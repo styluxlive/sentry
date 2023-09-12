@@ -253,9 +253,27 @@ def devserver(
 
     os.environ["SENTRY_USE_RELAY"] = "1" if settings.SENTRY_USE_RELAY else ""
 
-    if ingest and not workers:
-        click.echo("--ingest was provided, implicitly enabling --workers")
-        workers = True
+    if ingest:
+        daemons += [("relay", ["sentry", "devservices", "attach", "--skip-only-if", "relay"])]
+        kafka_consumers.add("ingest-events")
+        kafka_consumers.add("ingest-attachments")
+        kafka_consumers.add("ingest-transactions")
+        kafka_consumers.add("ingest-monitors")
+
+        if settings.SENTRY_USE_PROFILING:
+            kafka_consumers.add("ingest-profiles")
+
+        if occurrence_ingest:
+            kafka_consumers.add("ingest-occurrences")
+
+        if settings.SENTRY_USE_METRICS_DEV:
+            kafka_consumers.add("ingest-metrics")
+            kafka_consumers.add("ingest-generic-metrics")
+            kafka_consumers.add("billing-metrics-consumer")
+
+        if not workers:
+            click.echo("--ingest was provided, implicitly enabling --workers")
+            workers = True
 
     if workers and not crons:
         click.secho(
@@ -288,25 +306,6 @@ def devserver(
         if settings.SENTRY_DEV_PROCESS_SUBSCRIPTIONS:
             kafka_consumers.update(_SUBSCRIPTION_RESULTS_CONSUMERS)
 
-        if settings.SENTRY_USE_METRICS_DEV and settings.SENTRY_USE_RELAY:
-            kafka_consumers.add("ingest-metrics")
-            kafka_consumers.add("ingest-generic-metrics")
-            kafka_consumers.add("billing-metrics-consumer")
-
-        if settings.SENTRY_USE_RELAY:
-            daemons += [("relay", ["sentry", "devservices", "attach", "relay"])]
-
-            kafka_consumers.add("ingest-events")
-            kafka_consumers.add("ingest-attachments")
-            kafka_consumers.add("ingest-transactions")
-            kafka_consumers.add("ingest-monitors")
-
-            if settings.SENTRY_USE_PROFILING:
-                kafka_consumers.add("ingest-profiles")
-
-        if occurrence_ingest:
-            kafka_consumers.add("ingest-occurrences")
-
     if needs_https and has_https:
         https_port = str(parsed_url.port)
         https_host = parsed_url.hostname
@@ -337,7 +336,7 @@ don't seem to be running.
 
 The following consumers were intended to be started: {kafka_consumers}
 
-Make sure you have:
+Make sure you have the following in your ~/.sentry/sentry.conf.py:
 
     SENTRY_USE_RELAY = True
 
