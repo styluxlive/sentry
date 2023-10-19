@@ -76,9 +76,6 @@ sudo-askpass() {
 }
 
 pip-install() {
-    env
-    which python3
-    which pip || true
     python3 -m pip install --constraint requirements-dev-frozen.txt "$@"
 }
 
