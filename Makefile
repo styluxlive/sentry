@@ -19,13 +19,8 @@ apply-migrations \
 reset-db \
 node-version-check \
 install-js-dev \
+setup-git \
 install-py-dev :
-	@./scripts/do.sh $@
-
-setup-git:
-	env
-	ls -lah /Users/runner/.local/share/sentry-devenv/virtualenvs/sentry/bin
-	which pip
 	@./scripts/do.sh $@
 
 build-platform-assets \
