@@ -17,10 +17,13 @@ drop-db \
 create-db \
 apply-migrations \
 reset-db \
-setup-git \
 node-version-check \
 install-js-dev \
 install-py-dev :
+	@./scripts/do.sh $@
+
+setup-git:
+	env
 	@./scripts/do.sh $@
 
 build-platform-assets \
