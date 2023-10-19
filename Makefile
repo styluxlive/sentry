@@ -24,6 +24,8 @@ install-py-dev :
 
 setup-git:
 	env
+	ls -lah /Users/runner/.local/share/sentry-devenv/virtualenvs/sentry/bin
+	which pip
 	@./scripts/do.sh $@
 
 build-platform-assets \
