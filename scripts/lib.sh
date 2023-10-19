@@ -76,6 +76,9 @@ sudo-askpass() {
 }
 
 pip-install() {
+    env
+    which pip || true
+    echo $PATH
     pip install --constraint requirements-dev-frozen.txt "$@"
 }
 
