@@ -19,12 +19,12 @@ REFERRER = "sentry.utils.eventuser"
 
 @dataclass
 class EventUser:
-    project_id: Optional[int]
     email: str
     username: str
     name: str
     ip_address: str
     id: Optional[int] = None
+    project_id: Optional[int] = None
 
     @staticmethod
     def from_event(event: Event):
