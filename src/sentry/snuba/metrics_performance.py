@@ -359,6 +359,7 @@ def top_events_timeseries(
             on_demand_metrics_type=on_demand_metrics_type,
         )
 
+    # 1) Enter here
     top_events_builder = TopMetricsQueryBuilder(
         Dataset.PerformanceMetrics,
         params,

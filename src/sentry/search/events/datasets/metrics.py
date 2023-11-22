@@ -941,6 +941,9 @@ class MetricsDatasetConfig(DatasetConfig):
     ) -> SelectType:
         """Apdex is tag based in metrics, which means we can't base it on the satsifaction parameter"""
         if args["satisfaction"] is not None:
+            # print(args)
+            # print(alias)
+            raise Exception("It fails here")
             raise IncompatibleMetricsQuery(
                 "Cannot query apdex with a threshold parameter on the metrics dataset"
             )

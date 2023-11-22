@@ -117,7 +117,6 @@ from sentry.testutils.factories import get_fixture_path
 from sentry.testutils.helpers.datetime import before_now, iso_format
 from sentry.testutils.helpers.notifications import TEST_ISSUE_OCCURRENCE
 from sentry.testutils.helpers.slack import install_slack
-from sentry.testutils.pytest.fixtures import default_project
 from sentry.testutils.pytest.selenium import Browser
 from sentry.types.condition_activity import ConditionActivity, ConditionActivityType
 from sentry.types.integrations import ExternalProviders
@@ -1892,10 +1891,8 @@ class MetricsEnhancedPerformanceTestCase(BaseMetricsLayerTestCase, TestCase):
         spec: OnDemandMetricSpec,
         additional_tags: Optional[Dict[str, str]] = None,
         timestamp: Optional[datetime] = None,
-        project: Optional[Project] = None,
     ):
-        _project = project or default_project
-        metric_spec = spec.to_metric_spec(_project)
+        metric_spec = spec.to_metric_spec(self.project)
         metric_spec_tags = metric_spec["tags"] or [] if metric_spec else []
         tags = {i["key"]: i.get("value") or i.get("field") for i in metric_spec_tags}
 

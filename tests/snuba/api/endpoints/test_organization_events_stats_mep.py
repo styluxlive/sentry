@@ -1221,21 +1221,35 @@ class OrganizationEventsStatsMetricsEnhancedPerformanceEndpointTestWithOnDemandW
         ]
 
     def test_apdex_issue(self):
-        field = "apdex(300)"
-        query = "event.type:transaction transaction:dm.DeviceDetails"
-        spec = OnDemandMetricSpec(field=field, query=query, spec_type=MetricSpecType.DYNAMIC_QUERY)
-
-        assert (
-            spec._query_str_for_hash
-            == "on_demand_apdex:300;{'name': 'event.transaction', 'op': 'eq', 'value': 'dm.DeviceDetails'}"
+        field = "apdex()"  # "apdex(300)"
+        groupbys = ["transaction"]
+        query = "transaction.duration:>=100"
+        # query = "event.type:transaction transaction:dm.DeviceDetails"
+        spec = OnDemandMetricSpec(
+            field="apdex(300)",
+            groupbys=groupbys,
+            query=query,
+            spec_type=MetricSpecType.DYNAMIC_QUERY,
         )
 
-        for count in range(0, 4):
+        self.store_transaction_metric(
+            123,
+            timestamp=self.day_ago + timedelta(hours=1),
+            tags={"transaction": "number_one"},
+            entity="metrics_counters",
+        )
+        for hour in range(0, 5):
             self.store_on_demand_metric(
-                count * 100,
+                hour * 62 * 24,
                 spec=spec,
-                timestamp=self.day_ago + timedelta(hours=1),
-                project=self.project,
+                additional_tags={"transaction": "number_one", "environment": "production"},
+                timestamp=self.day_ago + timedelta(hours=hour),
+            )
+            self.store_on_demand_metric(
+                hour * 60 * 24,
+                spec=spec,
+                additional_tags={"transaction": "number_two", "environment": "production"},
+                timestamp=self.day_ago + timedelta(hours=hour),
             )
 
         response = self.do_request(
@@ -1252,7 +1266,7 @@ class OrganizationEventsStatsMetricsEnhancedPerformanceEndpointTestWithOnDemandW
                 "query": query,
                 "statsPeriod": "30d",
                 "topEvents": 5,
-                "useOnDemandMetrics": "true",
+                # "useOnDemandMetrics": "true",
                 "yAxis": field,
             },
         )

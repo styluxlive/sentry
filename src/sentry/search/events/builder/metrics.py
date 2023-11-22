@@ -1593,6 +1593,8 @@ class TopMetricsQueryBuilder(TimeseriesMetricQueryBuilder):
         if self.use_on_demand:
             self.groupby = list(set(selected_columns) - set(timeseries_columns))
 
+        # It's going to inside here
+        # breakpoint()
         if (conditions := self.resolve_top_event_conditions(top_events, other)) is not None:
             self.where.append(conditions)
 
@@ -1643,6 +1645,7 @@ class TopMetricsQueryBuilder(TimeseriesMetricQueryBuilder):
         """Given a list of top events construct the conditions"""
         conditions = []
         for field in self.fields:
+            # It fails here when we call self.resolve_column("apdex(300)")
             resolved_field = self.resolve_column(field)
 
             values: Set[Any] = set()
