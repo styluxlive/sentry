@@ -1892,9 +1892,10 @@ class MetricsEnhancedPerformanceTestCase(BaseMetricsLayerTestCase, TestCase):
         spec: OnDemandMetricSpec,
         additional_tags: Optional[Dict[str, str]] = None,
         timestamp: Optional[datetime] = None,
+        project: Optional[Project] = None,
     ):
-        project: Project = default_project
-        metric_spec = spec.to_metric_spec(project)
+        _project = project or default_project
+        metric_spec = spec.to_metric_spec(_project)
         metric_spec_tags = metric_spec["tags"] or [] if metric_spec else []
         tags = {i["key"]: i.get("value") or i.get("field") for i in metric_spec_tags}
 

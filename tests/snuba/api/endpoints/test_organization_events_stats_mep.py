@@ -1220,6 +1220,46 @@ class OrganizationEventsStatsMetricsEnhancedPerformanceEndpointTestWithOnDemandW
             [{"count": 450.0}],
         ]
 
+    def test_apdex_issue(self):
+        field = "apdex(300)"
+        query = "event.type:transaction transaction:dm.DeviceDetails"
+        spec = OnDemandMetricSpec(field=field, query=query, spec_type=MetricSpecType.DYNAMIC_QUERY)
+
+        assert (
+            spec._query_str_for_hash
+            == "on_demand_apdex:300;{'name': 'event.transaction', 'op': 'eq', 'value': 'dm.DeviceDetails'}"
+        )
+
+        for count in range(0, 4):
+            self.store_on_demand_metric(
+                count * 100,
+                spec=spec,
+                timestamp=self.day_ago + timedelta(hours=1),
+                project=self.project,
+            )
+
+        response = self.do_request(
+            data={
+                "dataset": "metricsEnhanced",
+                "environment": "production",
+                "excludeOther": 1,
+                "field": [field, "transaction"],
+                "interval": "1h",
+                "onDemandType": "dynamic_query",
+                "orderby": f"-{field}",
+                "partial": 1,
+                "project": self.project.id,
+                "query": query,
+                "statsPeriod": "30d",
+                "topEvents": 5,
+                "useOnDemandMetrics": "true",
+                "yAxis": field,
+            },
+        )
+
+        assert response.status_code == 200, response.content
+        assert response.data["meta"]["isMetricsExtractedData"] is False
+
     def _test_is_metrics_extracted_data(
         self, params: dict[str, Any], expected_on_demand_query: bool, dataset: str
     ) -> None:
