@@ -314,7 +314,7 @@ export function computeEchartsAriaLabels(
     start: filteredSeries[0]?.data?.[0][0],
     end: filteredSeries[0]?.data?.slice(-1)[0][0],
   })
-    ? `MMMM D, h:mm A`
+    ? 'MMMM D, h:mm A'
     : 'MMMM Do';
 
   function formatDate(date) {
@@ -373,8 +373,9 @@ export function computeEchartsAriaLabels(
           ? +highestValue[1].toFixed(3)
           : lowestValue[1];
 
-      return `The ${s.name} series contains ${s.data
-        ?.length} data points. Its lowest value is ${lowestY} ${
+      return `The ${s.name} series contains ${
+        s.data?.length
+      } data points. Its lowest value is ${lowestY} ${
         isGroupedByDate ? 'on' : 'at'
       } ${lowestX} and highest value is ${highestY} ${
         isGroupedByDate ? 'on' : 'at'

@@ -63,7 +63,7 @@ describe('Dashboards > Dashboard', () => {
   beforeEach(() => {
     initialData = initializeOrg({organization, router: {}, projects: []});
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/dashboards/widgets/`,
+      url: '/organizations/org-slug/dashboards/widgets/',
       method: 'POST',
       body: [],
     });

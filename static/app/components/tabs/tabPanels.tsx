@@ -86,7 +86,7 @@ const TabPanelWrap = styled('div', {shouldForwardProp: tabsShouldForwardProp})<{
 }>`
   border-radius: ${p => p.theme.borderRadius};
 
-  ${p => (p.orientation === 'horizontal' ? `height: 100%;` : `width: 100%;`)};
+  ${p => (p.orientation === 'horizontal' ? 'height: 100%;' : 'width: 100%;')};
 
   &.focus-visible {
     outline: none;

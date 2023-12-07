@@ -53,7 +53,7 @@ describe('ProjectDetail > ProjectIssues', function () {
 
   it('renders a list', async function () {
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/issues/?limit=5&query=error.unhandled%3Atrue%20is%3Aunresolved&sort=freq&statsPeriod=14d`,
+      url: '/organizations/org-slug/issues/?limit=5&query=error.unhandled%3Atrue%20is%3Aunresolved&sort=freq&statsPeriod=14d',
       body: [TestStubs.Group(), TestStubs.Group({id: '2'})],
     });
     render(

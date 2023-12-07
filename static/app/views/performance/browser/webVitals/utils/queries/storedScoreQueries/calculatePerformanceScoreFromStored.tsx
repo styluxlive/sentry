@@ -28,7 +28,7 @@ function getWebVitalWeight(data: TableDataRow, webVital: WebVitals): number {
 }
 
 function getTotalScore(data: TableDataRow): number {
-  return data[`avg(measurements.score.total)`] as number;
+  return data['avg(measurements.score.total)'] as number;
 }
 
 function hasWebVitalScore(data: TableDataRow, webVital: WebVitals): boolean {

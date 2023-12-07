@@ -163,7 +163,7 @@ export function SpanSummaryView({groupId}: Props) {
             <ChartPanel title={DataTitles.errorCount}>
               <Chart
                 height={CHART_HEIGHT}
-                data={[spanMetricsSeriesData?.[`http_error_count()`]]}
+                data={[spanMetricsSeriesData?.['http_error_count()']]}
                 loading={areSpanMetricsSeriesLoading}
                 chartColors={[ERRORS_COLOR]}
                 isLineChart

@@ -33,7 +33,7 @@ describe('CodeownerErrors', () => {
       )
     );
     expect(
-      screen.getByText(`There’s a problem linking teams and members from an integration`)
+      screen.getByText('There’s a problem linking teams and members from an integration')
     ).toBeInTheDocument();
     expect(screen.getByText('@getsentry/something')).toBeInTheDocument();
   });

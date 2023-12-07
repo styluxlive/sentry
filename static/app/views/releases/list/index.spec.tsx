@@ -87,7 +87,7 @@ describe('ReleasesList', () => {
     });
 
     sessionApiMock = MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/sessions/`,
+      url: '/organizations/org-slug/sessions/',
       body: null,
     });
 

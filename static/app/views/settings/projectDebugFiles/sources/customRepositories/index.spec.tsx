@@ -447,7 +447,7 @@ describe('Custom Repositories', function () {
     const props = getProps({
       router: {
         location: {
-          pathname: `/settings/org-slug/projects/project-2/debug-symbols/`,
+          pathname: '/settings/org-slug/projects/project-2/debug-symbols/',
           query: {
             customRepository: appStoreConnectRepository.id,
           },

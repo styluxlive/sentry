@@ -82,7 +82,7 @@ const ProjectRepoHolder = styled('div')`
   flex-direction: column;
 `;
 
-const RepoName = styled(`span`)`
+const RepoName = styled('span')`
   padding-bottom: ${space(1)};
 `;
 

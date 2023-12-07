@@ -91,7 +91,7 @@ export function ScreensTable({data, eventView, isLoading, pageLinks}: Props) {
                 secondaryRelease,
               })}`
             )}
-            style={{display: `block`, width: `100%`}}
+            style={{display: 'block', width: '100%'}}
           >
             {row.transaction}
           </Link>
@@ -163,7 +163,7 @@ export function ScreensTable({data, eventView, isLoading, pageLinks}: Props) {
           `avg_if(measurements.app_start_cold,release,${secondaryRelease})`,
           `avg_if(measurements.app_start_warm,release,${primaryRelease})`,
           `avg_if(measurements.app_start_warm,release,${secondaryRelease})`,
-          `app_start_breakdown`,
+          'app_start_breakdown',
           'count()',
         ].map(columnKey => {
           return {

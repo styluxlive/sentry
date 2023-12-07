@@ -54,7 +54,7 @@ function SuggestedAvatarStack({
 const AvatarStack = styled('div')<{reverse: boolean}>`
   display: flex;
   align-content: center;
-  ${p => p.reverse && `flex-direction: row-reverse;`}
+  ${p => p.reverse && 'flex-direction: row-reverse;'}
 `;
 
 const translateStyles = (props: {index: number; reverse: boolean}) => css`

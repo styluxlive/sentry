@@ -6,7 +6,8 @@ describe('ViewCodeOwnerModal', () => {
   const mockComponent: any = ({children}) => <div>{children}</div>;
 
   it('should display parsed codeowners file', () => {
-    const ownershipSyntax = `codeowners:/src/sentry/migrations/ #developer-infrastructure\n`;
+    const ownershipSyntax =
+      'codeowners:/src/sentry/migrations/ #developer-infrastructure\n';
     render(
       <ViewCodeOwnerModal
         codeowner={TestStubs.CodeOwner({ownershipSyntax})}

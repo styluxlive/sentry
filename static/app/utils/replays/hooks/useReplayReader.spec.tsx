@@ -43,7 +43,7 @@ describe('useReplayReader', () => {
       wrapper,
       initialProps: {
         orgSlug: organization.slug,
-        replaySlug: `123`,
+        replaySlug: '123',
       },
     });
 

@@ -18,6 +18,7 @@ const strictRulesNotCi = {
 };
 
 module.exports = {
+  root: true,
   extends: [isRelaxed ? 'sentry-app' : 'sentry-app/strict'],
   globals: {
     require: false,
@@ -38,6 +39,10 @@ module.exports = {
   },
 
   overrides: [
+    {
+      files: ['test/js/**/*.{ts,js}'],
+      extends: ['plugin:testing-library/react', 'sentry-app/strict'],
+    },
     {
       files: ['*.ts', '*.tsx'],
       rules: {},

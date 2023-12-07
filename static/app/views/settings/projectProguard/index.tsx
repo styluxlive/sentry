@@ -137,7 +137,7 @@ function ProjectProguard({organization, location, router, params}: ProjectProgua
 
       <TextBlock>
         {tct(
-          `ProGuard mapping files are used to convert minified classes, methods and field names into a human readable format. To learn more about proguard mapping files, [link: read the docs].`,
+          'ProGuard mapping files are used to convert minified classes, methods and field names into a human readable format. To learn more about proguard mapping files, [link: read the docs].',
           {
             link: (
               <ExternalLink href="https://docs.sentry.io/platforms/android/proguard/" />

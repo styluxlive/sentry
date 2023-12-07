@@ -9,5 +9,5 @@ export const EmptyContainer = styled('span')`
 `;
 
 export function DefaultEmptyOption() {
-  return <EmptyContainer>{t(`(empty string)`)}</EmptyContainer>;
+  return <EmptyContainer>{t('(empty string)')}</EmptyContainer>;
 }

@@ -139,7 +139,7 @@ export function WebVitalDescription({score, value, webVital}: Props) {
       <p>
         <b>
           {tct(
-            `At the moment, there is support for [webVital] in the following browsers:`,
+            'At the moment, there is support for [webVital] in the following browsers:',
             {webVital: webVital.toUpperCase()}
           )}
         </b>

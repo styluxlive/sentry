@@ -34,7 +34,7 @@ describe('useUserTeams', () => {
     const userTeams = [Team({id: '1', isMember: true})];
     const nonUserTeams = [Team({id: '2', isMember: false})];
     const mockapi = MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/user-teams/`,
+      url: '/organizations/org-slug/user-teams/',
       body: userTeams,
     });
 

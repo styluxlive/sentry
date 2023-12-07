@@ -402,8 +402,8 @@ const AddressCellWrapper = styled('div')`
 
 const AddressCell = styled('div')`
   font-family: ${p => p.theme.text.familyMono};
-  ${p => p.onClick && `cursor: pointer`};
-  ${p => p.onClick && `color:` + p.theme.linkColor};
+  ${p => p.onClick && 'cursor: pointer'};
+  ${p => p.onClick && 'color:' + p.theme.linkColor};
 `;
 
 const FunctionNameCell = styled('div')`
@@ -483,7 +483,7 @@ const RowHeader = styled('span')<{
   padding: ${space(1)};
   color: ${p => (!p.isInAppFrame ? p.theme.subText : '')};
   font-style: ${p => (!p.isInAppFrame ? 'italic' : '')};
-  ${p => p.expandable && `cursor: pointer;`};
+  ${p => p.expandable && 'cursor: pointer;'};
 
   @media (min-width: ${p => p.theme.breakpoints.small}) {
     grid-template-columns: auto 150px 120px 4fr repeat(2, auto) ${space(2)};

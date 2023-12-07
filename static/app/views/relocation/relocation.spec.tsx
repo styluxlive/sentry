@@ -206,7 +206,7 @@ describe('Relocation', function () {
 
     it('fails to starts relocation job if some form data is missing', async function () {
       const mockapi = MockApiClient.addMockResponse({
-        url: `/relocations/`,
+        url: '/relocations/',
         method: 'POST',
       });
       renderPage('upload-backup');
@@ -222,7 +222,7 @@ describe('Relocation', function () {
 
     it('starts relocation job if form data is available from previous steps', async function () {
       const mockapi = MockApiClient.addMockResponse({
-        url: `/relocations/`,
+        url: '/relocations/',
         method: 'POST',
       });
       renderPage('get-started');
@@ -251,7 +251,7 @@ describe('Relocation', function () {
 
     it('throws error if user already has an in-progress relocation job', async function () {
       const mockapi = MockApiClient.addMockResponse({
-        url: `/relocations/`,
+        url: '/relocations/',
         method: 'POST',
         statusCode: 409,
       });
@@ -276,7 +276,7 @@ describe('Relocation', function () {
 
     it('throws error if daily limit of relocations has been reached', async function () {
       const mockapi = MockApiClient.addMockResponse({
-        url: `/relocations/`,
+        url: '/relocations/',
         method: 'POST',
         statusCode: 429,
       });
@@ -301,7 +301,7 @@ describe('Relocation', function () {
 
     it('throws error if user session has expired', async function () {
       const mockapi = MockApiClient.addMockResponse({
-        url: `/relocations/`,
+        url: '/relocations/',
         method: 'POST',
         statusCode: 401,
       });
@@ -324,7 +324,7 @@ describe('Relocation', function () {
 
     it('throws error for 500 error', async function () {
       const mockapi = MockApiClient.addMockResponse({
-        url: `/relocations/`,
+        url: '/relocations/',
         method: 'POST',
         statusCode: 500,
       });

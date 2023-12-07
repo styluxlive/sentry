@@ -684,7 +684,7 @@ const ProfileVisualizationContainer = styled('div')<{hideRegressions}>`
   /* stylelint-disable */
   grid-template-areas: ${p =>
     p.hideRegressions ? "'visualization'" : "'visualization digest'"};
-  grid-template-columns: ${p => (p.hideRegressions ? `100%` : `60% 40%`)};
+  grid-template-columns: ${p => (p.hideRegressions ? '100%' : '60% 40%')};
   flex: 1 1 100%;
 `;
 

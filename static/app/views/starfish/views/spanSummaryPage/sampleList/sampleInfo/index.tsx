@@ -90,7 +90,7 @@ function SampleInfo(props: Props) {
           <Block title={DataTitles.timeSpent} alignment="left">
             <TimeSpentCell
               containerProps={{style}}
-              percentage={spanMetrics?.[`time_spent_percentage()`]}
+              percentage={spanMetrics?.['time_spent_percentage()']}
               total={spanMetrics?.[`sum(${SPAN_SELF_TIME})`]}
               op={spanMetrics?.['span.op']}
             />

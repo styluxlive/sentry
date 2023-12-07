@@ -322,7 +322,7 @@ function SlowScreensByTTID(props: PerformanceWidgetProps) {
             <Fragment>
               <GrowLink
                 to={normalizeUrl({
-                  pathname: `/performance/mobile/screens/spans/`,
+                  pathname: '/performance/mobile/screens/spans/',
                   query: {
                     project: listItem['project.id'],
                     transaction,

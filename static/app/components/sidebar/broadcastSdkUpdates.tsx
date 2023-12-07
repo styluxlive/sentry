@@ -125,7 +125,7 @@ function BroadcastSdkUpdates({projects, sdkUpdates, organization}: Props) {
       {!!deprecatedRavenSdkUpdates.length && (
         <StyledAlert type="warning" showIcon>
           {tct(
-            `[first-sentence]. Any SDK that has the package name ‘raven’ may be missing data. Migrate to the latest SDK version.`,
+            '[first-sentence]. Any SDK that has the package name ‘raven’ may be missing data. Migrate to the latest SDK version.',
             {
               ['first-sentence']: tn(
                 'You have %s project using a deprecated version of the Sentry client',

@@ -90,7 +90,7 @@ describe('StacktraceLink', function () {
     });
     const dismissPrompt = MockApiClient.addMockResponse({
       method: 'PUT',
-      url: `/prompts-activity/`,
+      url: '/prompts-activity/',
       body: {},
     });
     const {container} = render(<StacktraceLink frame={frame} event={event} line="" />, {
@@ -109,7 +109,7 @@ describe('StacktraceLink', function () {
     });
 
     expect(dismissPrompt).toHaveBeenCalledWith(
-      `/prompts-activity/`,
+      '/prompts-activity/',
       expect.objectContaining({
         data: {
           feature: 'stacktrace_link',

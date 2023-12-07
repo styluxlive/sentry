@@ -37,7 +37,7 @@ export const steps = ({
     configurations: [
       {
         language: 'bash',
-        code: `cloud install @sentry/node:`,
+        code: 'cloud install @sentry/node:',
       },
     ],
   },

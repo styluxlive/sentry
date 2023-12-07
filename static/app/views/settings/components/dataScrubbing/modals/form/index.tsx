@@ -191,7 +191,7 @@ const FieldContainer = styled('div')<{hasTwoColumns: boolean}>`
   margin-bottom: ${space(2)};
   @media (min-width: ${p => p.theme.breakpoints.small}) {
     gap: ${space(2)};
-    ${p => p.hasTwoColumns && `grid-template-columns: 1fr 1fr;`}
+    ${p => p.hasTwoColumns && 'grid-template-columns: 1fr 1fr;'}
     margin-bottom: ${p => (p.hasTwoColumns ? 0 : space(2))};
   }
 `;

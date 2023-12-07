@@ -100,7 +100,7 @@ class InlineDocs extends Component<Props, State> {
           <DocumentationWrapper dangerouslySetInnerHTML={{__html: this.state.html}} />
           <p>
             {tct(
-              `For in-depth instructions on setting up tracing, view [docLink:our documentation].`,
+              'For in-depth instructions on setting up tracing, view [docLink:our documentation].',
               {
                 docLink: <a href={this.state.link} />,
               }
@@ -115,7 +115,7 @@ class InlineDocs extends Component<Props, State> {
         <h4>{t('Requires Manual Instrumentation')}</h4>
         <p>
           {tct(
-            `To manually instrument certain regions of your code, view [docLink:our documentation].`,
+            'To manually instrument certain regions of your code, view [docLink:our documentation].',
             {
               docLink: (
                 <ExternalLink href="https://docs.sentry.io/product/performance/getting-started/" />

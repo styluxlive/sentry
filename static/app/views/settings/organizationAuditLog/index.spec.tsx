@@ -28,7 +28,7 @@ describe('OrganizationAuditLog', function () {
 
   it('renders', async function () {
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/audit-logs/`,
+      url: '/organizations/org-slug/audit-logs/',
       method: 'GET',
       body: {
         rows: [
@@ -86,7 +86,7 @@ describe('OrganizationAuditLog', function () {
     ProjectsStore.loadInitialData(projects);
 
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/audit-logs/`,
+      url: '/organizations/org-slug/audit-logs/',
       method: 'GET',
       body: {
         rows: [

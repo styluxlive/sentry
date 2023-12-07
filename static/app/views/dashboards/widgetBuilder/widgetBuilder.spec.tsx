@@ -212,7 +212,7 @@ describe('WidgetBuilder', function () {
     MockApiClient.addMockResponse({
       method: 'GET',
       url: '/organizations/org-slug/sessions/',
-      body: SessionsField(`sum(session)`),
+      body: SessionsField('sum(session)'),
     });
 
     MockApiClient.addMockResponse({

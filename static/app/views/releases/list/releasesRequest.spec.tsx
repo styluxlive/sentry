@@ -35,7 +35,7 @@ describe('ReleasesRequest', () => {
 
   beforeEach(() => {
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/sessions/`,
+      url: '/organizations/org-slug/sessions/',
       body: SessionStatusCountByReleaseInPeriod(),
       match: [
         MockApiClient.matchQuery({
@@ -51,7 +51,7 @@ describe('ReleasesRequest', () => {
     });
 
     requestForAutoHealthStatsPeriodSessionHistogram = MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/sessions/`,
+      url: '/organizations/org-slug/sessions/',
       body: SessionStatusCountByProjectInPeriod(),
       match: [
         MockApiClient.matchQuery({
@@ -66,7 +66,7 @@ describe('ReleasesRequest', () => {
     });
 
     requestForAutoTotalCountByProjectInPeriod = MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/sessions/`,
+      url: '/organizations/org-slug/sessions/',
       body: SessionTotalCountByProjectIn24h(),
       match: [
         MockApiClient.matchQuery({
@@ -81,7 +81,7 @@ describe('ReleasesRequest', () => {
     });
 
     requestForAutoTotalCountByReleaseInPeriod = MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/sessions/`,
+      url: '/organizations/org-slug/sessions/',
       body: SesssionTotalCountByReleaseIn24h(),
       match: [
         MockApiClient.matchQuery({
@@ -113,7 +113,7 @@ describe('ReleasesRequest', () => {
     });
 
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/sessions/`,
+      url: '/organizations/org-slug/sessions/',
       body: SessionTotalCountByProjectIn24h(),
       match: [
         MockApiClient.matchQuery({
@@ -128,7 +128,7 @@ describe('ReleasesRequest', () => {
     });
 
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/sessions/`,
+      url: '/organizations/org-slug/sessions/',
       body: SessionUserStatusCountByReleaseInPeriod(),
       match: [
         MockApiClient.matchQuery({
@@ -160,7 +160,7 @@ describe('ReleasesRequest', () => {
     });
 
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/sessions/`,
+      url: '/organizations/org-slug/sessions/',
       body: UserTotalCountByProjectIn24h(),
       match: [
         MockApiClient.matchQuery({

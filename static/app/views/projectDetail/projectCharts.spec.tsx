@@ -39,14 +39,14 @@ describe('ProjectDetail > ProjectCharts', () => {
   let mockSessions;
   beforeEach(() => {
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/releases/stats/`,
+      url: '/organizations/org-slug/releases/stats/',
       body: [],
     });
 
     mockSessions = MockApiClient.addMockResponse({
       method: 'GET',
       url: '/organizations/org-slug/sessions/',
-      body: SessionsField(`sum(session)`),
+      body: SessionsField('sum(session)'),
     });
   });
 

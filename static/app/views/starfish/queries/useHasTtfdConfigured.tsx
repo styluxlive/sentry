@@ -30,8 +30,8 @@ export function useTTFDConfigured(additionalFilters?: string[]) {
   const newQuery: NewQuery = {
     name: '',
     fields: [
-      `avg(measurements.time_to_initial_display)`,
-      `avg(measurements.time_to_full_display)`,
+      'avg(measurements.time_to_initial_display)',
+      'avg(measurements.time_to_full_display)',
       'count()',
     ],
     query: queryString,

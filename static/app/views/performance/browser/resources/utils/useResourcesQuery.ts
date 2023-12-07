@@ -132,12 +132,12 @@ export const useResourcesQuery = ({
       | 'blocking',
     [SPAN_DOMAIN]: row[SPAN_DOMAIN][0]?.toString(),
     [PROJECT_ID]: row[PROJECT_ID] as number,
-    [`avg(http.response_content_length)`]: row[
+    ['avg(http.response_content_length)']: row[
       `avg(${HTTP_RESPONSE_CONTENT_LENGTH})`
     ] as number,
-    [`time_spent_percentage()`]: row[`${TIME_SPENT_PERCENTAGE}()`] as number,
+    ['time_spent_percentage()']: row[`${TIME_SPENT_PERCENTAGE}()`] as number,
     ['count_unique(transaction)']: row['count_unique(transaction)'] as number,
-    [`sum(span.self_time)`]: row[`sum(${SPAN_SELF_TIME})`] as number,
+    ['sum(span.self_time)']: row[`sum(${SPAN_SELF_TIME})`] as number,
   }));
 
   return {...result, data: data || []};

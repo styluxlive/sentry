@@ -547,7 +547,7 @@ class RuleConditionsForm extends PureComponent<Props, State> {
                         <OnDemandWarningIcon
                           color="gray500"
                           msg={tct(
-                            `We don’t routinely collect metrics from [fields]. However, we’ll do so [strong:once this alert has been saved.]`,
+                            'We don’t routinely collect metrics from [fields]. However, we’ll do so [strong:once this alert has been saved.]',
                             {
                               fields: (
                                 <strong>

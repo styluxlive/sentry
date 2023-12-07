@@ -7,7 +7,7 @@ interface Props {
 
 export default function JSXProperty({name, value}: Props) {
   if (name === 'children') {
-    return <code data-property="children">{`{children}`}</code>;
+    return <code data-property="children">{'{children}'}</code>;
   }
   if (value === null || value === undefined) {
     return <code data-property="nullish">{`${name}={${value}}`}</code>;

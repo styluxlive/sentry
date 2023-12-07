@@ -289,7 +289,7 @@ function getValues(seriesData: Series['data']) {
 
 // TODO(ddm): PanelTable component proved to be a bit too opinionated for this use case,
 // so we're using a custom styled component instead. Figure out what we want to do here
-const SummaryTableWrapper = styled(`div`)<{hasActions: boolean}>`
+const SummaryTableWrapper = styled('div')<{hasActions: boolean}>`
   display: grid;
   grid-template-columns: ${p =>
     p.hasActions ? '24px 8fr repeat(5, 1fr)' : '24px 8fr repeat(4, 1fr)'};
@@ -332,7 +332,7 @@ const TextOverflowCell = styled(Cell)`
   white-space: nowrap;
 `;
 
-const ColorDot = styled(`div`)<{color: string; isHidden: boolean}>`
+const ColorDot = styled('div')<{color: string; isHidden: boolean}>`
   background-color: ${p =>
     p.isHidden ? 'transparent' : colorFn(p.color).alpha(1).string()};
   border: 1px solid ${p => p.color};

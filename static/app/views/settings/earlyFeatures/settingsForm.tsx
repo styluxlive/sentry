@@ -36,7 +36,7 @@ function EarlyFeaturesSettingsForm({organization, access, location}: Props) {
     staleTime: 0,
   });
 
-  const endpoint = `/internal/feature-flags/`;
+  const endpoint = '/internal/feature-flags/';
 
   if (authProviderIsLoading || featureFlagsIsLoading) {
     return <LoadingIndicator />;

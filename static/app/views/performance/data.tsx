@@ -125,13 +125,13 @@ export function getFrontendAxisOptions(organization: Organization): AxisOption[]
   return [
     {
       tooltip: getTermHelp(organization, PerformanceTerm.LCP),
-      value: `p75(lcp)`,
+      value: 'p75(lcp)',
       label: t('LCP p75'),
       field: 'p75(measurements.lcp)',
       isLeftDefault: true,
       backupOption: {
         tooltip: getTermHelp(organization, PerformanceTerm.FCP),
-        value: `p75(fcp)`,
+        value: 'p75(fcp)',
         label: t('FCP p75'),
         field: 'p75(measurements.fcp)',
       },
@@ -164,20 +164,20 @@ export function getFrontendOtherAxisOptions(organization: Organization): AxisOpt
   return [
     {
       tooltip: getTermHelp(organization, PerformanceTerm.P50),
-      value: `p50()`,
+      value: 'p50()',
       label: t('Duration p50'),
       field: 'p50(transaction.duration)',
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.P75),
-      value: `p75()`,
+      value: 'p75()',
       label: t('Duration p75'),
       field: 'p75(transaction.duration)',
       isLeftDefault: true,
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.P95),
-      value: `p95()`,
+      value: 'p95()',
       label: t('Duration p95'),
       field: 'p95(transaction.duration)',
     },
@@ -196,26 +196,26 @@ export function getBackendAxisOptions(organization: Organization): AxisOption[] 
   return [
     {
       tooltip: getTermHelp(organization, PerformanceTerm.P50),
-      value: `p50()`,
+      value: 'p50()',
       label: t('Duration p50'),
       field: 'p50(transaction.duration)',
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.P75),
-      value: `p75()`,
+      value: 'p75()',
       label: t('Duration p75'),
       field: 'p75(transaction.duration)',
       isLeftDefault: true,
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.P95),
-      value: `p95()`,
+      value: 'p95()',
       label: t('Duration p95'),
       field: 'p95(transaction.duration)',
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.P99),
-      value: `p99()`,
+      value: 'p99()',
       label: t('Duration p99'),
       field: 'p99(transaction.duration)',
     },
@@ -252,26 +252,26 @@ export function getMobileAxisOptions(organization: Organization): AxisOption[] {
   return [
     {
       tooltip: getTermHelp(organization, PerformanceTerm.APP_START_COLD),
-      value: `p50(measurements.app_start_cold)`,
+      value: 'p50(measurements.app_start_cold)',
       label: t('Cold Start Duration p50'),
       field: 'p50(measurements.app_start_cold)',
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.APP_START_COLD),
-      value: `p75(measurements.app_start_cold)`,
+      value: 'p75(measurements.app_start_cold)',
       label: t('Cold Start Duration p75'),
       field: 'p75(measurements.app_start_cold)',
       isLeftDefault: true,
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.APP_START_COLD),
-      value: `p95(measurements.app_start_cold)`,
+      value: 'p95(measurements.app_start_cold)',
       label: t('Cold Start Duration p95'),
       field: 'p95(measurements.app_start_cold)',
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.APP_START_COLD),
-      value: `p99(measurements.app_start_cold)`,
+      value: 'p99(measurements.app_start_cold)',
       label: t('Cold Start Duration p99'),
       field: 'p99(measurements.app_start_cold)',
     },
@@ -285,25 +285,25 @@ export function getMobileAxisOptions(organization: Organization): AxisOption[] {
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.APP_START_WARM),
-      value: `p50(measurements.app_start_warm)`,
+      value: 'p50(measurements.app_start_warm)',
       label: t('Warm Start Duration p50'),
       field: 'p50(measurements.app_start_warm)',
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.APP_START_WARM),
-      value: `p75(measurements.app_start_warm)`,
+      value: 'p75(measurements.app_start_warm)',
       label: t('Warm Start Duration p75'),
       field: 'p75(measurements.app_start_warm)',
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.APP_START_WARM),
-      value: `p95(measurements.app_start_warm)`,
+      value: 'p95(measurements.app_start_warm)',
       label: t('Warm Start Duration p95'),
       field: 'p95(measurements.app_start_warm)',
     },
     {
       tooltip: getTermHelp(organization, PerformanceTerm.APP_START_WARM),
-      value: `p99(measurements.app_start_warm)`,
+      value: 'p99(measurements.app_start_warm)',
       label: t('Warm Start Duration p99'),
       field: 'p99(measurements.app_start_warm)',
     },

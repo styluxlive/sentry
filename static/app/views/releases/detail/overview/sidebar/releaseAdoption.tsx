@@ -254,7 +254,7 @@ function ReleaseAdoption({
                   <Tag type={adoptionStageLabel.type}>{adoptionStageLabel.name}</Tag>
                 </Tooltip>
                 <AdoptionEnvironment>
-                  {tct(`in [environment]`, {environment})}
+                  {tct('in [environment]', {environment})}
                 </AdoptionEnvironment>
               </div>
             ) : (

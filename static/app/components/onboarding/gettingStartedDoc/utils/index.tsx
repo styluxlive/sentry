@@ -31,7 +31,7 @@ export function getUploadSourceMapsStep({
     configurations: [
       {
         language: 'bash',
-        code: `npx @sentry/wizard@latest -i sourcemaps`,
+        code: 'npx @sentry/wizard@latest -i sourcemaps',
         onCopy: () => {
           if (!organization || !projectId || !platformKey) {
             return;

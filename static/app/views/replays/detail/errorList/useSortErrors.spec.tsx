@@ -42,7 +42,7 @@ const [ERROR_1_JS_RANGEERROR, ERROR_2_NEXTJS_TYPEERROR, ERROR_3_JS_UNDEFINED] =
         id: 'ac43b19f1886bb41ddab96415ecb5c85',
         'issue.id': 22,
         issue: 'NEXTJS-TYPE',
-        title: `undefined is not an object (evaluating 'e.apply').`,
+        title: "undefined is not an object (evaluating 'e.apply').",
         'project.name': 'next-js',
       }),
       RawReplayErrorFixture({
@@ -51,7 +51,7 @@ const [ERROR_1_JS_RANGEERROR, ERROR_2_NEXTJS_TYPEERROR, ERROR_3_JS_UNDEFINED] =
         id: '9f1886bb41ddab96415ecb5c85ac43b1',
         'issue.id': 22,
         issue: 'JAVASCRIPT-UNDEF',
-        title: `Maximum update depth exceeded`,
+        title: 'Maximum update depth exceeded',
         'project.name': 'javascript',
       }),
     ]

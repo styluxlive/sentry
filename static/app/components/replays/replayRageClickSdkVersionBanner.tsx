@@ -67,7 +67,7 @@ export default function ReplayRageClickSdkVersionBanner() {
       title={tct("What's new in [version]", {
         version: (
           <PurpleText>
-            {tct(`version [version_number]`, {
+            {tct('version [version_number]', {
               version_number: MIN_DEAD_RAGE_CLICK_SDK.minVersion,
             })}
           </PurpleText>

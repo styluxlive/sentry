@@ -170,7 +170,7 @@ describe('useLocalStorageState', () => {
     } catch (e) {
       expect(
         e.message.startsWith(
-          `useLocalStorage: Native serialization of Map is not supported`
+          'useLocalStorage: Native serialization of Map is not supported'
         )
       ).toBe(true);
     }

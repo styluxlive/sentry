@@ -81,19 +81,19 @@ const onboarding: OnboardingConfig = {
     {
       type: StepType.VERIFY,
       description: t(
-        `One way to verify your setup is by intentionally causing an error that breaks your application.`
+        'One way to verify your setup is by intentionally causing an error that breaks your application.'
       ),
       configurations: [
         {
           description: t(
-            `Calling an undefined function will throw a JavaScript exception:`
+            'Calling an undefined function will throw a JavaScript exception:'
           ),
           language: 'javascript',
           code: 'myUndefinedFunction();',
         },
         {
           description: t(
-            `With Electron you can test native crash reporting by triggering a crash:`
+            'With Electron you can test native crash reporting by triggering a crash:'
           ),
           language: 'javascript',
           code: 'process.crash();',
@@ -133,7 +133,7 @@ const replayOnboarding: OnboardingConfig = {
               value: 'javascript',
               language: 'javascript',
               code: getReplaySDKSetupSnippet({
-                importStatement: `import * as Sentry from "@sentry/electron";`,
+                importStatement: 'import * as Sentry from "@sentry/electron";',
                 dsn: params.dsn,
               }),
             },

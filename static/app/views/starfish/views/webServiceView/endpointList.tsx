@@ -195,7 +195,7 @@ function EndpointList({
                 end: eventView.end,
               })}`
             )}
-            style={{display: `block`, width: `100%`}}
+            style={{display: 'block', width: '100%'}}
             onClick={() => {
               trackAnalytics('starfish.web_service_view.endpoint_list.endpoint.clicked', {
                 organization,

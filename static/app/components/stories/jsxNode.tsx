@@ -21,7 +21,7 @@ export default function JSXNode({name, props = {}, children}: Props) {
             <JSXProperty name={propName} value={value} />
           </Fragment>
         ))}
-        {`>`}
+        {'>'}
         <br />
         {children}
         <br />
@@ -37,7 +37,7 @@ export default function JSXNode({name, props = {}, children}: Props) {
           <JSXProperty name={propName} value={value} />{' '}
         </Fragment>
       ))}
-      {`/>`}
+      {'/>'}
     </Code>
   );
 }

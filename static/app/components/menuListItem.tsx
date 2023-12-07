@@ -263,7 +263,7 @@ export const InnerWrap = styled('div', {
   &:hover {
     color: ${getTextColor};
   }
-  ${p => p.disabled && `cursor: default;`}
+  ${p => p.disabled && 'cursor: default;'}
 
   &::before {
     content: '';
@@ -347,8 +347,8 @@ const LeadingItems = styled('div')<{
   margin-top: ${p => getVerticalPadding(p.size)};
   margin-right: ${space(1)};
 
-  ${p => p.disabled && `opacity: 0.5;`}
-  ${p => p.spanFullHeight && `height: 100%;`}
+  ${p => p.disabled && 'opacity: 0.5;'}
+  ${p => p.spanFullHeight && 'height: 100%;'}
 `;
 
 const LabelWrap = styled('div')`
@@ -381,6 +381,6 @@ const TrailingItems = styled('div')<{disabled: boolean; spanFullHeight: boolean}
   gap: ${space(1)};
   margin-right: ${space(0.5)};
 
-  ${p => p.disabled && `opacity: 0.5;`}
-  ${p => p.spanFullHeight && `height: 100%;`}
+  ${p => p.disabled && 'opacity: 0.5;'}
+  ${p => p.spanFullHeight && 'height: 100%;'}
 `;

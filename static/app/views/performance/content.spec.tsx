@@ -275,7 +275,7 @@ describe('Performance > Content', function () {
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/key-transactions-list/`,
+      url: '/organizations/org-slug/key-transactions-list/',
       body: [],
     });
   });

@@ -108,7 +108,7 @@ export function ScreensTable({data, eventView, isLoading, pageLinks, onCursor}: 
                 secondaryRelease,
               })}`
             )}
-            style={{display: `block`, width: `100%`}}
+            style={{display: 'block', width: '100%'}}
           >
             {row.transaction}
           </Link>

@@ -74,12 +74,12 @@ export const Package = styled('a')<Partial<Props>>`
   align-items: center;
 
   ${p =>
-    p.withLeadHint && (p.includeSystemFrames ? `max-width: 89px;` : `max-width: 76px;`)}
+    p.withLeadHint && (p.includeSystemFrames ? 'max-width: 89px;' : 'max-width: 76px;')}
 
   @media (min-width: ${p => p.theme.breakpoints.large}) and (max-width: ${p =>
     p.theme.breakpoints.xlarge}) {
     ${p =>
-      p.withLeadHint && (p.includeSystemFrames ? `max-width: 76px;` : `max-width: 63px;`)}
+      p.withLeadHint && (p.includeSystemFrames ? 'max-width: 76px;' : 'max-width: 63px;')}
   }
 `;
 

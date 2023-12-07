@@ -95,7 +95,7 @@ export function UnsupportedOp({type}: {type: 'headers' | 'bodies'}) {
       <h1>{title}</h1>
       <p>
         {tct(
-          `This feature is only compatible with [fetch] and [xhr] request types. [link].`,
+          'This feature is only compatible with [fetch] and [xhr] request types. [link].',
           {
             fetch: <code>fetch</code>,
             xhr: <code>xhr</code>,
@@ -199,15 +199,15 @@ function SetupInstructions({
     showSnippet === Output.SETUP
       ? t('Capture Request and Response Headers and Bodies')
       : visibleTab === 'details'
-      ? t('Capture Request and Response Headers')
-      : t('Capture Request and Response Bodies');
+        ? t('Capture Request and Response Headers')
+        : t('Capture Request and Response Bodies');
 
   return (
     <StyledInstructions data-test-id="network-setup-steps">
       <h1>{title}</h1>
       <p>
         {tct(
-          `To protect user privacy, Session Replay defaults to not capturing the request or response headers. However, we provide the option to do so, if it’s critical to your debugging process. [link].`,
+          'To protect user privacy, Session Replay defaults to not capturing the request or response headers. However, we provide the option to do so, if it’s critical to your debugging process. [link].',
           {
             link: (
               <ExternalLink href="https://docs.sentry.io/platforms/javascript/session-replay/configuration/#network-details">

@@ -115,7 +115,7 @@ function ResourceSummary() {
               avgDuration={spanMetrics[`avg(${SPAN_SELF_TIME})`]}
               throughput={spanMetrics['spm()']}
               timeSpentTotal={spanMetrics[`sum(${SPAN_SELF_TIME})`]}
-              timeSpentPercentage={spanMetrics[`time_spent_percentage()`]}
+              timeSpentPercentage={spanMetrics['time_spent_percentage()']}
             />
           </HeaderContainer>
           {isImage && <SampleImages groupId={groupId} />}

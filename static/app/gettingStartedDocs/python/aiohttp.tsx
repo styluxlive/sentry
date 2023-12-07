@@ -11,7 +11,7 @@ import {t, tct} from 'sentry/locale';
 
 type Params = DocsParams;
 
-const getInstallSnippet = () => `pip install --upgrade sentry-sdk`;
+const getInstallSnippet = () => 'pip install --upgrade sentry-sdk';
 
 const getSdkSetupSnippet = (params: Params) => `
 from aiohttp import web
@@ -122,7 +122,7 @@ web.run_app(app)`,
         <span>
           <p>
             {tct(
-              `When you point your browser to [localhostLInk:http://localhost:8080/] a transaction in the Performance section of Sentry will be created.`,
+              'When you point your browser to [localhostLInk:http://localhost:8080/] a transaction in the Performance section of Sentry will be created.',
               {
                 localhostLInk: <ExternalLink href="http://localhost:8080/" />,
               }

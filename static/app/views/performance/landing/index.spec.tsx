@@ -83,32 +83,32 @@ describe('Performance > Landing > Index', function () {
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/key-transactions-list/`,
+      url: '/organizations/org-slug/key-transactions-list/',
       body: [],
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/legacy-key-transactions-count/`,
+      url: '/organizations/org-slug/legacy-key-transactions-count/',
       body: [],
     });
     eventStatsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-stats/`,
+      url: '/organizations/org-slug/events-stats/',
       body: [],
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-trends-stats/`,
+      url: '/organizations/org-slug/events-trends-stats/',
       body: [],
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-histogram/`,
+      url: '/organizations/org-slug/events-histogram/',
       body: [],
     });
     eventsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events/`,
+      url: '/organizations/org-slug/events/',
       body: {
         meta: {
           fields: {
@@ -124,13 +124,13 @@ describe('Performance > Landing > Index', function () {
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/metrics-compatibility/`,
+      url: '/organizations/org-slug/metrics-compatibility/',
       body: [],
     });
 
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/metrics-compatibility-sums/`,
+      url: '/organizations/org-slug/metrics-compatibility-sums/',
       body: [],
     });
   });

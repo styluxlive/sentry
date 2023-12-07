@@ -291,7 +291,7 @@ describe('groupDetails', () => {
 
   it('renders error when project does not exist', async function () {
     MockApiClient.addMockResponse({
-      url: `/projects/org-slug/other-project-slug/issues/`,
+      url: '/projects/org-slug/other-project-slug/issues/',
       method: 'PUT',
     });
     MockApiClient.addMockResponse({

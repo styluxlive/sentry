@@ -108,7 +108,7 @@ function RouteError({error, disableLogSentry, disableReport, project}: Props) {
           </ListItem>
         )}
         <ListItem>
-          {tct(`Give it a few seconds and [link:reload the page].`, {
+          {tct('Give it a few seconds and [link:reload the page].', {
             link: (
               <a
                 onClick={() => {
@@ -119,7 +119,7 @@ function RouteError({error, disableLogSentry, disableReport, project}: Props) {
           })}
         </ListItem>
         <ListItem>
-          {tct(`If all else fails, [link:contact us] with more details.`, {
+          {tct('If all else fails, [link:contact us] with more details.', {
             link: (
               <ExternalLink href="https://github.com/getsentry/sentry/issues/new/choose" />
             ),

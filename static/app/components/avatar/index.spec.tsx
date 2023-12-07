@@ -123,7 +123,7 @@ describe('Avatar', function () {
       render(<AvatarComponent gravatar user={{...user, avatar: undefined}} />);
       await screen.findByRole('img');
 
-      const avatarElement = screen.getByTestId(`gravatar-avatar`);
+      const avatarElement = screen.getByTestId('gravatar-avatar');
       expect(avatarElement).toBeInTheDocument();
       expect(avatarElement).toHaveAttribute('title', user.name);
     });
@@ -131,7 +131,7 @@ describe('Avatar', function () {
     it('should not show a gravatar when no avatar type is set and user has no email address', function () {
       render(<AvatarComponent gravatar user={{...user, email: '', avatar: undefined}} />);
 
-      expect(screen.getByTestId(`letter_avatar-avatar`)).toBeInTheDocument();
+      expect(screen.getByTestId('letter_avatar-avatar')).toBeInTheDocument();
       expect(screen.getByText(userNameInitials)).toBeInTheDocument();
     });
 
@@ -140,7 +140,7 @@ describe('Avatar', function () {
 
       render(<AvatarComponent team={team} />);
 
-      expect(screen.getByTestId(`letter_avatar-avatar`)).toBeInTheDocument();
+      expect(screen.getByTestId('letter_avatar-avatar')).toBeInTheDocument();
       expect(screen.getByText('TT')).toBeInTheDocument();
     });
 
@@ -152,7 +152,7 @@ describe('Avatar', function () {
 
       render(<AvatarComponent organization={organization} />);
 
-      expect(screen.getByTestId(`letter_avatar-avatar`)).toBeInTheDocument();
+      expect(screen.getByTestId('letter_avatar-avatar')).toBeInTheDocument();
       expect(screen.getByText('TO')).toBeInTheDocument();
     });
 

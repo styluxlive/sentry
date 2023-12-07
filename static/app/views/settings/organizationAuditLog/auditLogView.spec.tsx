@@ -93,7 +93,7 @@ describe('OrganizationAuditLog', function () {
   it('replaces text in rule and alertrule entries', async function () {
     MockApiClient.clearMockResponses();
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/audit-logs/`,
+      url: '/organizations/org-slug/audit-logs/',
       method: 'GET',
       body: {
         rows: [

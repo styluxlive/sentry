@@ -168,7 +168,7 @@ describe('CreateAlertFromViewButton', () => {
     });
     await userEvent.click(screen.getByRole('button'));
     expect(navigateTo).toHaveBeenCalledWith(
-      `/organizations/org-slug/alerts/wizard/?`,
+      '/organizations/org-slug/alerts/wizard/?',
       expect.objectContaining({
         params: expect.objectContaining({
           orgId: 'org-slug',
@@ -207,7 +207,7 @@ describe('CreateAlertFromViewButton', () => {
     );
     await userEvent.click(screen.getByRole('button'));
     expect(context.context.router.push).toHaveBeenCalledWith({
-      pathname: `/organizations/org-slug/alerts/new/metric/`,
+      pathname: '/organizations/org-slug/alerts/new/metric/',
       query: expect.objectContaining({
         query: 'event.type:error ',
         project: 'project-slug',

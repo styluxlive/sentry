@@ -124,7 +124,7 @@ function ReleaseActions({
   }
 
   function handleNavigationClick(direction: string) {
-    trackAnalytics(`release_detail.pagination`, {
+    trackAnalytics('release_detail.pagination', {
       organization,
       direction,
     });

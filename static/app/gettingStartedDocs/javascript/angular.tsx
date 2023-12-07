@@ -157,7 +157,7 @@ const onboarding: OnboardingConfig<PlatformOptions> = {
       configurations: [
         {
           language: 'javascript',
-          code: `myUndefinedFunction();`,
+          code: 'myUndefinedFunction();',
         },
       ],
     },
@@ -235,7 +235,7 @@ function getSdkSetupSnippet(params: Params) {
 function getSetupConfiguration(params: Params) {
   const configuration = {
     description: tct(
-      `You should init the Sentry browser SDK in your [code:main.ts] file as soon as possible during application load up, before initializing Angular:`,
+      'You should init the Sentry browser SDK in your [code:main.ts] file as soon as possible during application load up, before initializing Angular:',
       {
         code: <code />,
       }

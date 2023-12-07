@@ -248,7 +248,7 @@ const SegmentWrap = styled('label')<{
     }
   `}
 
-  ${p => p.isSelected && `z-index: 1;`}
+  ${p => p.isSelected && 'z-index: 1;'}
 `;
 
 const SegmentInput = styled('input')`
@@ -411,5 +411,5 @@ const Divider = styled('div')<{visible: boolean}>`
     display: none;
   }
 
-  ${p => !p.visible && `opacity: 0;`}
+  ${p => !p.visible && 'opacity: 0;'}
 `;

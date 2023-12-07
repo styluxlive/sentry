@@ -132,11 +132,11 @@ describe('IssueRuleEditor', function () {
       body: TestStubs.Environments(),
     });
     MockApiClient.addMockResponse({
-      url: `/projects/org-slug/project-slug/?expand=hasAlertIntegration`,
+      url: '/projects/org-slug/project-slug/?expand=hasAlertIntegration',
       body: {},
     });
     MockApiClient.addMockResponse({
-      url: `/projects/org-slug/project-slug/ownership/`,
+      url: '/projects/org-slug/project-slug/ownership/',
       method: 'GET',
       body: {
         fallthrough: false,

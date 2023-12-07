@@ -217,7 +217,7 @@ const getColumnOrder = (
   ...(span?.['span.op']?.startsWith('http')
     ? ([
         {
-          key: `http_error_count()`,
+          key: 'http_error_count()',
           name: DataTitles.errorCount,
           width: COL_WIDTH_UNDEFINED,
         },

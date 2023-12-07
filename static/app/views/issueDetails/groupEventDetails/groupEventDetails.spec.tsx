@@ -281,7 +281,7 @@ const mockGroupApis = (
   });
 
   MockApiClient.addMockResponse({
-    url: `/customers/org-slug/policies/`,
+    url: '/customers/org-slug/policies/',
     body: {},
   });
 

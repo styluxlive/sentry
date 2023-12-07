@@ -204,7 +204,7 @@ const StyledPanelTable = styled(PanelTable)<{
   ${props =>
     props.gridRows
       ? `grid-template-rows: ${props.gridRows};`
-      : `grid-template-rows: 44px max-content;`}
+      : 'grid-template-rows: 44px max-content;'}
 `;
 
 const StyledAlert = styled(Alert)`

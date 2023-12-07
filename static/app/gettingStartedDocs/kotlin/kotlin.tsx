@@ -75,7 +75,7 @@ export const steps = ({
 }: StepsParams): LayoutProps['steps'] => [
   {
     type: StepType.INSTALL,
-    description: t(`Install the SDK via %s:`, packageManagerName[packageManager]),
+    description: t('Install the SDK via %s:', packageManagerName[packageManager]),
     configurations: [
       {
         description: (
@@ -89,7 +89,7 @@ export const steps = ({
           </p>
         ),
         language: 'bash',
-        code: `SENTRY_AUTH_TOKEN=___ORG_AUTH_TOKEN___`,
+        code: 'SENTRY_AUTH_TOKEN=___ORG_AUTH_TOKEN___',
       },
       ...(packageManager === PackageManager.GRADLE
         ? [

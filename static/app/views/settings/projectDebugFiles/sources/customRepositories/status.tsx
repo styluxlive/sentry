@@ -74,7 +74,7 @@ const Wrapper = styled('div')<{color: string}>`
   color: ${p => p.color};
   font-size: ${p => p.theme.fontSizeMedium};
   height: 14px;
-  ${p => p.onClick && `cursor: pointer`};
+  ${p => p.onClick && 'cursor: pointer'};
 `;
 
 const StyledTooltip = styled(Tooltip)`

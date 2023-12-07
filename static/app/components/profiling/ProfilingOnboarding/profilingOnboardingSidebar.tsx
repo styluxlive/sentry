@@ -234,7 +234,7 @@ function OnboardingContent({
       <ContentContainer>
         <p>
           {t(
-            `Your project's platform has not been set. Please select your project's platform before proceeding.`
+            "Your project's platform has not been set. Please select your project's platform before proceeding."
           )}
         </p>
         <Button
@@ -294,7 +294,7 @@ function OnboardingContent({
       )}
       <p>
         {t(
-          `Adding Profiling to your %s project is simple. Make sure you've got these basics down.`,
+          "Adding Profiling to your %s project is simple. Make sure you've got these basics down.",
           currentPlatform!.name
         )}
       </p>

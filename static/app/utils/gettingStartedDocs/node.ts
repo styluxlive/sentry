@@ -57,11 +57,11 @@ export function getDefaultNodeImports({
   productSelection: ProductSelectionMap;
 }) {
   const imports: string[] = [
-    `// You can also use CommonJS \`require('@sentry/node')\` instead of \`import\``,
-    `import * as Sentry from "@sentry/node";`,
+    "// You can also use CommonJS `require('@sentry/node')` instead of `import`",
+    'import * as Sentry from "@sentry/node";',
   ];
   if (productSelection.profiling) {
-    imports.push(`import { ProfilingIntegration } from "@sentry/profiling-node";`);
+    imports.push('import { ProfilingIntegration } from "@sentry/profiling-node";');
   }
   return imports;
 }
@@ -72,11 +72,11 @@ export function getDefaulServerlessImports({
   productSelection: ProductSelectionMap;
 }) {
   const imports: string[] = [
-    `// You can also use ESM \`import * as Sentry from "@sentry/serverless"\` instead of \`require\``,
-    `const Sentry = require("@sentry/serverless");`,
+    '// You can also use ESM `import * as Sentry from "@sentry/serverless"` instead of `require`',
+    'const Sentry = require("@sentry/serverless");',
   ];
   if (productSelection.profiling) {
-    imports.push(`const { ProfilingIntegration } = require("@sentry/profiling-node");`);
+    imports.push('const { ProfilingIntegration } = require("@sentry/profiling-node");');
   }
   return imports;
 }
@@ -88,7 +88,7 @@ export function getProductIntegrations({
 }) {
   const integrations: string[] = [];
   if (productSelection.profiling) {
-    integrations.push(`new ProfilingIntegration(),`);
+    integrations.push('new ProfilingIntegration(),');
   }
   return integrations;
 }
@@ -104,15 +104,15 @@ export function getProductInitParams({
 }) {
   const params: string[] = [];
   if (productSelection['performance-monitoring']) {
-    params.push(`// Performance Monitoring`);
-    params.push(`tracesSampleRate: 1.0,`);
+    params.push('// Performance Monitoring');
+    params.push('tracesSampleRate: 1.0,');
   }
 
   if (productSelection.profiling) {
     params.push(
-      `// Set sampling rate for profiling - this is relative to tracesSampleRate`
+      '// Set sampling rate for profiling - this is relative to tracesSampleRate'
     );
-    params.push(`profilesSampleRate: 1.0,`);
+    params.push('profilesSampleRate: 1.0,');
   }
 
   return params;

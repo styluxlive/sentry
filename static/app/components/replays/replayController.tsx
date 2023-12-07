@@ -262,7 +262,7 @@ const ButtonGrid = styled('div')<{isCompact: boolean}>`
   gap: 0 ${space(2)};
   flex-direction: row;
   justify-content: space-between;
-  ${p => (p.isCompact ? `flex-wrap: wrap;` : '')}
+  ${p => (p.isCompact ? 'flex-wrap: wrap;' : '')}
 `;
 
 const Container = styled('div')`

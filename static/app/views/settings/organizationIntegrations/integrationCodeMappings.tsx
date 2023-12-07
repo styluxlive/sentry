@@ -224,7 +224,7 @@ class IntegrationCodeMappings extends DeprecatedAsyncComponent<Props, State> {
       <Fragment>
         <TextBlock>
           {tct(
-            `Code Mappings are used to map stack trace file paths to source code file paths. These mappings are the basis for features like Stack Trace Linking. To learn more, [link: read the docs].`,
+            'Code Mappings are used to map stack trace file paths to source code file paths. These mappings are the basis for features like Stack Trace Linking. To learn more, [link: read the docs].',
             {
               link: <ExternalLink href={docsLink} onClick={this.trackDocsClick} />,
             }

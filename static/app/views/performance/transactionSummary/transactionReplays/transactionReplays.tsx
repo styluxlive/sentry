@@ -81,7 +81,7 @@ function generateEventView({
 
   return EventView.fromSavedQuery({
     id: '',
-    name: `Replay events within a transaction`,
+    name: 'Replay events within a transaction',
     version: 2,
     fields,
     query: `event.type:transaction transaction:"${transactionName}" !replayId:""`,

@@ -32,7 +32,7 @@ const getInstallConfig = () => [
     configurations: [
       {
         language: 'bash',
-        code: `npx @sentry/wizard@latest -i sveltekit`,
+        code: 'npx @sentry/wizard@latest -i sveltekit',
       },
     ],
   },
@@ -114,7 +114,7 @@ const replayOnboarding: OnboardingConfig = {
               value: 'javascript',
               language: 'javascript',
               code: getReplaySDKSetupSnippet({
-                importStatement: `import * as Sentry from "@sentry/sveltekit";`,
+                importStatement: 'import * as Sentry from "@sentry/sveltekit";',
                 dsn: params.dsn,
               }),
             },

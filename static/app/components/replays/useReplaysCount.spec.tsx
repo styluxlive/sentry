@@ -192,7 +192,7 @@ describe('useReplaysCount', () => {
       '/organizations/org-slug/replay-count/',
       expect.objectContaining({
         query: {
-          query: `issue.id:[123,456]`,
+          query: 'issue.id:[123,456]',
           data_source: 'discover',
           statsPeriod: '14d',
           project: -1,
@@ -216,7 +216,7 @@ describe('useReplaysCount', () => {
       '/organizations/org-slug/replay-count/',
       expect.objectContaining({
         query: {
-          query: `issue.id:[789]`,
+          query: 'issue.id:[789]',
           data_source: 'discover',
           statsPeriod: '14d',
           project: -1,
@@ -252,7 +252,7 @@ describe('useReplaysCount', () => {
       '/organizations/org-slug/replay-count/',
       expect.objectContaining({
         query: {
-          query: `issue.id:[123,456]`,
+          query: 'issue.id:[123,456]',
           data_source: 'discover',
           statsPeriod: '14d',
           project: -1,
@@ -296,7 +296,7 @@ describe('useReplaysCount', () => {
       '/organizations/org-slug/replay-count/',
       expect.objectContaining({
         query: {
-          query: `replay_id:[abc,def]`,
+          query: 'replay_id:[abc,def]',
           data_source: 'discover',
           statsPeriod: '14d',
           project: -1,
@@ -355,7 +355,7 @@ describe('useReplaysCount', () => {
       '/organizations/org-slug/replay-count/',
       expect.objectContaining({
         query: {
-          query: `transaction:["/home","/profile"]`,
+          query: 'transaction:["/home","/profile"]',
           data_source: 'discover',
           statsPeriod: '14d',
           project: -1,
@@ -419,7 +419,7 @@ describe('useReplaysCount', () => {
       '/organizations/org-slug/replay-count/',
       expect.objectContaining({
         query: {
-          query: `transaction:["/home","/profile"]`,
+          query: 'transaction:["/home","/profile"]',
           data_source: 'discover',
           project: -1,
           start: mockDate,
@@ -452,7 +452,7 @@ describe('useReplaysCount', () => {
       '/organizations/org-slug/replay-count/',
       expect.objectContaining({
         query: {
-          query: `transaction:["/home","/profile"] transaction.duration>:300ms`,
+          query: 'transaction:["/home","/profile"] transaction.duration>:300ms',
           data_source: 'discover',
           project: -1,
           statsPeriod: '14d',

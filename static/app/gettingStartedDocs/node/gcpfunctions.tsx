@@ -116,11 +116,11 @@ export function GettingStartedWithGCPFunctions({
   const installSnippet: string[] = [
     'dependencies: {',
     '  //...',
-    `  "@sentry/serverless": "^7",`,
+    '  "@sentry/serverless": "^7",',
   ];
 
   if (productSelection.profiling) {
-    installSnippet.push(`  "@sentry/profiling-node": "^1",`);
+    installSnippet.push('  "@sentry/profiling-node": "^1",');
   }
   installSnippet.push('  //...', '}');
 

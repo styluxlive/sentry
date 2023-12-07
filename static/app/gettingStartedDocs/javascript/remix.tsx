@@ -30,7 +30,7 @@ const getInstallConfig = () => [
           }
         ),
         language: 'bash',
-        code: `npx @sentry/wizard@latest -i remix`,
+        code: 'npx @sentry/wizard@latest -i remix',
       },
     ],
   },
@@ -143,7 +143,7 @@ const replayOnboarding: OnboardingConfig = {
               value: 'javascript',
               language: 'javascript',
               code: getReplaySDKSetupSnippet({
-                importStatement: `import * as Sentry from "@sentry/remix";`,
+                importStatement: 'import * as Sentry from "@sentry/remix";',
                 dsn: params.dsn,
               }),
             },

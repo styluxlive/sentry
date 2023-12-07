@@ -41,7 +41,7 @@ const onboarding: OnboardingConfig = {
       configurations: [
         {
           language: 'bash',
-          code: `brew install getsentry/tools/sentry-wizard && sentry-wizard -i ios`,
+          code: 'brew install getsentry/tools/sentry-wizard && sentry-wizard -i ios',
         },
       ],
     },

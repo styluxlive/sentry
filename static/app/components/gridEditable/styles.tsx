@@ -135,7 +135,7 @@ export const GridHeadCell = styled('th')<{isFirst: boolean; sticky?: boolean}>`
   text-transform: uppercase;
   user-select: none;
 
-  ${p => (p.sticky ? `position: sticky; top: 0;` : '')}
+  ${p => (p.sticky ? 'position: sticky; top: 0;' : '')}
 
   a,
   div,

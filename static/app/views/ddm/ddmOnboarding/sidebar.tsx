@@ -198,7 +198,7 @@ function OnboardingContent({
     <Fragment>
       <IntroText>
         {tct(
-          `Adding custom metrics to your [platform] project is simple. Make sure you've got these basics down.`,
+          "Adding custom metrics to your [platform] project is simple. Make sure you've got these basics down.",
           {platform: currentPlatform?.name || currentProject.slug}
         )}
       </IntroText>

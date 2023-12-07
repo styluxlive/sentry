@@ -56,7 +56,7 @@ describe('GroupReplays', () => {
     MockApiClient.clearMockResponses();
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/sdk-updates/`,
+      url: '/organizations/org-slug/sdk-updates/',
       body: [],
     });
   });

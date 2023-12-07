@@ -56,7 +56,7 @@ const getTableColumnTitle = (index: number, vitalName: WebVital) => {
     `p50(${abbrev})`,
     `p75(${abbrev})`,
     `p95(${abbrev})`,
-    `Status`,
+    'Status',
   ];
   return titles[index];
 };

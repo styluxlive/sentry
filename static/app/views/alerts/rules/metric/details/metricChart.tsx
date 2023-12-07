@@ -425,11 +425,11 @@ class MetricChart extends PureComponent<Props, State> {
                           changeStatus === AlertRuleTriggerType.CRITICAL
                             ? theme.red300
                             : changeStatus === AlertRuleTriggerType.WARNING
-                            ? theme.yellow300
-                            : theme.green300;
+                              ? theme.yellow300
+                              : theme.green300;
 
                         return [
-                          `<div class="tooltip-series">`,
+                          '<div class="tooltip-series">',
                           isModified &&
                             `<div><span class="tooltip-label"><strong>${t(
                               'Alert Rule Modified'
@@ -437,8 +437,8 @@ class MetricChart extends PureComponent<Props, State> {
                           `<div><span class="tooltip-label">${marker} <strong>${seriesName}</strong></span>${pointYFormatted}</div>`,
                           comparisonSeries &&
                             `<div><span class="tooltip-label">${comparisonSeries.marker} <strong>${comparisonSeriesName}</strong></span>${comparisonPointYFormatted}</div>`,
-                          `</div>`,
-                          `<div class="tooltip-footer">`,
+                          '</div>',
+                          '<div class="tooltip-footer">',
                           `<span>${startTime} &mdash; ${endTime}</span>`,
                           comparisonPointY !== undefined &&
                             Math.abs(changePercentage) !== Infinity &&
@@ -446,7 +446,7 @@ class MetricChart extends PureComponent<Props, State> {
                             `<span style="color:${changeStatusColor};margin-left:10px;">${
                               Math.sign(changePercentage) === 1 ? '+' : '-'
                             }${Math.abs(changePercentage).toFixed(2)}%</span>`,
-                          `</div>`,
+                          '</div>',
                           '<div class="tooltip-arrow"></div>',
                         ]
                           .filter(e => e)

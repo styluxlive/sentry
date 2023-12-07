@@ -27,7 +27,7 @@ function ThresholdsHoverWrapper({children, thresholds, tableData}: Props) {
   const dataType = tableMeta[field];
   const formattedUnit =
     unit && (dataType === 'duration' ? `${unit}s` : `/${unit.split('/')[1]}`);
-  const title = unit ? t(`Thresholds in %s`, formattedUnit) : t('Thresholds');
+  const title = unit ? t('Thresholds in %s', formattedUnit) : t('Thresholds');
 
   const notSetMsg = t('Not set');
   const maxOneValue = max1 ?? notSetMsg;

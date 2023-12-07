@@ -234,7 +234,7 @@ describe('getFieldRenderer', function () {
 
     expect(screen.queryByRole('link')).toHaveAttribute(
       'href',
-      `/organizations/org-slug/releases/F2520C43515BD1F0E8A6BD46233324641A370BF6/`
+      '/organizations/org-slug/releases/F2520C43515BD1F0E8A6BD46233324641A370BF6/'
     );
     expect(screen.getByText('F2520C43515B')).toBeInTheDocument();
   });
@@ -248,7 +248,7 @@ describe('getFieldRenderer', function () {
 
     expect(screen.queryByRole('link')).toHaveAttribute(
       'href',
-      `/organizations/org-slug/issues/123214/`
+      '/organizations/org-slug/issues/123214/'
     );
     expect(screen.getByText('SENTRY-T6P')).toBeInTheDocument();
   });

@@ -30,7 +30,7 @@ describe('parseMRI', () => {
       const mri: MRI = `c:${useCase as UseCase}/xyz@test`;
       const parsedMRI = {
         type: 'c',
-        name: `xyz`,
+        name: 'xyz',
         unit: 'test',
         useCase,
       };

@@ -70,7 +70,7 @@ function RelocationOnboarding(props: Props) {
 
   const api = useApi();
   const fetchData = useCallback(() => {
-    const endpoint = `/publickeys/relocations/`;
+    const endpoint = '/publickeys/relocations/';
     return api
       .requestPromise(endpoint)
       .then(response => {

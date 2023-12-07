@@ -30,7 +30,7 @@ export const useIndexedResourcesQuery = ({
   const eventView = EventView.fromNewQueryWithPageFilters(
     {
       fields: [
-        `any(id)`,
+        'any(id)',
         'project',
         'span.group',
         SPAN_DESCRIPTION,

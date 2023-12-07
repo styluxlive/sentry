@@ -55,7 +55,7 @@ export function DataSetStep({
     <BuildStep
       title={t('Choose your dataset')}
       description={tct(
-        `This reflects the type of information you want to use. To learn more, [link: read the docs].`,
+        'This reflects the type of information you want to use. To learn more, [link: read the docs].',
         {
           link: (
             <ExternalLink href="https://docs.sentry.io/product/dashboards/widget-builder/#choose-your-dataset" />

@@ -51,7 +51,7 @@ export function InviteBanner({
 
   const api = useApi();
   // NOTE: this is currently used for Github only
-  const promptsFeature = `github_missing_members`;
+  const promptsFeature = 'github_missing_members';
   const location = useLocation();
 
   const snoozePrompt = useCallback(async () => {

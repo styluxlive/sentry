@@ -86,7 +86,7 @@ TransactionProfileIdProvider.Context = TransactionProfileContext;
 export function useTransactionProfileId() {
   const ctx = useContext(TransactionProfileContext);
   if (typeof ctx === 'undefined') {
-    throw new Error(`useTransactionProfile called outside of TransactionProfileProvider`);
+    throw new Error('useTransactionProfile called outside of TransactionProfileProvider');
   }
 
   return ctx;

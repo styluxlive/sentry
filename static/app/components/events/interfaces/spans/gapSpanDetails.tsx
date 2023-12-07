@@ -156,7 +156,7 @@ function ManualInstrumentationInstruction() {
   return (
     <SubText>
       {tct(
-        `You can also [docLink:manually instrument] certain regions of your code to see span details for future transactions.`,
+        'You can also [docLink:manually instrument] certain regions of your code to see span details for future transactions.',
         {
           docLink: (
             <ExternalLink href="https://docs.sentry.io/product/performance/getting-started/" />

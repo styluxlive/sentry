@@ -287,8 +287,8 @@ export const FIELD_FORMATTERS: FieldFormatters = {
       const value = Array.isArray(data[field])
         ? data[field].slice(-1)
         : defined(data[field])
-        ? data[field]
-        : emptyValue;
+          ? data[field]
+          : emptyValue;
       if (isUrl(value)) {
         return (
           <Container>
@@ -768,7 +768,7 @@ const SPECIAL_FUNCTIONS: SpecialFunctions = {
       <TimeSpentCell
         percentage={data[fieldName]}
         total={data[`sum(${SpanMetricsField.SPAN_SELF_TIME})`]}
-        op={data[`span.op`]}
+        op={data['span.op']}
       />
     );
   },

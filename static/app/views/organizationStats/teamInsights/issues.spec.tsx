@@ -61,7 +61,7 @@ describe('TeamStatsIssues', () => {
   beforeEach(() => {
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/projects/`,
+      url: '/organizations/org-slug/projects/',
       body: [],
     });
     MockApiClient.addMockResponse({

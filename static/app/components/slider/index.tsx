@@ -254,8 +254,8 @@ function BaseSlider(
                 index === 0
                   ? 'start'
                   : index === allTickValues.length - 1
-                  ? 'end'
-                  : 'center'
+                    ? 'end'
+                    : 'center'
               }
             >
               {showTickLabels && (
@@ -346,7 +346,7 @@ const SliderTrack = styled('div', {
   margin-bottom: ${p => (p.hasTickLabels ? '2em' : '0.5rem')};
   margin-top: ${p => (p.hasThumbLabels ? '2em' : '0.5rem')};
 
-  ${p => p.disabled && `pointer-events: none;`}
+  ${p => p.disabled && 'pointer-events: none;'}
 
   /* Users can click on the track to quickly jump to a value. We should extend the click
   area to make the action easier. */

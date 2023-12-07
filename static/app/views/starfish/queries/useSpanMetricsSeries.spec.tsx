@@ -89,7 +89,8 @@ describe('useSpanMetricsSeries', () => {
       expect.objectContaining({
         method: 'GET',
         query: expect.objectContaining({
-          query: `span.group:221aa7ebd216 transaction:/api/details release:0.0.1 resource.render_blocking_status:blocking`,
+          query:
+            'span.group:221aa7ebd216 transaction:/api/details release:0.0.1 resource.render_blocking_status:blocking',
           dataset: 'spansMetrics',
           statsPeriod: '10d',
           referrer: 'span-metrics-series',

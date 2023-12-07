@@ -353,7 +353,7 @@ const ContentWrapper = styled('div')`
 `;
 
 const ChartPanel = styled(Panel)<{isLoading: boolean}>`
-  ${p => p.isLoading && `opacity: 0.6;`}
+  ${p => p.isLoading && 'opacity: 0.6;'}
 `;
 
 const ChartHeader = styled('div')`

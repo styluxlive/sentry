@@ -86,7 +86,7 @@ function createIncidentSeries(
   const formatter = ({value, marker}: any) => {
     const time = formatTooltipDate(moment(value), 'MMM D, YYYY LT');
     return [
-      `<div class="tooltip-series"><div>`,
+      '<div class="tooltip-series"><div>',
       `<span class="tooltip-label">${marker} <strong>${t('Alert')} #${
         incident.identifier
       }</strong></span>${
@@ -98,7 +98,7 @@ function createIncidentSeries(
             )}`
           : ''
       }`,
-      `</div></div>`,
+      '</div></div>',
       `<div class="tooltip-footer">${time}</div>`,
       '<div class="tooltip-arrow"></div>',
     ].join('');
@@ -372,8 +372,8 @@ export function getMetricAlertChartOption({
     max: isCrashFreeAlert(rule.dataset)
       ? 100
       : maxThresholdValue > maxSeriesValue
-      ? maxThresholdValue
-      : undefined,
+        ? maxThresholdValue
+        : undefined,
     min: minChartValue || undefined,
   };
 

@@ -94,7 +94,7 @@ describe('TransactionReplays', () => {
   beforeEach(() => {
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/sdk-updates/`,
+      url: '/organizations/org-slug/sdk-updates/',
       body: [],
     });
     MockApiClient.addMockResponse({

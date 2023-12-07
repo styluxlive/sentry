@@ -584,7 +584,7 @@ const StyledPanelTable = styled(PanelTable)<{scrollbarWidth?: number}>`
       border-bottom: 1px solid ${p => p.theme.border};
       :nth-child(5n) {
         height: 100%;
-        ${p => !p.scrollbarWidth && `display: none`}
+        ${p => !p.scrollbarWidth && 'display: none'}
       }
     }
 

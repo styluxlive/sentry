@@ -256,7 +256,7 @@ export function ScratchpadSelector() {
       <CompactSelect
         grid
         options={scratchpadOptions}
-        value={scratchpads.selected ?? `None`}
+        value={scratchpads.selected ?? 'None'}
         closeOnSelect={false}
         onChange={option => {
           scratchpads.toggleSelected(option.value);

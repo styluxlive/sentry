@@ -175,7 +175,7 @@ tags.sku_class:enterprise #enterprise`;
         />
         <TextBlock>
           {tct(
-            `Auto-assign issues to users and teams. To learn more, [link:read the docs].`,
+            'Auto-assign issues to users and teams. To learn more, [link:read the docs].',
             {
               link: (
                 <ExternalLink href="https://docs.sentry.io/product/error-monitoring/issue-owners/" />

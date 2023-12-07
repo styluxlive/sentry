@@ -111,7 +111,7 @@ function TraceViewHeader(props: PropType) {
                   position: 'absolute',
                   top: 0,
                   left: `calc(${toPercent(dividerPosition)} - 0.5px)`,
-                  height: `100px`,
+                  height: '100px',
                 }}
               />
               <div

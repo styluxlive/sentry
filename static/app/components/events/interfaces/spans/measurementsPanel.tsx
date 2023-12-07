@@ -103,7 +103,7 @@ const Label = styled('div')<{
   failedThreshold: boolean;
   isSingleLabel?: boolean;
 }>`
-  transform: ${p => (p.isSingleLabel ? `translate(-50%, 15%)` : `translateY(15%)`)};
+  transform: ${p => (p.isSingleLabel ? 'translate(-50%, 15%)' : 'translateY(15%)')};
   font-size: ${p => p.theme.fontSizeExtraSmall};
   font-weight: 600;
   color: ${p => (p.failedThreshold ? `${p.theme.errorText}` : `${p.theme.textColor}`)};

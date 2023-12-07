@@ -85,7 +85,7 @@ export function AggregateFlamegraphPanel({transaction}: {transaction: string}) {
                   <LoadingIndicator>{t('Loading Aggregate Flamegraph')}</LoadingIndicator>
                 ) : isEmpty ? (
                   <EmptyStateWarning>
-                    <p>{t(`Aggregate flamegraph isn't available for your query`)}</p>
+                    <p>{t("Aggregate flamegraph isn't available for your query")}</p>
                   </EmptyStateWarning>
                 ) : (
                   <DeprecatedAggregateFlamegraph

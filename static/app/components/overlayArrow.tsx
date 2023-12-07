@@ -86,14 +86,14 @@ const Wrap = styled('div')<{size: number; placement?: PopperProps<any>['placemen
 
   ${p =>
     p.placement?.startsWith('top') &&
-    `bottom: 0; transform: translateY(50%) rotate(180deg);`}
-  ${p => p.placement?.startsWith('bottom') && `top: 0; transform: translateY(-50%) ;`}
+    'bottom: 0; transform: translateY(50%) rotate(180deg);'}
+  ${p => p.placement?.startsWith('bottom') && 'top: 0; transform: translateY(-50%) ;'}
   ${p =>
     p.placement?.startsWith('left') &&
-    `right: 0; transform: translateX(50%) rotate(90deg);`}
+    'right: 0; transform: translateX(50%) rotate(90deg);'}
   ${p =>
     p.placement?.startsWith('right') &&
-    `left: 0; transform: translateX(-50%) rotate(-90deg);`}
+    'left: 0; transform: translateX(-50%) rotate(-90deg);'}
 `;
 
 const SVG = styled('svg')<{background: ColorOrAlias; border: ColorOrAlias}>`

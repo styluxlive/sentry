@@ -75,7 +75,7 @@ describe('Performance > Widgets > Query Batching', function () {
 
     eventStatsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-stats/`,
+      url: '/organizations/org-slug/events-stats/',
       body: {
         'tpm()': {
           data: [
@@ -337,7 +337,7 @@ describe('Performance > Widgets > Query Batching', function () {
   it('Errors work correctly', async function () {
     eventStatsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-stats/`,
+      url: '/organizations/org-slug/events-stats/',
       statusCode: 404,
       body: {},
     });

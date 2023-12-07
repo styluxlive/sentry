@@ -303,7 +303,7 @@ describe('GroupActivity', function () {
   it('requests assignees that are not in the team store', async function () {
     const team = Team({id: '123', name: 'workflow'});
     const teamRequest = MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/teams/`,
+      url: '/organizations/org-slug/teams/',
       body: [team],
     });
     createWrapper({

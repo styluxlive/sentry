@@ -80,7 +80,7 @@ describe('CreateProject', function () {
     TeamStore.loadUserTeams([teamNoAccess]);
 
     MockApiClient.addMockResponse({
-      url: `/projects/testOrg/rule-conditions/`,
+      url: '/projects/testOrg/rule-conditions/',
       body: {},
       // Not required for these tests
       statusCode: 500,

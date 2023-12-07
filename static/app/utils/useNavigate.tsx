@@ -20,7 +20,7 @@ export function useNavigate() {
     (to: string | number, options: NavigateOptions = {}) => {
       if (!hasMountedRef.current) {
         throw new Error(
-          `You should call navigate() in a React.useEffect(), not when your component is first rendered.`
+          'You should call navigate() in a React.useEffect(), not when your component is first rendered.'
         );
       }
       if (typeof to === 'number') {

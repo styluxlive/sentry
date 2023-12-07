@@ -8,7 +8,7 @@ import NewProject from 'sentry/views/projectInstall/newProject';
 describe('NewProjectPlatform', function () {
   beforeEach(() => {
     MockApiClient.addMockResponse({
-      url: `/projects/org-slug/rule-conditions/`,
+      url: '/projects/org-slug/rule-conditions/',
       body: MOCK_RESP_VERBOSE,
     });
   });

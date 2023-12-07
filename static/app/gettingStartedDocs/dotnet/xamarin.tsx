@@ -140,7 +140,7 @@ const onboarding: OnboardingConfig = {
               description: tct('Initialize the SDK on your [code:MainActivity].', {
                 code: <code />,
               }),
-              language: `csharp`,
+              language: 'csharp',
               code: getConfigureSnippetAndroid(params),
             },
           ],
@@ -152,7 +152,7 @@ const onboarding: OnboardingConfig = {
               description: tct('Initialize the SDK on your [code:AppDelegate.cs].', {
                 code: <code />,
               }),
-              language: `csharp`,
+              language: 'csharp',
               code: getConfigureSnippetIOS(params),
             },
           ],
@@ -171,7 +171,7 @@ const onboarding: OnboardingConfig = {
                   {t("NOTE: It's recommended to not setup the CacheDirectory for UWP.")}
                 </Fragment>
               ),
-              language: `csharp`,
+              language: 'csharp',
               code: getConfigureSnippetUWP(params),
             },
           ],

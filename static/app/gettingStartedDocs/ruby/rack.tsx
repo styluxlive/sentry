@@ -19,7 +19,7 @@ export const steps = ({
     configurations: [
       {
         language: 'ruby',
-        code: `gem "sentry-ruby"`,
+        code: 'gem "sentry-ruby"',
       },
     ],
   },

@@ -28,7 +28,7 @@ export function SearchInvalidTag({message, highlightMessage, docLink}: Props) {
   );
 }
 
-const Invalid = styled(`span`)`
+const Invalid = styled('span')`
   font-size: ${p => p.theme.fontSizeSmall};
   font-family: ${p => p.theme.text.family};
   color: ${p => p.theme.gray400};
@@ -42,6 +42,6 @@ const Invalid = styled(`span`)`
   width: 100%;
 `;
 
-const Highlight = styled(`strong`)`
+const Highlight = styled('strong')`
   color: ${p => p.theme.linkColor};
 `;

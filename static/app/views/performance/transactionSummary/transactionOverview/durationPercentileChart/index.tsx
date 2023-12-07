@@ -32,7 +32,7 @@ function DurationPercentileChart({currentFilter, ...props}: Props) {
         position="top"
         size="sm"
         title={t(
-          `Compare the duration at each percentile. Compare with Latency Histogram to see transaction volume at duration intervals.`
+          'Compare the duration at each percentile. Compare with Latency Histogram to see transaction volume at duration intervals.'
         )}
       />
     </HeaderTitleLegend>

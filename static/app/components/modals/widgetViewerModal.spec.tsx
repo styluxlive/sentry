@@ -1258,7 +1258,7 @@ describe('Modals -> WidgetViewerModal', function () {
     let metricsMock;
     const mockQuery = {
       conditions: '',
-      fields: [`sum(session)`],
+      fields: ['sum(session)'],
       columns: [],
       aggregates: [],
       id: '1',
@@ -1352,7 +1352,7 @@ describe('Modals -> WidgetViewerModal', function () {
         seriesData: [],
       });
       expect(metricsMock).toHaveBeenCalledTimes(1);
-      await userEvent.click(screen.getByText(`sum(session)`), {delay: null});
+      await userEvent.click(screen.getByText('sum(session)'), {delay: null});
       expect(initialData.router.push).toHaveBeenCalledWith({
         query: {sort: '-sum(session)'},
       });

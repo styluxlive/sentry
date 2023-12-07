@@ -56,10 +56,10 @@ type Params = DocsParams<PlatformOptions>;
 const getSentryInitLayout = (params: Params, siblingOption: string): string => {
   return `${
     siblingOption === SiblingOption.VUE2
-      ? `Vue,`
+      ? 'Vue,'
       : siblingOption === SiblingOption.VUE3
-      ? 'app,'
-      : ''
+        ? 'app,'
+        : ''
   }dsn: "${params.dsn}",
   integrations: [${
     params.isPerformanceSelected
@@ -127,10 +127,10 @@ const isVue = (siblingOption: string): boolean =>
 function getPerformanceIntegration(siblingOption: string): string {
   return `${
     isVue(siblingOption)
-      ? `routingInstrumentation: SentryVue.vueRouterInstrumentation(router),`
+      ? 'routingInstrumentation: SentryVue.vueRouterInstrumentation(router),'
       : isAngular(siblingOption)
-      ? `routingInstrumentation: SentryAngular.routingInstrumentation,`
-      : ''
+        ? 'routingInstrumentation: SentryAngular.routingInstrumentation,'
+        : ''
   }`;
 }
 
@@ -152,7 +152,7 @@ const getInstallStep = (params: Params) => [
     description: (
       <p>
         {tct(
-          `Install the Sentry Capacitor SDK as a dependency using [codeNpm:npm] or [codeYarn:yarn], alongside the Sentry [siblingName:] SDK:`,
+          'Install the Sentry Capacitor SDK as a dependency using [codeNpm:npm] or [codeYarn:yarn], alongside the Sentry [siblingName:] SDK:',
           {
             codeYarn: <code />,
             codeNpm: <code />,
@@ -187,7 +187,7 @@ const getInstallStep = (params: Params) => [
         additionalInfo: (
           <p>
             {tct(
-              `The version of the Sentry [siblingName:] SDK must match with the version referred by Sentry Capacitor. To check which version of the Sentry [siblingName:] SDK is installed, use the following command: [code:npm info @sentry/capacitor peerDependencies]`,
+              'The version of the Sentry [siblingName:] SDK must match with the version referred by Sentry Capacitor. To check which version of the Sentry [siblingName:] SDK is installed, use the following command: [code:npm info @sentry/capacitor peerDependencies]',
               {
                 code: <code />,
                 siblingName: getSiblingName(params.platformOptions.siblingOption),
@@ -222,7 +222,7 @@ const onboarding: OnboardingConfig<PlatformOptions> = {
       configurations: [
         {
           language: 'javascript',
-          code: `myUndefinedFunction();`,
+          code: 'myUndefinedFunction();',
         },
       ],
     },
@@ -307,7 +307,7 @@ function getSetupConfiguration({
   const configuration = [
     {
       description: tct(
-        `You should init the Sentry capacitor SDK in your [code:main.ts] file as soon as possible during application load up, before initializing Sentry [siblingName:]:`,
+        'You should init the Sentry capacitor SDK in your [code:main.ts] file as soon as possible during application load up, before initializing Sentry [siblingName:]:',
         {
           siblingName: getSiblingName(siblingOption),
           code: <code />,

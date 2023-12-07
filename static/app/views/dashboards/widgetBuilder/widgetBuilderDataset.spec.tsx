@@ -211,7 +211,7 @@ describe('WidgetBuilder', function () {
     sessionsDataMock = MockApiClient.addMockResponse({
       method: 'GET',
       url: '/organizations/org-slug/sessions/',
-      body: SessionsField(`sum(session)`),
+      body: SessionsField('sum(session)'),
     });
 
     metricsDataMock = MockApiClient.addMockResponse({
@@ -419,11 +419,11 @@ describe('WidgetBuilder', function () {
 
       await waitFor(() =>
         expect(metricsDataMock).toHaveBeenLastCalledWith(
-          `/organizations/org-slug/metrics/data/`,
+          '/organizations/org-slug/metrics/data/',
           expect.objectContaining({
             query: expect.objectContaining({
               environment: [],
-              field: [`session.crash_free_rate`],
+              field: ['session.crash_free_rate'],
               groupBy: [],
               interval: '5m',
               project: [],
@@ -455,7 +455,7 @@ describe('WidgetBuilder', function () {
 
       await waitFor(() =>
         expect(metricsDataMock).toHaveBeenLastCalledWith(
-          `/organizations/org-slug/metrics/data/`,
+          '/organizations/org-slug/metrics/data/',
           expect.objectContaining({
             query: expect.objectContaining({
               environment: [],
@@ -493,7 +493,7 @@ describe('WidgetBuilder', function () {
 
       await waitFor(() =>
         expect(sessionsDataMock).toHaveBeenLastCalledWith(
-          `/organizations/org-slug/sessions/`,
+          '/organizations/org-slug/sessions/',
           expect.objectContaining({
             query: expect.objectContaining({
               environment: [],
@@ -522,7 +522,7 @@ describe('WidgetBuilder', function () {
       await userEvent.click(screen.getByText('Line Chart'));
 
       expect(screen.getByText('crash_free_rate(…)')).toBeInTheDocument();
-      expect(screen.getByText(`session`)).toBeInTheDocument();
+      expect(screen.getByText('session')).toBeInTheDocument();
 
       await userEvent.click(screen.getByText('crash_free_rate(…)'));
       expect(screen.getByText('count_unique(…)')).toBeInTheDocument();

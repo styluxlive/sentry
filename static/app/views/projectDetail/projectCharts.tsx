@@ -358,7 +358,7 @@ class ProjectCharts extends Component<Props, State> {
                     query ?? '',
                   ]).formatString()}
                   yAxis="failure_rate()"
-                  field={[`failure_rate()`]}
+                  field={['failure_rate()']}
                   api={api}
                   router={router}
                   organization={organization}
@@ -375,7 +375,7 @@ class ProjectCharts extends Component<Props, State> {
                     query ?? '',
                   ]).formatString()}
                   yAxis="tpm()"
-                  field={[`tpm()`]}
+                  field={['tpm()']}
                   api={api}
                   router={router}
                   organization={organization}
@@ -393,7 +393,7 @@ class ProjectCharts extends Component<Props, State> {
                       query ?? '',
                     ]).formatString()}
                     yAxis="count()"
-                    field={[`count()`]}
+                    field={['count()']}
                     api={api}
                     router={router}
                     organization={organization}
@@ -419,7 +419,7 @@ class ProjectCharts extends Component<Props, State> {
                     query ?? '',
                   ]).formatString()}
                   yAxis="count()"
-                  field={[`count()`]}
+                  field={['count()']}
                   api={api}
                   router={router}
                   organization={organization}

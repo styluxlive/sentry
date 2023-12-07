@@ -452,7 +452,7 @@ export default SourceField;
 const Wrapper = styled('div')<{hideCaret?: boolean}>`
   position: relative;
   width: 100%;
-  ${p => p.hideCaret && `caret-color: transparent;`}
+  ${p => p.hideCaret && 'caret-color: transparent;'}
 `;
 
 const StyledTextField = styled(TextField)`

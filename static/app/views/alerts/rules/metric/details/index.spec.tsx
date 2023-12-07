@@ -53,7 +53,7 @@ describe('MetricAlertDetails', () => {
       body: rule,
     });
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/incidents/`,
+      url: '/organizations/org-slug/incidents/',
       body: [incident],
     });
 
@@ -95,7 +95,7 @@ describe('MetricAlertDetails', () => {
       body: incident,
     });
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/incidents/`,
+      url: '/organizations/org-slug/incidents/',
       body: [incident],
     });
     // Related issues to the selected incident
@@ -141,7 +141,7 @@ describe('MetricAlertDetails', () => {
       body: rule,
     });
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/incidents/`,
+      url: '/organizations/org-slug/incidents/',
       body: [incident],
     });
 
@@ -189,7 +189,7 @@ describe('MetricAlertDetails', () => {
       body: rule,
     });
     MockApiClient.addMockResponse({
-      url: `/organizations/org-slug/incidents/`,
+      url: '/organizations/org-slug/incidents/',
       body: [],
     });
     MockApiClient.addMockResponse({

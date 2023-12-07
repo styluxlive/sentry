@@ -95,7 +95,7 @@ function Profiles(): React.ReactElement {
       projects={projects.projects}
       tab={Tab.PROFILING}
       generateEventView={() => EventView.fromLocation(location)}
-      getDocumentTitle={() => t(`Profile: %s`, transaction)}
+      getDocumentTitle={() => t('Profile: %s', transaction)}
       childComponent={() => {
         return (
           <Layout.Main fullWidth>

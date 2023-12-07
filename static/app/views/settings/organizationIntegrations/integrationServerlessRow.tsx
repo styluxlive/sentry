@@ -182,7 +182,7 @@ const NameRuntimeVersionWrapper = styled('div')`
   flex-direction: column;
 `;
 
-const Name = styled(`span`)`
+const Name = styled('span')`
   padding-bottom: ${space(1)};
 `;
 

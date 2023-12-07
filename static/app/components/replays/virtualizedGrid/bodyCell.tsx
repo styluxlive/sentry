@@ -12,9 +12,9 @@ const cellBackground = (p: CellProps & {theme: Theme}) => {
     return `background-color: ${p.theme.red100};`;
   }
   if (p.isStatusWarning) {
-    return `background-color: var(--background-warning-default, rgba(245, 176, 0, 0.09));`;
+    return 'background-color: var(--background-warning-default, rgba(245, 176, 0, 0.09));';
   }
-  return `background-color: inherit;`;
+  return 'background-color: inherit;';
 };
 
 const cellColor = (p: CellProps & {theme: Theme}) => {
@@ -22,15 +22,15 @@ const cellColor = (p: CellProps & {theme: Theme}) => {
     const color = p.isStatusError
       ? p.theme.red300
       : p.isStatusWarning
-      ? p.theme.yellow300
-      : p.theme.white;
+        ? p.theme.yellow300
+        : p.theme.white;
     return `color: ${color};`;
   }
   const colors = p.isStatusError
     ? [p.theme.red300, p.theme.red400]
     : p.isStatusWarning
-    ? [p.theme.textColor, p.theme.subText]
-    : ['inherit', p.theme.subText];
+      ? [p.theme.textColor, p.theme.subText]
+      : ['inherit', p.theme.subText];
 
   return `color: ${p.hasOccurred !== false ? colors[0] : colors[1]};`;
 };

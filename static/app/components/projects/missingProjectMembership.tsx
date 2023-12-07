@@ -151,7 +151,7 @@ class MissingProjectMembership extends Component<Props, State> {
             icon={<IconFlag size="xl" />}
             title={t("You're not a member of this project.")}
             description={t(
-              `You'll need to join a team with access before you can view this data.`
+              "You'll need to join a team with access before you can view this data."
             )}
             action={
               <Field>

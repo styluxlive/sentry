@@ -76,7 +76,7 @@ function AppStartup({additionalFilters, chartHeight}: Props) {
     secondaryRelease
   )} (count_starts(measurements.app_start_cold):>0 OR count_starts(measurements.app_start_warm):>0)`;
 
-  const orderby = decodeScalar(locationQuery.sort, `-count`);
+  const orderby = decodeScalar(locationQuery.sort, '-count');
   const newQuery: NewQuery = {
     name: '',
     fields: [

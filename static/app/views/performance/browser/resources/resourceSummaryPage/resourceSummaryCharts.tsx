@@ -42,7 +42,7 @@ function ResourceSummaryCharts(props: {groupId: string}) {
           : {}),
       },
       [
-        `spm()`,
+        'spm()',
         `avg(${SPAN_SELF_TIME})`,
         `avg(${HTTP_RESPONSE_CONTENT_LENGTH})`,
         `avg(${HTTP_DECODED_RESPONSE_CONTENT_LENGTH})`,
@@ -65,7 +65,7 @@ function ResourceSummaryCharts(props: {groupId: string}) {
         <ChartPanel title={getThroughputChartTitle('http', RESOURCE_THROUGHPUT_UNIT)}>
           <Chart
             height={160}
-            data={[spanMetricsSeriesData?.[`spm()`]]}
+            data={[spanMetricsSeriesData?.['spm()']]}
             loading={areSpanMetricsSeriesLoading}
             isLineChart
             definedAxisTicks={4}

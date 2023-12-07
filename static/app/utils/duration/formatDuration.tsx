@@ -71,9 +71,9 @@ export default function formatDuration({
       return valueInUnit.toLocaleString();
     case 'count':
       return String(valueInUnit);
-    case 'h:mm:ss': // fall-through
-    case 'hh:mm:ss': // fall-through
-    case 'h:mm:ss.sss': // fall-through
+    case 'h:mm:ss':
+    case 'hh:mm:ss':
+    case 'h:mm:ss.sss':
     case 'hh:mm:ss.sss':
       const includeMs = style.endsWith('.sss');
       const valueInSec = msToPrecision(ms, 'sec');

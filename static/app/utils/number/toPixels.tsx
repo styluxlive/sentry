@@ -1,4 +1,4 @@
-export type CssSize = number | `${number}px` | `1em` | '100%';
+export type CssSize = number | `${number}px` | '1em' | '100%';
 
 /**
  * Convert a number into a `${number}px` value

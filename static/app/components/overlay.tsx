@@ -82,7 +82,7 @@ function computeOriginFromArrow(
     case 'right':
       return {originX: 0, originY: y ? `${y}px` : '50%'};
     default:
-      return {originX: `50%`, originY: '50%'};
+      return {originX: '50%', originY: '50%'};
   }
 }
 
@@ -140,7 +140,7 @@ const Overlay = styled(
 
   /* Override z-index from useOverlayPosition */
   z-index: ${p => p.theme.zIndex.dropdown} !important;
-  ${p => p.animated && `will-change: transform, opacity;`}
+  ${p => p.animated && 'will-change: transform, opacity;'}
 
   /* Specificity hack to allow override styles to have higher specificity than
    * styles provided in any styled components which extend Overlay */

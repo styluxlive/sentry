@@ -80,9 +80,9 @@ export default function getGuidesContent(orgSlug: string | null): GuidesContent 
         {
           target: 'alerts_write_owner',
           description: tct(
-            `Today only admins in your organization can create alert rules but we recommend [link:allowing members to create alerts], too.`,
+            'Today only admins in your organization can create alert rules but we recommend [link:allowing members to create alerts], too.',
             {
-              link: <Link to={orgSlug ? `/settings/${orgSlug}` : `/settings`} />,
+              link: <Link to={orgSlug ? `/settings/${orgSlug}` : '/settings'} />,
             }
           ),
           nextText: t('Allow'),
@@ -98,14 +98,14 @@ export default function getGuidesContent(orgSlug: string | null): GuidesContent 
           title: t('Event Breakdown'),
           target: 'trace_view_guide_breakdown',
           description: t(
-            `The event breakdown shows you the breakdown of event types within a trace.`
+            'The event breakdown shows you the breakdown of event types within a trace.'
           ),
         },
         {
           title: t('Events'),
           target: 'trace_view_guide_row',
           description: t(
-            `You can quickly see errors and transactions in a trace alongside the project, transaction duration and any errors or performance issues related to the transaction.`
+            'You can quickly see errors and transactions in a trace alongside the project, transaction duration and any errors or performance issues related to the transaction.'
           ),
         },
         {
@@ -305,7 +305,7 @@ export default function getGuidesContent(orgSlug: string | null): GuidesContent 
           title: t('Save your charts'),
           target: 'create_scratchpad',
           description: t(
-            `Scratchpads are stored locally on your device. If you want to share them, simply send the URL to your teammates.`
+            'Scratchpads are stored locally on your device. If you want to share them, simply send the URL to your teammates.'
           ),
         },
       ],
@@ -325,35 +325,35 @@ function getDemoModeGuides(): GuidesContent {
           title: t('Projects'),
           target: 'projects',
           description: t(
-            `Create a project for any type of application you want to monitor.`
+            'Create a project for any type of application you want to monitor.'
           ),
         },
         {
           title: t('Issues'),
           target: 'issues',
           description: t(
-            `Here's a list of what's broken and slow. Sentry automatically groups similar events together into an issue.`
+            "Here's a list of what's broken and slow. Sentry automatically groups similar events together into an issue."
           ),
         },
         {
           title: t('Performance'),
           target: 'performance',
           description: t(
-            `Keep a pulse on crash rates, throughput, and latency issues across projects.`
+            'Keep a pulse on crash rates, throughput, and latency issues across projects.'
           ),
         },
         {
           title: t('Releases'),
           target: 'releases',
           description: t(
-            `Track the health of every release, see differences between releases from crash analytics to adoption rates.`
+            'Track the health of every release, see differences between releases from crash analytics to adoption rates.'
           ),
         },
         {
           title: t('Discover'),
           target: 'discover',
           description: t(
-            `Query and unlock insights into the health of your entire system and get answers to critical business questions all in one place.`
+            'Query and unlock insights into the health of your entire system and get answers to critical business questions all in one place.'
           ),
           nextText: t('Got it'),
         },
@@ -389,14 +389,14 @@ function getDemoModeGuides(): GuidesContent {
           title: t('Find your broken code'),
           target: 'stack_trace',
           description: t(
-            `View the stack trace to see the exact sequence of function calls leading to the error in question.`
+            'View the stack trace to see the exact sequence of function calls leading to the error in question.'
           ),
         },
         {
           title: t('Retrace your steps'),
           target: 'breadcrumbs',
           description: t(
-            `Sentry automatically captures breadcrumbs for events so you can see the sequence of events leading up to the error.`
+            'Sentry automatically captures breadcrumbs for events so you can see the sequence of events leading up to the error.'
           ),
           nextText: t('Got it'),
         },
@@ -411,7 +411,7 @@ function getDemoModeGuides(): GuidesContent {
           title: t('Compare releases'),
           target: 'release_projects',
           description: t(
-            `Click here and select the "react-native" project to see how the release is trending compared to previous releases.`
+            'Click here and select the "react-native" project to see how the release is trending compared to previous releases.'
           ),
         },
       ],
@@ -424,7 +424,7 @@ function getDemoModeGuides(): GuidesContent {
           title: t('Release-specfic trends'),
           target: 'release_version',
           description: t(
-            `Select the latest release to review new and regressed issues, and business critical metrics like crash rate, and user adoption.`
+            'Select the latest release to review new and regressed issues, and business critical metrics like crash rate, and user adoption.'
           ),
         },
       ],
@@ -437,7 +437,7 @@ function getDemoModeGuides(): GuidesContent {
           title: t('New and regressed issues'),
           target: 'release_states',
           description: t(
-            `Along with reviewing how your release is trending over time compared to previous releases, you can view new and regressed issues here.`
+            'Along with reviewing how your release is trending over time compared to previous releases, you can view new and regressed issues here.'
           ),
         },
       ],
@@ -450,7 +450,7 @@ function getDemoModeGuides(): GuidesContent {
           title: t('See slow transactions'),
           target: 'performance_table',
           description: t(
-            `Trace slow-loading pages back to their API calls, as well as, related errors and users impacted across projects. Select a transaction to see more details.`
+            'Trace slow-loading pages back to their API calls, as well as, related errors and users impacted across projects. Select a transaction to see more details.'
           ),
         },
       ],

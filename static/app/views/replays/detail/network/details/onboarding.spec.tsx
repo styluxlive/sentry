@@ -42,7 +42,7 @@ describe('Setup', () => {
       ).toBeInTheDocument();
 
       expect(container.querySelector('code')).toHaveTextContent(
-        `networkRequestHeaders: ['X-Custom-Header'],`
+        "networkRequestHeaders: ['X-Custom-Header'],"
       );
     });
   });

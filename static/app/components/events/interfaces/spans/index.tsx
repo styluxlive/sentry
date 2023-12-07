@@ -65,8 +65,8 @@ function TraceErrorAlerts({
     traceErrors.length === 1
       ? t('There is an issue associated with this transaction event.')
       : tn(
-          `There are %s issues associated with this transaction event.`,
-          `There are %s issues associated with this transaction event.`,
+          'There are %s issues associated with this transaction event.',
+          'There are %s issues associated with this transaction event.',
           traceErrors.length
         );
 

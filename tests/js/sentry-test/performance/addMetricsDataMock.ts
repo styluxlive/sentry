@@ -13,7 +13,7 @@ export function addMetricsDataMock(settings?: {
 
   MockApiClient.addMockResponse({
     method: 'GET',
-    url: `/organizations/org-slug/metrics-compatibility/`,
+    url: '/organizations/org-slug/metrics-compatibility/',
     body: {
       compatible_projects,
       dynamic_sampling_projects,
@@ -22,7 +22,7 @@ export function addMetricsDataMock(settings?: {
 
   MockApiClient.addMockResponse({
     method: 'GET',
-    url: `/organizations/org-slug/metrics-compatibility-sums/`,
+    url: '/organizations/org-slug/metrics-compatibility-sums/',
     body: {
       sum: {
         metrics: metricsCount,
@@ -34,7 +34,7 @@ export function addMetricsDataMock(settings?: {
 
   MockApiClient.addMockResponse({
     method: 'GET',
-    url: `/organizations/org-slug/events/`,
+    url: '/organizations/org-slug/events/',
     body: {
       data: [{}],
       meta: {},

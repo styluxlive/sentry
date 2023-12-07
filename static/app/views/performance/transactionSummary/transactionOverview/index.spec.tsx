@@ -404,7 +404,7 @@ describe('Performance > TransactionSummary', function () {
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/key-transactions-list/`,
+      url: '/organizations/org-slug/key-transactions-list/',
       body: teams.map(({id}) => ({
         team: id,
         count: 0,
@@ -434,12 +434,12 @@ describe('Performance > TransactionSummary', function () {
       ],
     });
     MockApiClient.addMockResponse({
-      url: `/projects/org-slug/project-slug/profiling/functions/`,
+      url: '/projects/org-slug/project-slug/profiling/functions/',
       body: {functions: []},
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/metrics-compatibility/`,
+      url: '/organizations/org-slug/metrics-compatibility/',
       body: {
         compatible_projects: [],
         incompatible_projecs: [],
@@ -448,7 +448,7 @@ describe('Performance > TransactionSummary', function () {
 
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/metrics-compatibility-sums/`,
+      url: '/organizations/org-slug/metrics-compatibility-sums/',
       body: {
         sum: {
           metrics: 100,
@@ -802,7 +802,7 @@ describe('Performance > TransactionSummary', function () {
       );
 
       const mockUpdate = MockApiClient.addMockResponse({
-        url: `/organizations/org-slug/key-transactions/`,
+        url: '/organizations/org-slug/key-transactions/',
         method: 'POST',
         body: {},
       });
@@ -1156,7 +1156,7 @@ describe('Performance > TransactionSummary', function () {
     it('does not use MEP dataset for stats query if cardinality fallback fails', async function () {
       MockApiClient.addMockResponse({
         method: 'GET',
-        url: `/organizations/org-slug/metrics-compatibility-sums/`,
+        url: '/organizations/org-slug/metrics-compatibility-sums/',
         body: {
           sum: {
             metrics: 100,

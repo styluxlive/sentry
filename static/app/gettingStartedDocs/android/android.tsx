@@ -108,7 +108,7 @@ const onboarding: OnboardingConfig<PlatformOptions> = {
             configurations: [
               {
                 language: 'bash',
-                code: `brew install getsentry/tools/sentry-wizard && sentry-wizard -i android`,
+                code: 'brew install getsentry/tools/sentry-wizard && sentry-wizard -i android',
               },
               {
                 description: (

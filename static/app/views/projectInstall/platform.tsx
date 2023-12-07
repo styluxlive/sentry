@@ -213,7 +213,7 @@ export function ProjectInstallPlatform({location, params}: Props) {
               return (
                 <StyledAlert type="info" showIcon>
                   {t(
-                    `Your selected platform supports performance, but your organization does not have performance enabled.`
+                    'Your selected platform supports performance, but your organization does not have performance enabled.'
                   )}
                 </StyledAlert>
               );

@@ -73,32 +73,32 @@ describe('Performance > Landing > MetricsDataSwitcher', function () {
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/key-transactions-list/`,
+      url: '/organizations/org-slug/key-transactions-list/',
       body: [],
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/legacy-key-transactions-count/`,
+      url: '/organizations/org-slug/legacy-key-transactions-count/',
       body: [],
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-stats/`,
+      url: '/organizations/org-slug/events-stats/',
       body: [],
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-trends-stats/`,
+      url: '/organizations/org-slug/events-trends-stats/',
       body: [],
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-histogram/`,
+      url: '/organizations/org-slug/events-histogram/',
       body: [],
     });
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/eventsv2/`,
+      url: '/organizations/org-slug/eventsv2/',
       body: {
         meta: {
           id: 'string',

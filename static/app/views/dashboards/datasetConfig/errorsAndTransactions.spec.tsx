@@ -119,7 +119,7 @@ describe('getCustomFieldRenderer', function () {
     await userEvent.click(await screen.findByText('<< unparameterized >>'));
     expect(router.push).toHaveBeenCalledWith(
       expect.objectContaining({
-        pathname: `/organizations/org-slug/discover/results/`,
+        pathname: '/organizations/org-slug/discover/results/',
         query: expect.objectContaining({
           query: 'event.type:transaction transaction.source:"url"',
         }),

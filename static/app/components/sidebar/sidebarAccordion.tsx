@@ -110,7 +110,7 @@ const SidebarAccordionExpandButton = styled(Button)<{sidebarCollapsed?: boolean}
     color: ${p => p.theme.white};
   }
 
-  ${p => p.sidebarCollapsed && `display: none;`}
+  ${p => p.sidebarCollapsed && 'display: none;'}
   @media (max-width: ${p => p.theme.breakpoints.medium}) {
     display: none;
   }

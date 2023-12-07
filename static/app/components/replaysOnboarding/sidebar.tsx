@@ -299,7 +299,7 @@ function OnboardingContent({currentProject}: {currentProject: Project}) {
     <Fragment>
       <IntroText>
         {tct(
-          `Adding Session Replay to your [platform] project is simple. Make sure you've got these basics down.`,
+          "Adding Session Replay to your [platform] project is simple. Make sure you've got these basics down.",
           {platform: currentPlatform?.name || currentProject.slug}
         )}
         {showJsFrameworkInstructions ? (

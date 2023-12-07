@@ -98,7 +98,7 @@ describe('useSpanMetrics', () => {
           per_page: 10,
           project: [],
           sort: '-spm()',
-          query: `span.group:221aa7ebd216 transaction:/api/details release:0.0.1`,
+          query: 'span.group:221aa7ebd216 transaction:/api/details release:0.0.1',
           referrer: 'api-spec',
           statsPeriod: '10d',
         },

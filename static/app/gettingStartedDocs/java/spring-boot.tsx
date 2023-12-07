@@ -171,7 +171,7 @@ const onboarding: OnboardingConfig<PlatformOptions> = {
             }
           ),
           language: 'bash',
-          code: `SENTRY_AUTH_TOKEN=___ORG_AUTH_TOKEN___`,
+          code: 'SENTRY_AUTH_TOKEN=___ORG_AUTH_TOKEN___',
         },
         params.platformOptions.packageManager === PackageManager.GRADLE
           ? {

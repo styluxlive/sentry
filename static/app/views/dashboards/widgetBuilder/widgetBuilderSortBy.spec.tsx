@@ -191,7 +191,7 @@ describe('WidgetBuilder', function () {
     MockApiClient.addMockResponse({
       method: 'GET',
       url: '/organizations/org-slug/sessions/',
-      body: SessionsField(`sum(session)`),
+      body: SessionsField('sum(session)'),
     });
 
     MockApiClient.addMockResponse({
@@ -681,7 +681,7 @@ describe('WidgetBuilder', function () {
       ${'-'}          | ${'High to low'}       | ${DisplayType.LINE}
       ${''}           | ${'Low to high'}       | ${DisplayType.LINE}
     `(
-      `opens a widget with the '$expectedOrderSelection' sort order when the widget was saved with that direction`,
+      "opens a widget with the '$expectedOrderSelection' sort order when the widget was saved with that direction",
       async function ({directionPrefix, expectedOrderSelection}) {
         const widget: Widget = {
           id: '1',

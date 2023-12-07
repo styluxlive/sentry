@@ -550,7 +550,7 @@ const BigNumber = styled('div')`
 
 const ChartWrapper = styled('div')<{autoHeightResize: boolean; noPadding?: boolean}>`
   ${p => p.autoHeightResize && 'height: 100%;'}
-  padding: ${p => (p.noPadding ? `0` : `0 ${space(3)} ${space(3)}`)};
+  padding: ${p => (p.noPadding ? '0' : `0 ${space(3)} ${space(3)}`)};
 `;
 
 const StyledSimpleTableChart = styled(SimpleTableChart)`

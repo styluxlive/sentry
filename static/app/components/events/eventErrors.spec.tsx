@@ -123,7 +123,7 @@ describe('EventErrors', () => {
   describe('proguard errors', () => {
     beforeEach(() => {
       MockApiClient.addMockResponse({
-        url: `/projects/org-slug/project-slug/files/dsyms/`,
+        url: '/projects/org-slug/project-slug/files/dsyms/',
         body: [],
       });
     });

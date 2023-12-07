@@ -257,7 +257,7 @@ class DashboardDetail extends Component<Props, State> {
       // TODO: replace with url generation later on.
       widgetBuilderRoutes.push(
         ...[
-          `/dashboards/new/widget/new/`,
+          '/dashboards/new/widget/new/',
           `/dashboard/${dashboardId}/widget/new/`,
           `/dashboards/new/widget/${widgetIndex}/edit/`,
           `/dashboard/${dashboardId}/widget/${widgetIndex}/edit/`,

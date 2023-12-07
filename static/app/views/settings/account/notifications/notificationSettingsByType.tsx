@@ -85,18 +85,18 @@ class NotificationSettingsByTypeV2 extends DeprecatedAsyncComponent<Props, State
     return [
       [
         'notificationOptions',
-        `/users/me/notification-options/`,
+        '/users/me/notification-options/',
         {query: getQueryParams(notificationType)},
       ],
       [
         'notificationProviders',
-        `/users/me/notification-providers/`,
+        '/users/me/notification-providers/',
         {query: getQueryParams(notificationType)},
       ],
-      ['identities', `/users/me/identities/`, {query: {provider: 'slack'}}],
+      ['identities', '/users/me/identities/', {query: {provider: 'slack'}}],
       [
         'organizationIntegrations',
-        `/users/me/organization-integrations/`,
+        '/users/me/organization-integrations/',
         {query: {provider: 'slack'}},
       ],
       ['defaultSettings', '/notification-defaults/'],

@@ -62,7 +62,7 @@ describe('GroupSidebar', function () {
       body: [],
     });
     MockApiClient.addMockResponse({
-      url: `/prompts-activity/`,
+      url: '/prompts-activity/',
       body: {},
     });
     MockApiClient.addMockResponse({

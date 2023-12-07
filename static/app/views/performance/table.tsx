@@ -269,7 +269,7 @@ class _Table extends Component<Props, State> {
           <Link
             to={target}
             onClick={this.handleSummaryClick}
-            style={{display: `block`, width: `100%`}}
+            style={{display: 'block', width: '100%'}}
           >
             {rendered}
           </Link>

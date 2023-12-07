@@ -26,16 +26,16 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
     queries: [
       {
         conditions: '',
-        fields: [`sum(session)`],
-        aggregates: [`sum(session)`],
+        fields: ['sum(session)'],
+        aggregates: ['sum(session)'],
         columns: [],
         name: 'sessions',
         orderby: '',
       },
       {
         conditions: 'environment:prod',
-        fields: [`sum(session)`],
-        aggregates: [`sum(session)`],
+        fields: ['sum(session)'],
+        aggregates: ['sum(session)'],
         columns: [],
         name: 'users',
         orderby: '',
@@ -50,8 +50,8 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
     queries: [
       {
         conditions: '',
-        fields: [`count_unique(user)`],
-        aggregates: [`count_unique(user)`],
+        fields: ['count_unique(user)'],
+        aggregates: ['count_unique(user)'],
         columns: [],
         name: 'sessions',
         orderby: '-count_unique(user)',
@@ -80,7 +80,7 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
     jest.useFakeTimers().setSystemTime(new Date('2022-08-02'));
     const mock = MockApiClient.addMockResponse({
       url: '/organizations/org-slug/metrics/data/',
-      body: MetricsField(`session.all`),
+      body: MetricsField('session.all'),
     });
     const children = jest.fn(() => <div />);
 
@@ -134,8 +134,8 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
     const queries = [
       {
         conditions: '',
-        fields: [`count_unique(user)`],
-        aggregates: [`count_unique(user)`],
+        fields: ['count_unique(user)'],
+        aggregates: ['count_unique(user)'],
         columns: ['release'],
         name: 'sessions',
         orderby: '-release',
@@ -188,14 +188,14 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
   it('calls session api when session.status is a group by', function () {
     const mock = MockApiClient.addMockResponse({
       url: '/organizations/org-slug/sessions/',
-      body: MetricsField(`count_unique(user)`),
+      body: MetricsField('count_unique(user)'),
     });
     const children = jest.fn(() => <div />);
     const queries = [
       {
         conditions: '',
-        fields: [`count_unique(user)`],
-        aggregates: [`count_unique(user)`],
+        fields: ['count_unique(user)'],
+        aggregates: ['count_unique(user)'],
         columns: ['session.status'],
         name: 'sessions',
         orderby: '-count_unique(user)',
@@ -272,8 +272,8 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
       queries: [
         {
           conditions: '',
-          fields: [`sum(session)`],
-          aggregates: [`sum(session)`],
+          fields: ['sum(session)'],
+          aggregates: ['sum(session)'],
           columns: [],
           name: 'sessions',
           orderby: '-count_unique(user)',
@@ -562,7 +562,7 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
     jest.useFakeTimers().setSystemTime(new Date('2022-08-02'));
     const mock = MockApiClient.addMockResponse({
       url: '/organizations/org-slug/metrics/data/',
-      body: MetricsField(`count_unique(sentry.sessions.user)`),
+      body: MetricsField('count_unique(sentry.sessions.user)'),
     });
     const children = jest.fn(() => <div />);
 
@@ -608,10 +608,10 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
     jest.useFakeTimers().setSystemTime(new Date('2022-08-02'));
     const metricsMock = MockApiClient.addMockResponse({
       url: '/organizations/org-slug/metrics/data/',
-      body: SessionsField(`session.all`),
+      body: SessionsField('session.all'),
       match: [
         MockApiClient.matchQuery({
-          field: [`session.all`],
+          field: ['session.all'],
         }),
       ],
     });
@@ -672,7 +672,7 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
       body: {detail: badMessage},
       match: [
         MockApiClient.matchQuery({
-          field: [`session.all`],
+          field: ['session.all'],
         }),
       ],
     });
@@ -703,7 +703,7 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
     jest.useFakeTimers().setSystemTime(new Date('2022-08-02'));
     const mock = MockApiClient.addMockResponse({
       url: '/organizations/org-slug/metrics/data/',
-      body: SessionsField(`session.all`),
+      body: SessionsField('session.all'),
     });
 
     render(
@@ -735,7 +735,7 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
   it('does not re-fetch when renaming legend alias / adding falsy fields', () => {
     const mock = MockApiClient.addMockResponse({
       url: '/organizations/org-slug/metrics/data/',
-      body: SessionsField(`session.all`),
+      body: SessionsField('session.all'),
     });
     const children = jest.fn(() => <div />);
 
@@ -779,7 +779,7 @@ describe('Dashboards > ReleaseWidgetQueries', function () {
   it('does not re-fetch when dashboard filter remains the same', () => {
     const mock = MockApiClient.addMockResponse({
       url: '/organizations/org-slug/metrics/data/',
-      body: SessionsField(`session.all`),
+      body: SessionsField('session.all'),
     });
     const children = jest.fn(() => <div />);
 

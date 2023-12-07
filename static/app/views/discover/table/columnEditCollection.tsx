@@ -546,7 +546,7 @@ class ColumnEditCollection extends Component<Props, State> {
     const title = canAdd
       ? undefined
       : t(
-          `Sorry, you've reached the maximum number of columns (%d). Delete columns to add more.`,
+          "Sorry, you've reached the maximum number of columns (%d). Delete columns to add more.",
           MAX_COL_COUNT
         );
 
@@ -666,12 +666,14 @@ const RowContainer = styled('div')<{
     p.showAliasField &&
     css`
       align-items: flex-start;
-      grid-template-columns: ${p.singleColumn ? `1fr` : `${space(3)} 1fr 40px`};
+      grid-template-columns: ${p.singleColumn ? '1fr' : `${space(3)} 1fr 40px`};
 
       @media (min-width: ${p.theme.breakpoints.small}) {
-        grid-template-columns: ${p.singleColumn
-          ? `1fr calc(200px + ${space(1)})`
-          : `${space(3)} 1fr calc(200px + ${space(1)}) 40px`};
+        grid-template-columns: ${
+          p.singleColumn
+            ? `1fr calc(200px + ${space(1)})`
+            : `${space(3)} 1fr calc(200px + ${space(1)}) 40px`
+        };
       }
     `};
 `;

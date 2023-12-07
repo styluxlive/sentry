@@ -139,7 +139,7 @@ export function ScreensView({yAxes, additionalFilters, chartHeight}: Props) {
 
   const queryString = appendReleaseFilters(query, primaryRelease, secondaryRelease);
 
-  const orderby = decodeScalar(locationQuery.sort, `-count`);
+  const orderby = decodeScalar(locationQuery.sort, '-count');
   const newQuery: NewQuery = {
     name: '',
     fields: [

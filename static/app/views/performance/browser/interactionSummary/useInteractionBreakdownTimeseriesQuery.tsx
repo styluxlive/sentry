@@ -30,7 +30,7 @@ export const useInteractionBreakdownTimeseriesQuery = ({
   );
   const projectTimeSeriesEventView = EventView.fromNewQueryWithPageFilters(
     {
-      yAxis: [`p75(transaction.duration)`],
+      yAxis: ['p75(transaction.duration)'],
       name: 'Interaction Duration',
       query: search.formatString(),
       version: 2,

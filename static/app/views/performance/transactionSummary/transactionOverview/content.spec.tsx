@@ -131,7 +131,7 @@ describe('Transaction Summary Content', function () {
       ],
     });
     MockApiClient.addMockResponse({
-      url: `/projects/org-slug/project-slug/profiling/functions/`,
+      url: '/projects/org-slug/project-slug/profiling/functions/',
       body: {functions: []},
     });
   });

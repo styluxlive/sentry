@@ -131,7 +131,7 @@ export const FunctionsMiniGridCell = styled('div')<{align?: CSSProperties['textA
   padding: ${space(0.5)} 0px;
 `;
 
-const NumberContainer = styled(`div`)`
+const NumberContainer = styled('div')`
   text-align: right;
 `;
 

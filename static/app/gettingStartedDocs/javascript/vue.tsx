@@ -41,7 +41,7 @@ type Params = DocsParams<PlatformOptions>;
 
 const getSentryInitLayout = (params: Params, siblingOption: string): string => {
   return `Sentry.init({
-    ${siblingOption === VueVersion.VUE2 ? `Vue,` : ''}dsn: "${params.dsn}",
+    ${siblingOption === VueVersion.VUE2 ? 'Vue,' : ''}dsn: "${params.dsn}",
     integrations: [${
       params.isPerformanceSelected
         ? `
@@ -81,13 +81,13 @@ const getInstallConfig = () => [
         label: 'npm',
         value: 'npm',
         language: 'bash',
-        code: `npm install --save @sentry/vue`,
+        code: 'npm install --save @sentry/vue',
       },
       {
         label: 'yarn',
         value: 'yarn',
         language: 'bash',
-        code: `yarn add @sentry/vue`,
+        code: 'yarn add @sentry/vue',
       },
     ],
   },
@@ -124,7 +124,7 @@ const onboarding: OnboardingConfig<PlatformOptions> = {
       description: (
         <p>
           {tct(
-            `Install the Sentry Capacitor SDK as a dependency using [codeNpm:npm] or [codeYarn:yarn], alongside the Sentry Vue SDK:`,
+            'Install the Sentry Capacitor SDK as a dependency using [codeNpm:npm] or [codeYarn:yarn], alongside the Sentry Vue SDK:',
             {
               codeYarn: <code />,
               codeNpm: <code />,
@@ -157,7 +157,7 @@ const onboarding: OnboardingConfig<PlatformOptions> = {
       configurations: [
         {
           language: 'javascript',
-          code: `myUndefinedFunction();`,
+          code: 'myUndefinedFunction();',
         },
       ],
     },

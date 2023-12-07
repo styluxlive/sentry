@@ -53,7 +53,7 @@ function ReleaseHeader({
           {t('Commits')} <NavTabsBadge text={formatAbbreviatedNumber(commitCount)} />
         </Fragment>
       ),
-      to: `commits/`,
+      to: 'commits/',
     },
     {
       title: (
@@ -62,7 +62,7 @@ function ReleaseHeader({
           <NavTabsBadge text={formatAbbreviatedNumber(commitFilesChanged)} />
         </Fragment>
       ),
-      to: `files-changed/`,
+      to: 'files-changed/',
     },
   ];
 

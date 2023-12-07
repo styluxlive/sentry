@@ -76,12 +76,12 @@ describe('Performance > Widgets > WidgetContainer', function () {
   beforeEach(function () {
     eventStatsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-stats/`,
+      url: '/organizations/org-slug/events-stats/',
       body: [],
     });
     eventsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events/`,
+      url: '/organizations/org-slug/events/',
       body: {
         data: [{}],
         meta: {},
@@ -90,7 +90,7 @@ describe('Performance > Widgets > WidgetContainer', function () {
     });
     issuesListMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events/`,
+      url: '/organizations/org-slug/events/',
       body: {
         data: [
           {
@@ -114,13 +114,13 @@ describe('Performance > Widgets > WidgetContainer', function () {
 
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/metrics-compatibility/`,
+      url: '/organizations/org-slug/metrics-compatibility/',
       body: [],
     });
 
     MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/metrics-compatibility-sums/`,
+      url: '/organizations/org-slug/metrics-compatibility-sums/',
       body: [],
     });
   });
@@ -258,7 +258,7 @@ describe('Performance > Widgets > WidgetContainer', function () {
 
     eventStatsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-stats/`,
+      url: '/organizations/org-slug/events-stats/',
       statusCode: 400,
       body: {
         detail: 'Request did not work :(',
@@ -357,7 +357,7 @@ describe('Performance > Widgets > WidgetContainer', function () {
 
     eventStatsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-stats/`,
+      url: '/organizations/org-slug/events-stats/',
       body: {
         data: [],
         isMetricsData: true,
@@ -366,7 +366,7 @@ describe('Performance > Widgets > WidgetContainer', function () {
 
     eventsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events/`,
+      url: '/organizations/org-slug/events/',
       body: {
         data: [{}],
         meta: {isMetricsData: true},
@@ -412,7 +412,7 @@ describe('Performance > Widgets > WidgetContainer', function () {
 
     eventStatsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-stats/`,
+      url: '/organizations/org-slug/events-stats/',
       body: {
         data: [],
         isMetricsData: undefined,
@@ -447,7 +447,7 @@ describe('Performance > Widgets > WidgetContainer', function () {
 
     eventStatsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events-stats/`,
+      url: '/organizations/org-slug/events-stats/',
       body: {
         data: [],
         isMetricsData: false,
@@ -456,7 +456,7 @@ describe('Performance > Widgets > WidgetContainer', function () {
 
     eventsMock = MockApiClient.addMockResponse({
       method: 'GET',
-      url: `/organizations/org-slug/events/`,
+      url: '/organizations/org-slug/events/',
       body: {
         data: [{}],
         meta: {isMetricsData: false},

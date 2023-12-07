@@ -174,8 +174,8 @@ function EventDifferentialFlamegraphView(props: EventDifferentialFlamegraphViewP
     frameFilterSetting === 'application'
       ? applicationFrameOnly
       : frameFilterSetting === 'system'
-      ? systemFrameOnly
-      : undefined;
+        ? systemFrameOnly
+        : undefined;
 
   const [negated, setNegated] = useState<boolean>(false);
   const canvasPoolManager = useMemo(() => new CanvasPoolManager(), []);
@@ -627,8 +627,8 @@ function DifferentialFlamegraphExplanationBar(
     <DifferentialFlamegraphExplanationBarContainer>
       <div>
         {props.negated
-          ? t(`Flamegraph is showing how stack frequency will change.`)
-          : t(`Flamegraph is showing how stack frequency has changed.`)}
+          ? t('Flamegraph is showing how stack frequency will change.')
+          : t('Flamegraph is showing how stack frequency has changed.')}
       </div>
       <DifferentialFlamegraphLegend />
     </DifferentialFlamegraphExplanationBarContainer>

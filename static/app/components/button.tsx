@@ -412,7 +412,7 @@ const getColors = ({
         return `background-color: ${background};`;
       default:
         if (borderless) {
-          return `background-color: transparent;`;
+          return 'background-color: transparent;';
         }
         return `background-color: ${background};`;
     }
@@ -424,14 +424,15 @@ const getColors = ({
 
     border: 1px solid ${borderless || priority === 'link' ? 'transparent' : border};
 
-    ${translucentBorder && `border-width: 0;`}
+    ${translucentBorder && 'border-width: 0;'}
 
     &:hover {
       color: ${color};
     }
 
-    ${size !== 'zero' &&
-    `
+    ${
+      size !== 'zero' &&
+      `
       &:hover,
       &:active,
       &[aria-expanded="true"] {
@@ -443,7 +444,8 @@ const getColors = ({
         color: ${colorActive || color};
         border-color: ${borderActive};
       }
-    `}
+    `
+    }
 
     &.focus-visible {
       ${getFocusState()}
@@ -538,7 +540,7 @@ const StyledButton = styled(
 
   ${p =>
     p.priority === 'link' &&
-    `font-size: inherit; font-weight: inherit; padding: 0; height: auto; min-height: auto;`}
+    'font-size: inherit; font-weight: inherit; padding: 0; height: auto; min-height: auto;'}
   ${p => p.size === 'zero' && `height: auto; min-height: auto; padding: ${space(0.25)};`}
 
   &:focus {
@@ -596,7 +598,6 @@ export {
   BaseButtonProps,
   LinkButton,
   LinkButtonProps,
-
   // Also export these styled components so we can use them as selectors
   StyledButton,
   ButtonLabel,

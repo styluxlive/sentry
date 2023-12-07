@@ -92,7 +92,7 @@ export function generateWebServiceEventView(
 
 export function generateMobileServiceSavedQuery(location: Location) {
   const {query} = location;
-  const orderby = decodeScalar(query.sort, `-eps`);
+  const orderby = decodeScalar(query.sort, '-eps');
 
   const fields = [
     'transaction',
@@ -116,7 +116,7 @@ export function generateMobileServiceSavedQuery(location: Location) {
 
 function generateWebServiceSavedQuery(location: Location) {
   const {query} = location;
-  const orderby = decodeScalar(query.sort, `-time_spent_percentage`);
+  const orderby = decodeScalar(query.sort, '-time_spent_percentage');
 
   const fields = [
     'transaction',

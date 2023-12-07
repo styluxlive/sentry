@@ -194,7 +194,7 @@ class AccountSecurity extends DeprecatedAsyncView<Props> {
                         {!isBackupInterface && isEnrolled && (
                           <Tooltip
                             title={t(
-                              `Two-factor authentication is required for organization(s): %s.`,
+                              'Two-factor authentication is required for organization(s): %s.',
                               this.formatOrgSlugs()
                             )}
                             disabled={!deleteDisabled}

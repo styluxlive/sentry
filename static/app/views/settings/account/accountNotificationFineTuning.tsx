@@ -159,13 +159,13 @@ class AccountNotificationFineTuning extends DeprecatedAsyncView<Props, State> {
 
     if (isGroupedByProject(fineTuneType)) {
       const organizationId = this.getOrganizationId();
-      endpoints.push(['projects', `/projects/`, {query: {organizationId}}]);
+      endpoints.push(['projects', '/projects/', {query: {organizationId}}]);
     }
 
     // special logic for email
     if (fineTuneType === 'email') {
       endpoints.push(['emails', '/users/me/emails/']);
-      endpoints.push(['emailsByProject', `/users/me/notifications/email/`]);
+      endpoints.push(['emailsByProject', '/users/me/notifications/email/']);
     }
 
     return endpoints;

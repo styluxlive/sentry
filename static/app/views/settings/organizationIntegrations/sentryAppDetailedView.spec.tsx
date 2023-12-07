@@ -42,7 +42,7 @@ describe('SentryAppDetailedView', function () {
 
     beforeEach(() => {
       sentryAppInteractionRequest = MockApiClient.addMockResponse({
-        url: `/sentry-apps/clickup/interaction/`,
+        url: '/sentry-apps/clickup/interaction/',
         method: 'POST',
         statusCode: 200,
         body: {},
@@ -113,7 +113,7 @@ describe('SentryAppDetailedView', function () {
         />
       );
       expect(sentryAppInteractionRequest).toHaveBeenCalledWith(
-        `/sentry-apps/clickup/interaction/`,
+        '/sentry-apps/clickup/interaction/',
         expect.objectContaining({
           method: 'POST',
           data: {
@@ -152,7 +152,7 @@ describe('SentryAppDetailedView', function () {
   describe('Internal Sentry App', function () {
     beforeEach(() => {
       MockApiClient.addMockResponse({
-        url: `/sentry-apps/my-headband-washer-289499/interaction/`,
+        url: '/sentry-apps/my-headband-washer-289499/interaction/',
         method: 'POST',
         statusCode: 200,
         body: {},
@@ -224,7 +224,7 @@ describe('SentryAppDetailedView', function () {
 
     beforeEach(() => {
       MockApiClient.addMockResponse({
-        url: `/sentry-apps/la-croix-monitor/interaction/`,
+        url: '/sentry-apps/la-croix-monitor/interaction/',
         method: 'POST',
         statusCode: 200,
         body: {},
@@ -314,7 +314,7 @@ describe('SentryAppDetailedView', function () {
     let createRequest;
     beforeEach(() => {
       MockApiClient.addMockResponse({
-        url: `/sentry-apps/go-to-google/interaction/`,
+        url: '/sentry-apps/go-to-google/interaction/',
         method: 'POST',
         statusCode: 200,
         body: {},
