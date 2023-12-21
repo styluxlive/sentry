@@ -16,6 +16,7 @@ from django.conf import settings
 from sentry_sdk import Hub
 
 from sentry.runner.importer import install_plugin_apps
+from sentry.silo import SiloMode
 from sentry.testutils.region import TestEnvRegionDirectory
 from sentry.types import region
 from sentry.types.region import Region, RegionCategory
@@ -49,6 +50,7 @@ def configure_split_db() -> None:
 
 
 def _configure_test_env_regions() -> None:
+    settings.SILO_MODE = SiloMode.REGION
 
     # Assign a random name on every test run, as a reminder that test setup and
     # assertions should not depend on this value. If you need to test behavior that
