@@ -377,7 +377,7 @@ class EventManagerGroupingMetricsTest(TestCase):
                 ),
             ):
                 with mock.patch(
-                    "sentry.event_manager._calculate_secondary_hash",
+                    "sentry.event_manager.calculate_secondary_hash",
                     return_value=CalculatedHashes(
                         hashes=secondary_hashes, hierarchical_hashes=[], tree_labels=[]
                     ),
