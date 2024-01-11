@@ -10,10 +10,12 @@ import {
   usePromptsCheck,
 } from 'sentry/actionCreators/prompts';
 import {Button} from 'sentry/components/button';
+import {hasFileExtension} from 'sentry/components/events/interfaces/frame/utils';
 import HookOrDefault from 'sentry/components/hookOrDefault';
 import ExternalLink from 'sentry/components/links/externalLink';
 import Link from 'sentry/components/links/link';
 import Placeholder from 'sentry/components/placeholder';
+import {Tooltip} from 'sentry/components/tooltip';
 import {IconClose, IconWarning} from 'sentry/icons';
 import {t} from 'sentry/locale';
 import {space} from 'sentry/styles/space';
@@ -171,9 +173,20 @@ function CodecovLink({
     organization?.features?.includes('issue-details-stacktrace-link-in-frame') ?? false;
 
   return (
-    <OpenInLink href={coverageUrl} openInNewTab onClick={onOpenCodecovLink}>
-      <StyledIconWrapper>{getIntegrationIcon('codecov', 'sm')}</StyledIconWrapper>
-      {hasStacktraceLinkFeatureFlag ? t('Codecov') : t('Open in Codecov')}
+    <OpenInLink
+      href={coverageUrl}
+      openInNewTab
+      onClick={onOpenCodecovLink}
+      aria-label={hasStacktraceLinkFeatureFlag ? t('Open in Codecov') : undefined}
+    >
+      <Tooltip
+        title={t('Open in Codecov')}
+        disabled={!hasStacktraceLinkFeatureFlag}
+        skipWrapper
+      >
+        <StyledIconWrapper>{getIntegrationIcon('codecov', 'sm')}</StyledIconWrapper>
+      </Tooltip>
+      {hasStacktraceLinkFeatureFlag ? null : t('Open in Codecov')}
     </OpenInLink>
   );
 }
@@ -192,7 +205,15 @@ export function StacktraceLink({frame, event, line}: StacktraceLinkProps) {
   const {projects} = useProjects();
   const hasStacktraceLinkFeatureFlag =
     organization?.features?.includes('issue-details-stacktrace-link-in-frame') ?? false;
-  const [isQueryEnabled, setIsQueryEnabled] = useState(!hasStacktraceLinkFeatureFlag);
+  const validFilePath = hasFileExtension(frame.absPath || frame.filename || '');
+  // TODO: Currently we only support GitHub links. Implement support for other source code providers.
+  // Related comment: https://github.com/getsentry/sentry/pull/62596#discussion_r1443025242
+  const hasGithubSourceLink = (frame.sourceLink || '').startsWith(
+    'https://www.github.com/'
+  );
+  const [isQueryEnabled, setIsQueryEnabled] = useState(
+    hasGithubSourceLink ? false : !frame.inApp ? false : !hasStacktraceLinkFeatureFlag
+  );
   const project = useMemo(
     () => projects.find(p => p.id === event.projectID),
     [projects, event]
@@ -213,14 +234,19 @@ export function StacktraceLink({frame, event, line}: StacktraceLinkProps) {
 
   useEffect(() => {
     let timer;
-    if (hasStacktraceLinkFeatureFlag) {
+    if (!validFilePath) {
+      return setIsQueryEnabled(false);
+    }
+    // Skip fetching if we already have the Source Link
+    if (hasStacktraceLinkFeatureFlag && !hasGithubSourceLink && frame.inApp) {
       // Introduce a delay before enabling the query
+
       timer = setTimeout(() => {
         setIsQueryEnabled(true);
       }, 100); // Delay of 100ms
     }
     return () => timer && clearTimeout(timer);
-  }, [hasStacktraceLinkFeatureFlag]); // Empty dependency array to run only on mount
+  }, [hasStacktraceLinkFeatureFlag, validFilePath, hasGithubSourceLink, frame]);
 
   const {
     data: match,
@@ -254,9 +280,9 @@ export function StacktraceLink({frame, event, line}: StacktraceLinkProps) {
       : {}
   );
 
-  const onOpenLink = e => {
+  const onOpenLink = (e: React.MouseEvent, sourceLink: Frame['sourceLink'] = null) => {
     e.stopPropagation();
-    const provider = match!.config?.provider;
+    const provider = match?.config?.provider;
     if (provider) {
       trackAnalytics(
         'integrations.stacktrace_link_clicked',
@@ -270,18 +296,62 @@ export function StacktraceLink({frame, event, line}: StacktraceLinkProps) {
         {startSession: true}
       );
     }
+    if (sourceLink) {
+      const url = new URL(sourceLink);
+      const hostname = url.hostname;
+      const parts = hostname.split('.');
+      const domain = parts.length > 1 ? parts[1] : '';
+      trackAnalytics(
+        'integrations.non_inapp_stacktrace_link_clicked',
+        {
+          view: 'stacktrace_issue_details',
+          provider: domain,
+          organization,
+          group_id: event.groupID ? parseInt(event.groupID, 10) : -1,
+          ...getAnalyticsDataForEvent(event),
+        },
+        {startSession: true}
+      );
+    }
   };
 
   const handleSubmit = () => {
     refetch();
   };
 
+  if (!validFilePath) {
+    return null;
+  }
+
+  // Render the provided `sourceLink` for all the non-inapp frames for `csharp` platform Issues
+  // We skip fetching from the API for these frames.
+  if (
+    !match &&
+    hasGithubSourceLink &&
+    !frame.inApp &&
+    frame.sourceLink &&
+    hasStacktraceLinkFeatureFlag
+  ) {
+    return (
+      <StacktraceLinkWrapper>
+        <OpenInLink
+          onClick={e => onOpenLink(e, frame.sourceLink)}
+          href={frame.sourceLink}
+          openInNewTab
+        >
+          <StyledIconWrapper>{getIntegrationIcon('github', 'sm')}</StyledIconWrapper>
+          {t('GitHub')}
+        </OpenInLink>
+      </StacktraceLinkWrapper>
+    );
+  }
+
   if (isLoading || !match) {
     return (
       <StacktraceLinkWrapper>
         <Placeholder
           height={hasStacktraceLinkFeatureFlag ? '14px' : '24px'}
-          width={hasStacktraceLinkFeatureFlag ? '171px' : '120px'}
+          width={hasStacktraceLinkFeatureFlag ? '40px' : '120px'}
         />
       </StacktraceLinkWrapper>
     );
@@ -299,12 +369,23 @@ export function StacktraceLink({frame, event, line}: StacktraceLinkProps) {
             frame.lineNo
           )}
           openInNewTab
+          aria-label={
+            hasStacktraceLinkFeatureFlag
+              ? t('Open this line in %s', match.config.provider.name)
+              : undefined
+          }
         >
-          <StyledIconWrapper>
-            {getIntegrationIcon(match.config.provider.key, 'sm')}
-          </StyledIconWrapper>
+          <Tooltip
+            disabled={!hasStacktraceLinkFeatureFlag}
+            title={t('Open this line in %s', match.config.provider.name)}
+            skipWrapper
+          >
+            <StyledIconWrapper>
+              {getIntegrationIcon(match.config.provider.key, 'sm')}
+            </StyledIconWrapper>
+          </Tooltip>
           {hasStacktraceLinkFeatureFlag
-            ? match.config.provider.name
+            ? null
             : t('Open this line in %s', match.config.provider.name)}
         </OpenInLink>
         {shouldShowCodecovFeatures(organization, match) ? (
@@ -328,9 +409,7 @@ export function StacktraceLink({frame, event, line}: StacktraceLinkProps) {
   const isUnsupportedPlatform = !supportedStacktracePlatforms.includes(
     event.platform as PlatformKey
   );
-  const hasGithubSourceLink =
-    event.platform === 'csharp' &&
-    frame.sourceLink?.startsWith('https://www.github.com/');
+
   const hideErrors = isMinifiedJsError || isUnsupportedPlatform;
   // for .NET projects, if there is no match found but there is a GitHub source link, use that
   if (
@@ -486,12 +565,14 @@ const OpenInLink = withOrganization(styled(ExternalLink)<{organization: Organiza
   ${p =>
     p.organization?.features?.includes('issue-details-stacktrace-link-in-frame')
       ? css`
-          color: ${p.theme.linkColor};
+          color: ${p.theme.subText};
           animation: ${fadeIn} 0.2s ease-in-out forwards;
+          width: max-content;
           &:hover {
             text-decoration: underline;
-            text-decoration-color: ${p.theme.linkUnderline};
+            text-decoration-color: ${p.theme.textColor};
             text-underline-offset: ${space(0.5)};
+            color: ${p.theme.textColor};
           }
         `
       : css`

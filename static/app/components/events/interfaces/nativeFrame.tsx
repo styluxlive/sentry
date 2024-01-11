@@ -148,8 +148,7 @@ function NativeFrame({
   const [isHovering, setHovering] = useState(false);
 
   const contextLine = (frame?.context || []).find(l => l[0] === frame.lineNo);
-  const hasStacktraceLink =
-    frame.inApp && !!frame.filename && frame.lineNo && (isHovering || expanded);
+  const hasStacktraceLink = frame.inApp && !!frame.filename && (isHovering || expanded);
   const hasStacktraceLinkInFrameFeatureFlag =
     organization?.features?.includes('issue-details-stacktrace-link-in-frame') ?? false;
   const showStacktraceLinkInFrame =
@@ -408,7 +407,6 @@ function NativeFrame({
             {expandable && (
               <ToggleButton
                 size="zero"
-                title={t('Toggle Context')}
                 aria-label={t('Toggle Context')}
                 tooltipProps={isHoverPreviewed ? {delay: SLOW_TOOLTIP_DELAY} : undefined}
                 icon={
@@ -524,7 +522,7 @@ const RowHeader = styled('span')<{
     !p.isInAppFrame && p.isSubFrame
       ? `${p.theme.surface100}`
       : `${p.theme.bodyBackground}`};
-  font-size: ${p => p.theme.codeFontSize};
+  font-size: ${p => p.theme.fontSizeSmall};
   padding: ${space(1)};
   color: ${p => (!p.isInAppFrame ? p.theme.subText : '')};
   font-style: ${p => (!p.isInAppFrame ? 'italic' : '')};
