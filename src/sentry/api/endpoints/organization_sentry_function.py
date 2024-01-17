@@ -32,10 +32,10 @@ class SentryFunctionSerializer(CamelSnakeSerializer):
         """
         Convert env_variables from a list of dicts to a dict of key-value pairs
         """
-        output = {}
-        for env_variable in env_variables:
-            output[env_variable["name"]] = env_variable["value"]
-        return output
+        return {
+            env_variable["name"]: env_variable["value"]
+            for env_variable in env_variables
+        }
 
 
 @region_silo_endpoint

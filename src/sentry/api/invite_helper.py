@@ -120,14 +120,12 @@ class ApiInviteHelper:
                 logger.exception("Invalid pending invite cookie")
             return None
 
-        api_invite_helper = ApiInviteHelper(
+        return ApiInviteHelper(
             request=request,
             invite_context=invite_context,
             token=invite_details.invite_token,
             logger=logger,
         )
-
-        return api_invite_helper
 
     def __init__(
         self,
@@ -186,11 +184,11 @@ class ApiInviteHelper:
         assert self.invite_context.member
         if self.invite_context.member.token_expired:
             return False
-        tokens_are_equal = constant_time_compare(
-            self.invite_context.member.token or self.invite_context.member.legacy_token,
+        return constant_time_compare(
+            self.invite_context.member.token
+            or self.invite_context.member.legacy_token,
             self.token,
         )
-        return tokens_are_equal
 
     @property
     def user_authenticated(self) -> bool:
@@ -239,12 +237,11 @@ class ApiInviteHelper:
                 self.handle_member_has_no_sso()
                 return None
 
-        new_om = organization_service.set_user_for_organization_member(
+        if new_om := organization_service.set_user_for_organization_member(
             organization_member_id=member.id,
             user_id=user.id,
             organization_id=self.invite_context.organization.id,
-        )
-        if new_om:
+        ):
             self.invite_context.member = member = new_om
 
         create_audit_entry(

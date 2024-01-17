@@ -106,11 +106,10 @@ class BaseAggregateSpans:
         start_timestamp = span_tree["start_timestamp_ms"]
         if root_prefix is None:
             prefix = key
+        elif nth_span == 1:
+            prefix = f"{root_prefix}-{key}"
         else:
-            if nth_span == 1:
-                prefix = f"{root_prefix}-{key}"
-            else:
-                prefix = f"{root_prefix}-{key}{nth_span}"
+            prefix = f"{root_prefix}-{key}{nth_span}"
 
         node_fingerprint = hashlib.md5(prefix.encode()).hexdigest()[:16]
         parent_node = self.aggregated_tree.get(parent_node_fingerprint, None)
@@ -192,8 +191,7 @@ class AggregateIndexedSpans(BaseAggregateSpans):
             for span_ in spans:
                 span = EventSpan(*span_)
                 span_id = getattr(span, "span_id")
-                is_root = getattr(span, "is_segment")
-                if is_root:
+                if is_root := getattr(span, "is_segment"):
                     root_span_id = span_id
                 if span_id not in span_tree:
                     spans_dict = span._asdict()
@@ -228,26 +226,24 @@ class AggregateNodestoreSpans(BaseAggregateSpans):
     def build_aggregate_span_tree(self, results: Any):
         for event_ in results:
             event = event_.data.data
-            span_tree = {}
-
             self.current_transaction = event["event_id"]
             root_span_id = event["contexts"]["trace"]["span_id"]
-            span_tree[root_span_id] = {
-                "span_id": root_span_id,
-                "is_segment": True,
-                "parent_span_id": None,
-                "group": event["contexts"]["trace"]["hash"],
-                "description": event["transaction"],
-                "op": event["contexts"]["trace"]["op"],
-                "start_timestamp_ms": event["start_timestamp"]
-                * 1000,  # timestamp is unix timestamp, convert to ms
-                "duration": (event["timestamp"] - event["start_timestamp"])
-                * 1000,  # duration in ms
-                "exclusive_time": event["contexts"]["trace"]["exclusive_time"],
-                "key": event["contexts"]["trace"]["hash"],
-                "children": [],
+            span_tree = {
+                root_span_id: {
+                    "span_id": root_span_id,
+                    "is_segment": True,
+                    "parent_span_id": None,
+                    "group": event["contexts"]["trace"]["hash"],
+                    "description": event["transaction"],
+                    "op": event["contexts"]["trace"]["op"],
+                    "start_timestamp_ms": event["start_timestamp"] * 1000,
+                    "duration": (event["timestamp"] - event["start_timestamp"])
+                    * 1000,
+                    "exclusive_time": event["contexts"]["trace"]["exclusive_time"],
+                    "key": event["contexts"]["trace"]["hash"],
+                    "children": [],
+                }
             }
-
             spans = event["spans"]
 
             for span in spans:
@@ -372,11 +368,11 @@ class OrganizationSpansAggregationEndpoint(OrganizationEventsEndpointBase):
         if http_method is not None:
             conditions.append(["http.method", "=", http_method])
 
-        environments = params.get("environment", None)
-        if environments and len(environments) > 1:
-            conditions.append(["environment", "IN", environments])
-        elif environments and len(environments) == 1:
-            conditions.append(["environment", "=", environments[0]])
+        if environments := params.get("environment", None):
+            if len(environments) > 1:
+                conditions.append(["environment", "IN", environments])
+            elif len(environments) == 1:
+                conditions.append(["environment", "=", environments[0]])
 
         events = eventstore.backend.get_events(
             filter=eventstore.Filter(

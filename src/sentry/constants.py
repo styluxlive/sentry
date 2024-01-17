@@ -364,8 +364,7 @@ def _load_platform_data() -> None:
         return
 
     for platform in data["platforms"]:
-        integrations = platform.pop("integrations")
-        if integrations:
+        if integrations := platform.pop("integrations"):
             for integration in integrations:
                 integration_id = integration.pop("id")
                 if integration["type"] != "language":
@@ -416,10 +415,7 @@ def get_integration_id_for_marketing_slug(slug: str) -> Optional[str]:
     if slug in MARKETING_SLUG_TO_INTEGRATION_ID:
         return MARKETING_SLUG_TO_INTEGRATION_ID[slug]
 
-    if slug in INTEGRATION_ID_TO_PLATFORM_DATA:
-        return slug
-
-    return None
+    return slug if slug in INTEGRATION_ID_TO_PLATFORM_DATA else None
 
 
 # special cases where the integration sent with the SDK differ from
@@ -459,10 +455,7 @@ def get_integration_id_for_event(
         return sdk_name
 
     # try platform name, for example "java"
-    if platform in INTEGRATION_ID_TO_PLATFORM_DATA:
-        return platform
-
-    return None
+    return platform if platform in INTEGRATION_ID_TO_PLATFORM_DATA else None
 
 
 class ObjectStatus:

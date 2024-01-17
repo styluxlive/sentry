@@ -60,12 +60,10 @@ class ProjectIndexEndpoint(Endpoint):
             else:
                 queryset = queryset.filter(teams__organizationmember__user_id=request.user.id)
 
-            org_id_filter = request.GET.get("organizationId", None)
-            if org_id_filter:
+            if org_id_filter := request.GET.get("organizationId", None):
                 queryset = queryset.filter(organization_id=org_id_filter)
 
-        query = request.GET.get("query")
-        if query:
+        if query := request.GET.get("query"):
             tokens = tokenize_query(query)
             for key, value in tokens.items():
                 if key == "query":

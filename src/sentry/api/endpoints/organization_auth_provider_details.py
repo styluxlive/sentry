@@ -29,17 +29,18 @@ class OrganizationAuthProviderDetailsEndpoint(OrganizationEndpoint):
         :pparam string organization_slug: the organization short name
         :auth: required
         """
-        auth_provider = auth_service.get_auth_provider(organization_id=organization.id)
-        if not auth_provider:
+        if auth_provider := auth_service.get_auth_provider(
+            organization_id=organization.id
+        ):
+            return Response(
+                serialize(
+                    auth_provider,
+                    request.user,
+                    organization=organization,
+                    serializer=AuthProviderSerializer(),
+                )
+            )
+        else:
             # This is a valid state where org does not have an auth provider
             # configured, make sure we respond with a 20x
             return Response(status=status.HTTP_204_NO_CONTENT)
-
-        return Response(
-            serialize(
-                auth_provider,
-                request.user,
-                organization=organization,
-                serializer=AuthProviderSerializer(),
-            )
-        )

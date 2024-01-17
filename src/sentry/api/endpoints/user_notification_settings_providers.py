@@ -36,8 +36,7 @@ class UserNotificationSettingsProvidersEndpoint(UserEndpoint):
         notifications_settings = NotificationSettingProvider.objects.filter(
             user_id=user.id,
         )
-        notification_type = request.GET.get("type")
-        if notification_type:
+        if notification_type := request.GET.get("type"):
             try:
                 validate_type(notification_type)
             except ParameterValidationError:

@@ -166,10 +166,10 @@ def set_tag(data: dict[str, Any], key: str, value: Any) -> None:
 
 
 def get_tag(data: dict[str, Any], key: str) -> Optional[Any]:
-    for k, v in get_path(data, "tags", filter=True) or ():
-        if k == key:
-            return v
-    return None
+    return next(
+        (v for k, v in get_path(data, "tags", filter=True) or () if k == key),
+        None,
+    )
 
 
 def is_sample_event(job):
@@ -227,20 +227,16 @@ def has_pending_commit_resolution(group: Group) -> bool:
     if latest_issue_commit_resolution is None:
         return False
 
-    # commit has been released and is not in pending commit state
     if ReleaseCommit.objects.filter(commit__id=latest_issue_commit_resolution.linked_id).exists():
         return False
-    else:
-        # check if this commit is a part of a PR
-        pr_ids = PullRequest.objects.filter(
-            pullrequestcommit__commit=latest_issue_commit_resolution.linked_id
-        ).values_list("id", flat=True)
+    # check if this commit is a part of a PR
+    pr_ids = PullRequest.objects.filter(
+        pullrequestcommit__commit=latest_issue_commit_resolution.linked_id
+    ).values_list("id", flat=True)
         # assume that this commit has been released if any commits in this PR have been released
-        if ReleaseCommit.objects.filter(
-            commit__pullrequestcommit__pull_request__in=pr_ids
-        ).exists():
-            return False
-        return True
+    return not ReleaseCommit.objects.filter(
+        commit__pullrequestcommit__pull_request__in=pr_ids
+    ).exists()
 
 
 def get_max_crashreports(
@@ -565,11 +561,7 @@ class EventManager:
                 tags["result"] = "no change"
             else:
                 shared_hashes = set(current_values) & set(secondary_values)
-                if len(shared_hashes) > 0:
-                    tags["result"] = "partial change"
-                else:
-                    tags["result"] = "full change"
-
+                tags["result"] = "partial change" if len(shared_hashes) > 0 else "full change"
             metrics.incr("grouping.hash_comparison", tags=tags)
 
         # Track the total number of grouping calculations done overall, so we can divide by the
@@ -749,13 +741,13 @@ class EventManager:
 
 
 def _should_run_secondary_grouping(project: Project) -> bool:
-    result = False
     # These two values are basically always set
     secondary_grouping_config = project.get_option("sentry:secondary_grouping_config")
     secondary_grouping_expiry = project.get_option("sentry:secondary_grouping_expiry")
-    if secondary_grouping_config and (secondary_grouping_expiry or 0) >= time.time():
-        result = True
-    return result
+    return bool(
+        secondary_grouping_config
+        and (secondary_grouping_expiry or 0) >= time.time()
+    )
 
 
 def _calculate_primary_hash(
@@ -860,12 +852,11 @@ def _is_commit_sha(version: str) -> bool:
 
 def _associate_commits_with_release(release: Release, project: Project) -> None:
     previous_release = release.get_previous_release(project)
-    possible_repos = (
+    if possible_repos := (
         RepositoryProjectPathConfig.objects.select_related("repository")
         .filter(project=project, repository__provider="integrations:github")
         .all()
-    )
-    if possible_repos:
+    ):
         # If it does exist, kick off a task to look if the commit exists in the repository
         target_repo = None
         for repo_proj_path_model in possible_repos:
@@ -1029,8 +1020,9 @@ def _derive_plugin_tags_many(jobs: Sequence[Job], projects: ProjectsMapping) -> 
 
     for job in jobs:
         for plugin in plugins_for_projects[job["project_id"]]:
-            added_tags = safe_execute(plugin.get_tags, job["event"], _with_transaction=False)
-            if added_tags:
+            if added_tags := safe_execute(
+                plugin.get_tags, job["event"], _with_transaction=False
+            ):
                 data = job["data"]
                 # plugins should not override user provided tags
                 for key, value in added_tags:
@@ -1224,12 +1216,10 @@ def _tsdb_record_all_metrics(jobs: Sequence[Job]) -> None:
     # XXX: validate whether anybody actually uses those metrics
 
     for job in jobs:
-        incrs = []
         frequencies = []
         records = []
-        incrs.append((TSDBModel.project, job["project_id"]))
+        incrs = [(TSDBModel.project, job["project_id"])]
         event = job["event"]
-        release = job["release"]
         environment = job["environment"]
         user = job["user"]
 
@@ -1254,7 +1244,7 @@ def _tsdb_record_all_metrics(jobs: Sequence[Job]) -> None:
                     (TSDBModel.users_affected_by_group, group_info.group.id, (user.tag_value,))
                 )
 
-        if release:
+        if release := job["release"]:
             incrs.append((TSDBModel.release, release.id))
 
         if user:
@@ -1292,8 +1282,7 @@ def _nodestore_save_many(jobs: Sequence[Job], app_feature: str) -> None:
 
         if app_feature:
             event_size = 0
-            event_metrics = job.get("event_metrics")
-            if event_metrics:
+            if event_metrics := job.get("event_metrics"):
                 event_size = event_metrics.get("bytes.stored.event", 0)
             record(
                 resource_id=settings.COGS_EVENT_STORE_LABEL,
@@ -1426,7 +1415,7 @@ def _get_event_user_impl(
         except ValueError:
             ip_address = None
 
-    euser = EventUser(
+    return EventUser(
         project_id=project.id,
         user_ident=user_data.get("id"),
         email=user_data.get("email"),
@@ -1434,8 +1423,6 @@ def _get_event_user_impl(
         ip_address=ip_address,
         name=user_data.get("name"),
     )
-
-    return euser
 
 
 def get_event_type(data: Mapping[str, Any]) -> EventType:
@@ -1553,13 +1540,13 @@ def _save_aggregate(
         ):
             raise HashDiscarded("Load shedding group creation", reason="load_shed")
 
-        with sentry_sdk.start_span(
-            op="event_manager.create_group_transaction"
-        ) as span, metrics.timer(
-            "event_manager.create_group_transaction"
-        ) as metric_tags, transaction.atomic(
-            router.db_for_write(GroupHash)
-        ):
+        with (sentry_sdk.start_span(
+                    op="event_manager.create_group_transaction"
+                ) as span, metrics.timer(
+                    "event_manager.create_group_transaction"
+                ) as metric_tags, transaction.atomic(
+                    router.db_for_write(GroupHash)
+                )):
             span.set_tag("create_group_transaction.outcome", "no_group")
             metric_tags["create_group_transaction.outcome"] = "no_group"
 
@@ -1621,9 +1608,9 @@ def _save_aggregate(
                     },
                 )
 
-                # This only applies to events with stacktraces
-                frame_mix = event.get_event_metadata().get("in_app_frame_mix")
-                if frame_mix:
+                if frame_mix := event.get_event_metadata().get(
+                    "in_app_frame_mix"
+                ):
                     metrics.incr(
                         "grouping.in_app_frame_mix",
                         sample_rate=1.0,
@@ -1777,7 +1764,7 @@ def _find_existing_grouphash(
         # group attached to `hierarchical_hashes[0]`? Maybe.
         if group_hash.group_tombstone_id is not None:
             raise HashDiscarded(
-                "Matches group tombstone %s" % group_hash.group_tombstone_id,
+                f"Matches group tombstone {group_hash.group_tombstone_id}",
                 reason="discard",
                 tombstone_id=group_hash.group_tombstone_id,
             )
@@ -2236,11 +2223,10 @@ def get_attachments(cache_key: Optional[str], job: Job) -> list[Attachment]:
     if not features.has("organizations:event-attachments", project.organization, actor=None):
         return []
 
-    attachments = list(attachment_cache.get(cache_key))
-    if not attachments:
+    if attachments := list(attachment_cache.get(cache_key)):
+        return [attachment for attachment in attachments if not attachment.rate_limited]
+    else:
         return []
-
-    return [attachment for attachment in attachments if not attachment.rate_limited]
 
 
 def filter_attachments_for_group(attachments: list[Attachment], job: Job) -> list[Attachment]:

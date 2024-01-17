@@ -27,11 +27,12 @@ class RpcServiceEndpoint(Endpoint):
     enforce_rate_limit = False
 
     def _is_authorized(self, request: Request) -> bool:
-        if request.auth and isinstance(
-            request.successful_authenticator, RpcSignatureAuthentication
-        ):
-            return True
-        return False
+        return bool(
+            request.auth
+            and isinstance(
+                request.successful_authenticator, RpcSignatureAuthentication
+            )
+        )
 
     def post(self, request: Request, service_name: str, method_name: str) -> Response:
         if not self._is_authorized(request):

@@ -130,8 +130,7 @@ class ProjectKeyDetailsEndpoint(ProjectEndpoint):
             default_version if not result.get("browserSdkVersion") else result["browserSdkVersion"]
         )
 
-        result_dynamic_sdk_options = result.get("dynamicSdkLoaderOptions")
-        if result_dynamic_sdk_options:
+        if result_dynamic_sdk_options := result.get("dynamicSdkLoaderOptions"):
             if key.data.get("dynamicSdkLoaderOptions"):
                 key.data["dynamicSdkLoaderOptions"].update(result_dynamic_sdk_options)
             else:

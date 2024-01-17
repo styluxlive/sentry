@@ -80,11 +80,7 @@ def issue_search_query_to_conditions(
     snql_conditions = []
     for cond in resolved_legacy_conditions or ():
         if not is_condition(cond):
-            # this shouldn't be possible since issue search only allows ands
-            or_conditions = []
-            for or_cond in cond:
-                or_conditions.append(parse_condition(or_cond))
-
+            or_conditions = [parse_condition(or_cond) for or_cond in cond]
             if len(or_conditions) > 1:
                 snql_conditions.append(Or(or_conditions))
             else:
@@ -118,7 +114,7 @@ class GroupEventDetailsEndpoint(GroupEndpoint):
 
         :pparam string group_id: the ID of the issue
         """
-        environments = [e for e in get_environments(request, group.project.organization)]
+        environments = list(get_environments(request, group.project.organization))
         environment_names = [e.name for e in environments]
 
         if event_id == "latest":
@@ -127,9 +123,8 @@ class GroupEventDetailsEndpoint(GroupEndpoint):
         elif event_id == "oldest":
             with metrics.timer("api.endpoints.group_event_details.get", tags={"type": "oldest"}):
                 event = group.get_oldest_event_for_environments(environment_names)
-        elif event_id in ("helpful", "recommended"):
-            query = request.GET.get("query")
-            if query:
+        elif event_id in {"helpful", "recommended"}:
+            if query := request.GET.get("query"):
                 with metrics.timer(
                     "api.endpoints.group_event_details.get",
                     tags={"type": "helpful", "query": True},

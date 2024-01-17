@@ -30,10 +30,7 @@ class UserRegionEndpointPermissions(UserPermission):
             return True
         if is_system_auth(request.auth):
             return True
-        if is_active_superuser(request):
-            return True
-
-        return False
+        return bool(is_active_superuser(request))
 
 
 @control_silo_endpoint

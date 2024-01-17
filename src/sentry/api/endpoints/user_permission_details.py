@@ -81,6 +81,4 @@ class UserPermissionDetailsEndpoint(UserEndpoint):
                     },
                 )
 
-        if deleted:
-            return self.respond(status=204)
-        return self.respond(status=404)
+        return self.respond(status=204) if deleted else self.respond(status=404)

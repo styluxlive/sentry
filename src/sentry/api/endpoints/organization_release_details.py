@@ -231,9 +231,7 @@ class OrganizationReleaseDetailsPaginationMixin:
 
         release = queryset.order_by(*order_by).first()
 
-        if not release:
-            return None
-        return release.version
+        return None if not release else release.version
 
     def get_first_and_last_releases(self, org, environment, project_id, sort):
         """
@@ -470,10 +468,8 @@ class OrganizationReleaseDetailsEndpoint(
                         }
                         for r in result.get("headCommits", [])
                     ]
-                # Clear commits in release
-                else:
-                    if result.get("refs") == []:
-                        release.clear_commits()
+                elif result.get("refs") == []:
+                    release.clear_commits()
 
             scope.set_tag("has_refs", bool(refs))
             if refs:

@@ -145,8 +145,8 @@ class OrganizationEventsEndpoint(OrganizationEventsV2EndpointBase):
 
     enforce_rate_limit = True
 
-    def rate_limits(*args, **kwargs) -> RateLimitConfig:
-        return rate_limit_events(*args, **kwargs)
+    def rate_limits(self, **kwargs) -> RateLimitConfig:
+        return rate_limit_events(*self, **kwargs)
 
     def get_features(self, organization: Organization, request: Request) -> Mapping[str, bool]:
         feature_names = [

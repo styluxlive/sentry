@@ -143,16 +143,16 @@ class NotificationActionsIndexEndpoint(OrganizationEndpoint):
             requested_projects = request.data.get("projects", [])
             projects = self.get_projects(request, organization)
             project_slugs = [project.slug for project in projects]
-            missing_access_projects = set(requested_projects).difference(set(project_slugs))
-
-            if missing_access_projects:
+            if missing_access_projects := set(requested_projects).difference(
+                set(project_slugs)
+            ):
                 raise PermissionDenied(
-                    detail="You do not have permission to create notification actions for projects "
-                    + str(list(missing_access_projects))
+                    detail=f"You do not have permission to create notification actions for projects {list(missing_access_projects)}"
                 )
             # team admins will have project:write scoped to their projects, members will not
             team_admin_has_access = all(
-                [request.access.has_project_scope(project, "project:write") for project in projects]
+                request.access.has_project_scope(project, "project:write")
+                for project in projects
             )
             # all() returns True for empty list, so include a check for it
             if not team_admin_has_access or not projects:

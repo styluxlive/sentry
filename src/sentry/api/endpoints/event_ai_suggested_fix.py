@@ -163,8 +163,7 @@ def trim_frames(frames, frame_allowance=MAX_STACKTRACE_FRAMES):
 
     remaining = frames_len - frame_allowance
     app_count = len(app_frames)
-    system_allowance = max(frame_allowance - app_count, 0)
-    if system_allowance:
+    if system_allowance := max(frame_allowance - app_count, 0):
         half_max = int(system_allowance / 2)
         # prioritize trimming system frames
         for frame in system_frames[half_max:-half_max]:
@@ -189,8 +188,7 @@ def describe_event_for_ai(event, model):
     detailed = model.startswith("gpt-4")
     data = {}
 
-    msg = event.get("message")
-    if msg:
+    if msg := event.get("message"):
         data["message"] = msg
 
     platform = event.get("platform")
@@ -205,13 +203,11 @@ def describe_event_for_ai(event, model):
         if idx > 0:
             exception["raised_during_handling_of_previous_exception"] = True
         exception["num"] = idx + 1
-        exc_type = exc.get("type")
-        if exc_type:
+        if exc_type := exc.get("type"):
             exception["type"] = exc_type
         exception["message"] = exc.get("value")
         mechanism = exc.get("mechanism") or {}
-        exc_meta = mechanism.get("meta")
-        if exc_meta:
+        if exc_meta := mechanism.get("meta"):
             exception["exception_info"] = exc_meta
         if mechanism.get("handled") is False:
             exception["unhandled"] = True
@@ -237,14 +233,11 @@ def describe_event_for_ai(event, model):
                     first_in_app = False
                 line = frame.get("context_line") or ""
                 if (crashed_here and idx == 0) or detailed:
-                    pre_context = frame.get("pre_context")
-                    if pre_context:
+                    if pre_context := frame.get("pre_context"):
                         stack_frame["code_before"] = pre_context
                     stack_frame["code"] = line
-                    post_context = frame.get("post_context")
-                    if post_context:
+                    if post_context := frame.get("post_context"):
                         stack_frame["code_after"] = post_context
-                # {snip} usually appears in minified lines. skip that
                 elif "{snip}" not in line:
                     set_if_value(stack_frame, "code", line.strip())
                 stacktrace.append(stack_frame)
@@ -348,7 +341,7 @@ class EventAiSuggestedFixEndpoint(ProjectEndpoint):
 
         # Cache the suggestion for a certain amount by primary hash, so even when new events
         # come into the group, we are sharing the same response.
-        cache_key = "ai:" + event.get_primary_hash()
+        cache_key = f"ai:{event.get_primary_hash()}"
         suggestion = cache.get(cache_key)
         if suggestion is None:
             try:

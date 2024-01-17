@@ -23,13 +23,13 @@ class InternalFeatureFlagsEndpoint(Endpoint):
         if not settings.SENTRY_SELF_HOSTED:
             return Response("You are not self-hosting Sentry.", status=403)
 
-        result = {}
-        for key in SENTRY_EARLY_FEATURES:
-            result[key] = {
+        result = {
+            key: {
                 "value": settings.SENTRY_FEATURES.get(key, False),
                 "description": SENTRY_EARLY_FEATURES[key],
             }
-
+            for key in SENTRY_EARLY_FEATURES
+        }
         return Response(result)
 
     def put(self, request: Request) -> Response:

@@ -133,7 +133,7 @@ def relay_from_id(request, relay_id) -> Tuple[Optional[Relay], bool]:
 
 class QuietBasicAuthentication(BasicAuthentication):
     def authenticate_header(self, request: Request) -> str:
-        return 'xBasic realm="%s"' % self.www_authenticate_realm
+        return f'xBasic realm="{self.www_authenticate_realm}"'
 
     def transform_auth(
         self,
@@ -247,8 +247,7 @@ class ApiKeyAuthentication(QuietBasicAuthentication):
 @AuthenticationSiloLimit(SiloMode.CONTROL, SiloMode.REGION)
 class SessionNoAuthTokenAuthentication(SessionAuthentication):
     def authenticate(self, request: Request):
-        auth = get_authorization_header(request)
-        if auth:
+        if auth := get_authorization_header(request):
             return None
         return super().authenticate(request)
 

@@ -32,7 +32,7 @@ class SentryAppInstallationExternalRequestsEndpoint(SentryAppInstallationBaseEnd
         }
 
         if project:
-            kwargs.update({"project_slug": project.slug})
+            kwargs["project_slug"] = project.slug
 
         try:
             choices = SelectRequester.run(**kwargs)

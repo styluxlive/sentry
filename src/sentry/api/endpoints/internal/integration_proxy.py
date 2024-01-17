@@ -106,10 +106,7 @@ class InternalIntegrationProxyEndpoint(Endpoint):
             organization_id=self.org_integration.organization_id
         )
 
-        # Get the client, some integrations use a keyring approach so
-        # we need to pass in the keyid
-        keyid = request.headers.get(PROXY_KEYID_HEADER)
-        if keyid:
+        if keyid := request.headers.get(PROXY_KEYID_HEADER):
             self.client: IntegrationProxyClient = installation.get_keyring_client(keyid)
         else:
             self.client: IntegrationProxyClient = installation.get_client()

@@ -118,19 +118,15 @@ class PickledObjectField(models.Field):
 
         """
         if self.has_default():
-            if callable(self.default):
-                return self.default()
-            return self.default
+            return self.default() if callable(self.default) else self.default
         # If the field doesn't have a default, then we punt to models.Field.
         return super().get_default()
 
     def _check_default(self) -> List[Any]:
-        if self.has_default() and isinstance(self.default, (list, dict, set)):
-            return [
+        return (
+            [
                 checks.Warning(
-                    "%s default should be a callable instead of a mutable instance so "
-                    "that it's not shared between all field instances."
-                    % (self.__class__.__name__,),
+                    f"{self.__class__.__name__} default should be a callable instead of a mutable instance so that it's not shared between all field instances.",
                     hint=(
                         "Use a callable instead, e.g., use `%s` instead of "
                         "`%r`."
@@ -143,8 +139,9 @@ class PickledObjectField(models.Field):
                     id="picklefield.E001",
                 )
             ]
-        else:
-            return []
+            if self.has_default() and isinstance(self.default, (list, dict, set))
+            else []
+        )
 
     def check(self, **kwargs: Any) -> Any:
         errors = super().check(**kwargs)
@@ -222,5 +219,5 @@ class PickledObjectField(models.Field):
         We need to limit the lookup types.
         """
         if lookup_name not in ["exact", "in", "isnull"]:
-            raise TypeError("Lookup type %s is not supported." % lookup_name)
+            raise TypeError(f"Lookup type {lookup_name} is not supported.")
         return super().get_lookup(lookup_name)

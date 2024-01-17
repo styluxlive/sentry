@@ -61,10 +61,11 @@ def inbox_search(
 ) -> CursorResult:
     now: datetime = timezone.now()
     end: Optional[datetime] = None
-    end_params: List[datetime] = [
-        _f for _f in [date_to, get_search_filter(search_filters, "date", "<")] if _f
-    ]
-    if end_params:
+    if end_params := [
+        _f
+        for _f in [date_to, get_search_filter(search_filters, "date", "<")]
+        if _f
+    ]:
         end = min(end_params)
 
     end = end if end else now + ALLOWED_FUTURE_DELTA
@@ -79,11 +80,11 @@ def inbox_search(
     if start >= end:
         return Paginator(Group.objects.none()).get_result()
 
-    # Make sure search terms are valid
-    invalid_search_terms = [
-        str(sf) for sf in search_filters if sf.key.name not in allowed_inbox_search_terms
-    ]
-    if invalid_search_terms:
+    if invalid_search_terms := [
+        str(sf)
+        for sf in search_filters
+        if sf.key.name not in allowed_inbox_search_terms
+    ]:
         raise InvalidSearchQuery(f"Invalid search terms for 'inbox' search: {invalid_search_terms}")
 
     # Make sure this is an inbox search
@@ -114,8 +115,9 @@ def inbox_search(
             .distinct()
         )
 
-    owner_search = get_search_filter(search_filters, "assigned_or_suggested", "IN")
-    if owner_search:
+    if owner_search := get_search_filter(
+        search_filters, "assigned_or_suggested", "IN"
+    ):
         qs = qs.filter(
             assigned_or_suggested_filter(owner_search, projects, field_filter="group_id")
         )
@@ -278,12 +280,8 @@ class OrganizationGroupIndexEndpoint(OrganizationEndpoint):
             organization_id=organization.id,
         )
 
-        # we ignore date range for both short id and event ids
-        query = request.GET.get("query", "").strip()
-        if query:
-            # check to see if we've got an event ID
-            event_id = normalize_event_id(query)
-            if event_id:
+        if query := request.GET.get("query", "").strip():
+            if event_id := normalize_event_id(query):
                 # For a direct hit lookup we want to use any passed project ids
                 # (we've already checked permissions on these) plus any other
                 # projects that the user is a member of. This gives us a better

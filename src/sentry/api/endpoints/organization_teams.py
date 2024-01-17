@@ -111,37 +111,35 @@ class OrganizationTeamsEndpoint(OrganizationEndpoint):
             .select_related("organization")  # Used in TeamSerializer
         )
 
-        query = request.GET.get("query")
-
-        if query:
+        if query := request.GET.get("query"):
             tokens = tokenize_query(query)
             for key, value in tokens.items():
                 if key == "hasExternalTeams":
                     has_external_teams = "true" in value
-                    if has_external_teams:
-                        queryset = queryset.filter(
+                    queryset = (
+                        queryset.filter(
                             id__in=ExternalActor.objects.filter(
                                 organization=organization
                             ).values_list("team_id")
                         )
-                    else:
-                        queryset = queryset.exclude(
+                        if has_external_teams
+                        else queryset.exclude(
                             id__in=ExternalActor.objects.filter(
                                 organization=organization
                             ).values_list("team_id")
                         )
-
-                elif key == "query":
-                    value = " ".join(value)
-                    queryset = queryset.filter(Q(name__icontains=value) | Q(slug__icontains=value))
-                elif key == "slug":
-                    queryset = queryset.filter(slug__in=value)
+                    )
                 elif key == "id":
                     try:
                         value = [int(item) for item in value]
                     except ValueError:
                         raise ParseError(detail="Invalid id value")
                     queryset = queryset.filter(id__in=value)
+                elif key == "query":
+                    value = " ".join(value)
+                    queryset = queryset.filter(Q(name__icontains=value) | Q(slug__icontains=value))
+                elif key == "slug":
+                    queryset = queryset.filter(slug__in=value)
                 else:
                     queryset = queryset.none()
 

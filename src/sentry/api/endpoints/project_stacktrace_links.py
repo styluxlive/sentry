@@ -171,7 +171,4 @@ def check_file(
             raise
         return "integration_link_forbidden"
 
-    if not link:
-        return "file_not_found"
-
-    return None
+    return "file_not_found" if not link else None

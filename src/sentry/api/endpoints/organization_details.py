@@ -295,9 +295,9 @@ class OrganizationSerializer(BaseOrganizationSerializer):
                 "Organization does not have the relay feature enabled"
             )
 
-        # make sure we don't have multiple instances of one public key
-        public_keys = set()
         if value is not None:
+            # make sure we don't have multiple instances of one public key
+            public_keys = set()
             for key_info in value:
                 key = key_info.get("public_key")
                 if key in public_keys:
@@ -368,19 +368,18 @@ class OrganizationSerializer(BaseOrganizationSerializer):
             modified = True
 
         if modified:
-            # we have some modifications create a log message
-            if existing is not None:
-                # generate an update log message
-                changed_data["trustedRelays"] = f"from {existing} to {incoming}"
-                existing.value = incoming
-                existing.save()
-            else:
+            if existing is None:
                 # first time we set trusted relays, generate a create log message
                 changed_data["trustedRelays"] = f"to {incoming}"
                 OrganizationOption.objects.set_value(
                     organization=organization, key=option_key, value=incoming
                 )
 
+            else:
+                # generate an update log message
+                changed_data["trustedRelays"] = f"from {existing} to {incoming}"
+                existing.value = incoming
+                existing.save()
         return incoming
 
     def save(self):
@@ -456,16 +455,15 @@ class OrganizationSerializer(BaseOrganizationSerializer):
 
         # check if fields changed
         for f, v in org_tracked_field.items():
-            if f != "flag_field":
-                if has_changed(org, f):
-                    old_val = old_value(org, f)
-                    changed_data[f] = f"from {old_val} to {v}"
-            else:
+            if f == "flag_field":
                 # check if flag fields changed
                 for f, v in org_tracked_field["flag_field"].items():
                     if flag_has_changed(org, f):
                         changed_data[f] = f"to {v}"
 
+            elif has_changed(org, f):
+                old_val = old_value(org, f)
+                changed_data[f] = f"from {old_val} to {v}"
         org.save()
 
         if "avatar" in data or "avatarType" in data:
@@ -608,10 +606,10 @@ class OrganizationDetailsEndpoint(OrganizationEndpoint):
             context={"organization": organization, "user": request.user, "request": request},
         )
         if serializer.is_valid():
-            slug_change_requested = "slug" in request.data and request.data["slug"]
-
-            # Attempt slug change first as it's a more complex, control-silo driven workflow.
-            if slug_change_requested:
+            if (
+                slug_change_requested := "slug" in request.data
+                and request.data["slug"]
+            ):
                 slug = request.data["slug"]
                 try:
                     organization_provisioning_service.change_organization_slug(
@@ -772,7 +770,7 @@ def send_delete_confirmation(delete_confirmation_args: DeleteConfirmationArgs):
     }
 
     message = MessageBuilder(
-        subject="{}Organization Queued for Deletion".format(options.get("mail.subject-prefix")),
+        subject=f'{options.get("mail.subject-prefix")}Organization Queued for Deletion',
         template="sentry/emails/org_delete_confirm.txt",
         html_template="sentry/emails/org_delete_confirm.html",
         type="org.confirm_delete",
@@ -797,9 +795,7 @@ def has_changed(model, field_name):
         return False
     field = model._meta.get_field(field_name)
     value = get_field_value(model, field)
-    if value is DEFERRED:
-        return False
-    return model.__data.get(field_name) != value
+    return False if value is DEFERRED else model.__data.get(field_name) != value
 
 
 def old_value(model, field_name):
@@ -807,6 +803,4 @@ def old_value(model, field_name):
     if model.__data is UNSAVED:
         return None
     value = model.__data.get(field_name)
-    if value is DEFERRED:
-        return None
-    return model.__data.get(field_name)
+    return None if value is DEFERRED else model.__data.get(field_name)

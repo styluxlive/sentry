@@ -121,18 +121,14 @@ def _count_non_zero_intervals(stats: List[MetricVolumeRow]) -> int:
     """
     Counts the number of intervals with non-zero values
     """
-    non_zero_intervals = 0
-    for idx in range(len(stats)):
-        if _get_value(stats[idx]) != 0:
-            non_zero_intervals += 1
-    return non_zero_intervals
+    return sum(1 for stat in stats if _get_value(stat) != 0)
 
 
 def estimate_stats_quality(stats: List[MetricVolumeRow]) -> StatsQualityEstimation:
     """
     Estimates the quality of the stats estimation based on the number of intervals with no data
     """
-    if len(stats) == 0:
+    if not stats:
         return StatsQualityEstimation.NO_DATA
 
     data_intervals = _count_non_zero_intervals(stats)
@@ -156,19 +152,15 @@ def get_stats_generator(use_discover: bool, remove_on_demand: bool):
     """
 
     def get_discover_stats(
-        query_columns: Sequence[str],
-        query: str,
-        params: Dict[str, str],
-        rollup: int,
-        zerofill_results: bool,  # not used but required by get_event_stats_data
-        comparison_delta: Optional[datetime],  # not used but required by get_event_stats_data
-    ) -> SnubaTSResult:
+            query_columns: Sequence[str],
+            query: str,
+            params: Dict[str, str],
+            rollup: int,
+            zerofill_results: bool,  # not used but required by get_event_stats_data
+            comparison_delta: Optional[datetime],  # not used but required by get_event_stats_data
+        ) -> SnubaTSResult:
         # use discover or metrics_performance depending on the dataset
-        if use_discover:
-            module: ModuleType = discover
-        else:
-            module = metrics_performance
-
+        module = discover if use_discover else metrics_performance
         if remove_on_demand:
             query = to_standard_metrics_query(query)
 
@@ -218,11 +210,7 @@ def estimate_volume(
         indexed = _get_value(base_index[idx])
         metrics = _get_value(base_metrics[idx])
 
-        if indexed != 0:
-            inverted_rate = metrics / indexed
-        else:
-            inverted_rate = avg_inverted_rate
-
+        inverted_rate = metrics / indexed if indexed != 0 else avg_inverted_rate
         _set_value(indexed_data[idx], _get_value(indexed_data[idx]) * inverted_rate)
 
     return indexed_data
@@ -230,9 +218,7 @@ def estimate_volume(
 
 def _get_value(elm: MetricVolumeRow) -> float:
     ret_val = cast(List[CountResult], elm[1])[0].get("count")
-    if ret_val is None:
-        return 0.0
-    return ret_val
+    return 0.0 if ret_val is None else ret_val
 
 
 def _set_value(elm: MetricVolumeRow, value: float) -> None:
@@ -249,7 +235,7 @@ def _is_data_aligned(left: List[MetricVolumeRow], right: List[MetricVolumeRow]) 
     if len(left) != len(right):
         return False
 
-    if len(left) == 0:
+    if not left:
         return True
 
     return left[0][0] == right[0][0] and left[-1][0] == right[-1][0]

@@ -14,9 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 def _fix_label(label):
-    if isinstance(label, tuple):
-        return ":".join(label)
-    return label
+    return ":".join(label) if isinstance(label, tuple) else label
 
 
 @region_silo_endpoint
@@ -29,11 +27,7 @@ class GroupSimilarIssuesEndpoint(GroupEndpoint):
         features = similarity.features
 
         limit_s = request.GET.get("limit", None)
-        if limit_s is not None:
-            limit: int | None = int(limit_s) + 1  # the target group will always be included
-        else:
-            limit = None
-
+        limit = int(limit_s) + 1 if limit_s is not None else None
         group_ids = []
         group_scores = []
 

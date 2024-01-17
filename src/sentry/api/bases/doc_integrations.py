@@ -20,10 +20,7 @@ class DocIntegrationsPermission(SentryPermission):
         if not super().has_permission(request, view):
             return False
 
-        if is_active_superuser(request) or request.method == "GET":
-            return True
-
-        return False
+        return bool(is_active_superuser(request) or request.method == "GET")
 
     def has_object_permission(
         self, request: Request, view: object, doc_integration: DocIntegration
@@ -34,10 +31,7 @@ class DocIntegrationsPermission(SentryPermission):
         if is_active_superuser(request):
             return True
 
-        if not doc_integration.is_draft and request.method == "GET":
-            return True
-
-        return False
+        return not doc_integration.is_draft and request.method == "GET"
 
 
 class DocIntegrationsBaseEndpoint(Endpoint):

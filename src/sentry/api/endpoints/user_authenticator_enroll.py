@@ -266,7 +266,7 @@ class UserAuthenticatorEnrollEndpoint(UserEndpoint):
                 serializer.data["deviceName"],
                 state,
             )
-            context.update({"device_name": serializer.data["deviceName"]})
+            context["device_name"] = serializer.data["deviceName"]
 
         if interface.status == EnrollmentStatus.ROTATION:
             interface.rotate_in_place()
@@ -278,7 +278,7 @@ class UserAuthenticatorEnrollEndpoint(UserEndpoint):
             except NewEnrollmentDisallowed:
                 return Response(DISALLOWED_NEW_ENROLLMENT_ERR, status=status.HTTP_403_FORBIDDEN)
 
-        context.update({"authenticator": interface.authenticator})
+        context["authenticator"] = interface.authenticator
         capture_security_activity(
             account=user,
             type="mfa-added",
@@ -302,9 +302,9 @@ class UserAuthenticatorEnrollEndpoint(UserEndpoint):
         request.user = (
             user  # Load in the canonical user object so the invite helper references it correctly.
         )
-        invite_helper = ApiInviteHelper.from_session(request=request, logger=logger)
-
-        if invite_helper:
+        if invite_helper := ApiInviteHelper.from_session(
+            request=request, logger=logger
+        ):
             if invite_helper.member_already_exists:
                 invite_helper.handle_member_already_exists()
                 organization_service.delete_organization_member(

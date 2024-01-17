@@ -165,14 +165,14 @@ class ProguardArtifactReleasesEndpoint(ProjectEndpoint):
         :auth: required
         """
 
-        proguard_uuid = request.GET.get("proguard_uuid")
-        releases = None
-        if proguard_uuid:
+        if proguard_uuid := request.GET.get("proguard_uuid"):
             releases = ProguardArtifactRelease.objects.filter(
                 organization_id=project.organization_id,
                 project_id=project.id,
                 proguard_uuid=proguard_uuid,
             ).values_list("release_name", flat=True)
+        else:
+            releases = None
         return Response({"releases": releases})
 
 
@@ -187,12 +187,11 @@ class DebugFilesEndpoint(ProjectEndpoint):
     permission_classes = (ProjectReleasePermission,)
 
     def download(self, debug_file_id, project):
-        rate_limited = ratelimits.backend.is_limited(
+        if rate_limited := ratelimits.backend.is_limited(
             project=project,
             key=f"rl:DSymFilesEndpoint:download:{debug_file_id}:{project.id}",
             limit=10,
-        )
-        if rate_limited:
+        ):
             logger.info(
                 "notification.rate_limited",
                 extra={"project_id": project.id, "project_debug_file_id": debug_file_id},
@@ -212,10 +211,9 @@ class DebugFilesEndpoint(ProjectEndpoint):
                 iter(lambda: fp.read(4096), b""), content_type="application/octet-stream"
             )
             response["Content-Length"] = debug_file.file.size
-            response["Content-Disposition"] = 'attachment; filename="{}{}"'.format(
-                posixpath.basename(debug_file.debug_id),
-                debug_file.file_extension,
-            )
+            response[
+                "Content-Disposition"
+            ] = f'attachment; filename="{posixpath.basename(debug_file.debug_id)}{debug_file.file_extension}"'
             return response
         except OSError:
             raise Http404
@@ -475,9 +473,9 @@ class DifAssembleEndpoint(ProjectEndpoint):
                 file_response[checksum] = {"state": ChunkFileState.NOT_FOUND, "missingChunks": []}
                 continue
 
-            # Check if all requested chunks have been uploaded.
-            missing_chunks = find_missing_chunks(project.organization.id, chunks)
-            if missing_chunks:
+            if missing_chunks := find_missing_chunks(
+                project.organization.id, chunks
+            ):
                 file_response[checksum] = {
                     "state": ChunkFileState.NOT_FOUND,
                     "missingChunks": missing_chunks,
@@ -593,9 +591,7 @@ class SourceMapsEndpoint(ProjectEndpoint):
         :auth: required
         """
 
-        archive_name = request.GET.get("name")
-
-        if archive_name:
+        if archive_name := request.GET.get("name"):
             with atomic_transaction(using=router.db_for_write(ReleaseFile)):
                 release = Release.objects.get(
                     organization_id=project.organization_id, projects=project, version=archive_name

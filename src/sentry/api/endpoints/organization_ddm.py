@@ -43,13 +43,11 @@ class OrganizationDDMMetaEndpoint(OrganizationEndpoint):
     """
 
     def _extract_meta_types(self, request: Request) -> Sequence[MetaType]:
-        meta_types = []
-
-        for meta_type in MetaType:
-            if request.GET.get(meta_type.value) == "true":
-                meta_types.append(meta_type)
-
-        return meta_types
+        return [
+            meta_type
+            for meta_type in MetaType
+            if request.GET.get(meta_type.value) == "true"
+        ]
 
     def get(self, request: Request, organization) -> Response:
         start, end = get_date_range_from_params(request.GET)

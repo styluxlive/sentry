@@ -247,12 +247,11 @@ class OrganizationMemberDetailsEndpoint(OrganizationMemberEndpoint):
                     return Response({"detail": ERR_RATE_LIMITED}, status=429)
 
                 if result.get("regenerate"):
-                    if request.access.has_scope("member:admin"):
-                        with transaction.atomic(router.db_for_write(OrganizationMember)):
-                            member.regenerate_token()
-                            member.save()
-                    else:
+                    if not request.access.has_scope("member:admin"):
                         return Response({"detail": ERR_INSUFFICIENT_SCOPE}, status=400)
+                    with transaction.atomic(router.db_for_write(OrganizationMember)):
+                        member.regenerate_token()
+                        member.save()
                 if member.token_expired:
                     return Response({"detail": ERR_EXPIRED}, status=400)
                 member.send_invite_email()
@@ -280,9 +279,10 @@ class OrganizationMemberDetailsEndpoint(OrganizationMemberEndpoint):
                 return Response({"teams": "Invalid team"}, status=400)
 
         assigned_org_role = result.get("orgRole") or result.get("role")
-        is_update_org_role = assigned_org_role and assigned_org_role != member.role
-
-        if is_update_org_role:
+        if (
+            is_update_org_role := assigned_org_role
+            and assigned_org_role != member.role
+        ):
             # TODO(adas): Reenable idp lockout once all scim role bugs are resolved.
 
             allowed_role_ids = {r.id for r in allowed_roles}
@@ -396,18 +396,13 @@ class OrganizationMemberDetailsEndpoint(OrganizationMemberEndpoint):
                 if acting_member != member:
                     if not request.access.has_scope("member:admin"):
                         return Response({"detail": ERR_INSUFFICIENT_SCOPE}, status=400)
-                    else:
-                        can_manage = False
-                        # check org roles through teams
-                        for role in acting_member.get_all_org_roles():
-                            if roles.can_manage(role, member.role):
-                                can_manage = True
-                                break
+                    can_manage = any(
+                        roles.can_manage(role, member.role)
+                        for role in acting_member.get_all_org_roles()
+                    )
+                    if not can_manage:
+                        return Response({"detail": ERR_INSUFFICIENT_ROLE}, status=400)
 
-                        if not can_manage:
-                            return Response({"detail": ERR_INSUFFICIENT_ROLE}, status=400)
-
-        # TODO(dcramer): do we even need this check?
         elif not request.access.has_scope("member:admin"):
             return Response({"detail": ERR_INSUFFICIENT_SCOPE}, status=400)
 

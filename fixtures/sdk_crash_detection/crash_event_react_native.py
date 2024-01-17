@@ -2,7 +2,7 @@ from typing import Dict, Mapping, MutableMapping, Sequence
 
 
 def get_frames(filename: str) -> Sequence[MutableMapping[str, str]]:
-    frames = [
+    return [
         {
             "function": "dispatchEvent",
             "filename": "/Users/sentry.user/git-repos/sentry-react-native/samples/react-native/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-dev.js",
@@ -29,7 +29,6 @@ def get_frames(filename: str) -> Sequence[MutableMapping[str, str]]:
             "abs_path": "/Users/sentry.user/git-repos/sentry-react-native/dist/js/client.js",
         },
     ]
-    return frames
 
 
 def get_crash_event(

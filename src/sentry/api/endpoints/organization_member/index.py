@@ -75,7 +75,7 @@ class OrganizationMemberSerializer(serializers.Serializer):
         )
 
         if queryset.filter(invite_status=InviteStatus.APPROVED.value).exists():
-            raise MemberConflictValidationError("The user %s is already a member" % email)
+            raise MemberConflictValidationError(f"The user {email} is already a member")
 
         if not self.context.get("allow_existing_invite_request"):
             if queryset.filter(
@@ -83,7 +83,7 @@ class OrganizationMemberSerializer(serializers.Serializer):
                 | Q(invite_status=InviteStatus.REQUESTED_TO_JOIN.value)
             ).exists():
                 raise MemberConflictValidationError(
-                    "There is an existing invite request for %s" % email
+                    f"There is an existing invite request for {email}"
                 )
         return email
 
@@ -119,10 +119,7 @@ class OrganizationMemberSerializer(serializers.Serializer):
 
         # Avoids O(n * n) search
         team_role_map = {item["teamSlug"]: item["role"] for item in teamRoles}
-        # TODO(dlee): Check if they have permissions to assign team role for each team
-        valid_team_roles = [(team, team_role_map[team.slug]) for team in valid_teams]
-
-        return valid_team_roles
+        return [(team, team_role_map[team.slug]) for team in valid_teams]
 
 
 @region_silo_endpoint
@@ -141,8 +138,7 @@ class OrganizationMemberIndexEndpoint(OrganizationEndpoint):
             invite_status=InviteStatus.APPROVED.value,
         ).order_by("id")
 
-        query = request.GET.get("query")
-        if query:
+        if query := request.GET.get("query"):
             tokens = tokenize_query(query)
             for key, value in tokens.items():
                 if key == "email":
@@ -153,33 +149,6 @@ class OrganizationMemberIndexEndpoint(OrganizationEndpoint):
                         Q(email__in=value) | Q(user_id__in=[u.id for u in email_user_ids])
                     )
 
-                elif key == "id":
-                    queryset = queryset.filter(id__in=value)
-
-                elif key == "user.id":
-                    queryset = queryset.filter(user_id__in=value)
-
-                elif key == "scope":
-                    queryset = queryset.filter(role__in=[r.id for r in roles.with_any_scope(value)])
-
-                elif key == "role":
-                    members_with_role = organization.get_members_with_org_roles(
-                        roles=value, include_null_users=True
-                    ).values_list("id", flat=True)
-                    queryset = queryset.filter(id__in=members_with_role)
-
-                elif key == "isInvited":
-                    isInvited = "true" in value
-                    queryset = queryset.filter(user_id__isnull=isInvited)
-
-                elif key == "ssoLinked":
-                    ssoFlag = OrganizationMember.flags["sso:linked"]
-                    ssoLinked = "true" in value
-                    if ssoLinked:
-                        queryset = queryset.filter(flags=F("flags").bitor(ssoFlag))
-                    else:
-                        queryset = queryset.filter(flags=F("flags").bitand(~ssoFlag))
-
                 elif key == "has2fa":
                     has2fa = "true" in value
                     if has2fa:
@@ -187,22 +156,29 @@ class OrganizationMemberIndexEndpoint(OrganizationEndpoint):
                         has2fa_user_ids = user_service.get_many_ids(
                             filter=dict(organization_id=organization.id, authenticator_types=types)
                         )
-                        queryset = queryset.filter(user_id__in=has2fa_user_ids).distinct()
                     else:
                         has2fa_user_ids = user_service.get_many_ids(
                             filter=dict(organization_id=organization.id, authenticator_types=None)
                         )
-                        queryset = queryset.filter(user_id__in=has2fa_user_ids).distinct()
+                    queryset = queryset.filter(user_id__in=has2fa_user_ids).distinct()
                 elif key == "hasExternalUsers":
                     externalactor_user_ids = ExternalActor.objects.filter(
                         organization=organization,
                     ).values_list("user_id", flat=True)
 
                     hasExternalUsers = "true" in value
-                    if hasExternalUsers:
-                        queryset = queryset.filter(user_id__in=externalactor_user_ids)
-                    else:
-                        queryset = queryset.exclude(user_id__in=externalactor_user_ids)
+                    queryset = (
+                        queryset.filter(user_id__in=externalactor_user_ids)
+                        if hasExternalUsers
+                        else queryset.exclude(user_id__in=externalactor_user_ids)
+                    )
+                elif key == "id":
+                    queryset = queryset.filter(id__in=value)
+
+                elif key == "isInvited":
+                    isInvited = "true" in value
+                    queryset = queryset.filter(user_id__isnull=isInvited)
+
                 elif key == "query":
                     value = " ".join(value)
                     query_user_ids = user_service.get_many_ids(
@@ -211,6 +187,26 @@ class OrganizationMemberIndexEndpoint(OrganizationEndpoint):
                     queryset = queryset.filter(
                         Q(user_id__in=query_user_ids) | Q(email__icontains=value)
                     )
+                elif key == "role":
+                    members_with_role = organization.get_members_with_org_roles(
+                        roles=value, include_null_users=True
+                    ).values_list("id", flat=True)
+                    queryset = queryset.filter(id__in=members_with_role)
+
+                elif key == "scope":
+                    queryset = queryset.filter(role__in=[r.id for r in roles.with_any_scope(value)])
+
+                elif key == "ssoLinked":
+                    ssoFlag = OrganizationMember.flags["sso:linked"]
+                    ssoLinked = "true" in value
+                    queryset = (
+                        queryset.filter(flags=F("flags").bitor(ssoFlag))
+                        if ssoLinked
+                        else queryset.filter(flags=F("flags").bitand(~ssoFlag))
+                    )
+                elif key == "user.id":
+                    queryset = queryset.filter(user_id__in=value)
+
                 else:
                     queryset = queryset.none()
 

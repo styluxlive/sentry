@@ -98,7 +98,7 @@ def safe_urlopen(
         if method is None:
             method = "POST" if (data or json) else "GET"
 
-        response = session.request(
+        return session.request(
             method=method,
             url=url,
             allow_redirects=allow_redirects,
@@ -107,8 +107,6 @@ def safe_urlopen(
             stream=stream,
             **kwargs,
         )
-
-        return response
 
 
 def safe_urlread(response):
@@ -158,8 +156,7 @@ def fetch_file(
     # lock down domains that are problematic
     if domain_lock_enabled:
         domain_key = get_domain_key(url)
-        domain_result = cache.get(domain_key)
-        if domain_result:
+        if domain_result := cache.get(domain_key):
             domain_result["url"] = url
             raise CannotFetch(domain_result)
 

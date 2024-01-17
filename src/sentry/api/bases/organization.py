@@ -54,13 +54,7 @@ class OrganizationPermission(SentryPermission):
         if not organization.flags.require_2fa:
             return False
 
-        if request.user.has_2fa():  # type: ignore
-            return False
-
-        if is_active_superuser(request):
-            return False
-
-        return True
+        return False if request.user.has_2fa() else not is_active_superuser(request)
 
     def needs_sso(self, request: Request, organization: Organization | RpcOrganization) -> bool:
         # XXX(dcramer): this is very similar to the server-rendered views
@@ -69,9 +63,7 @@ class OrganizationPermission(SentryPermission):
             return False
         if not auth.has_completed_sso(request, organization.id):
             return True
-        if not request.access.sso_is_valid:
-            return True
-        return False
+        return not request.access.sso_is_valid
 
     def has_object_permission(
         self,
@@ -294,23 +286,19 @@ class OrganizationEndpoint(Endpoint):
         qs = Project.objects.filter(organization=organization, status=ObjectStatus.ACTIVE)
         slugs = project_slugs or set(filter(None, request.GET.getlist("projectSlug")))
         ids = project_ids or self.get_requested_project_ids_unchecked(request)
-        if project_ids is None and slugs:
-            # If we're querying for project slugs specifically
-            if ALL_ACCESS_PROJECTS_SLUG in slugs:
-                # All projects i have access to
-                include_all_accessible = True
-            else:
-                qs = qs.filter(slug__in=slugs)
-        else:
-            # If we are explicitly querying for projects via id
-            # Or we're querying for an empty set of ids
-            if ALL_ACCESS_PROJECT_ID in ids:
-                # All projects i have access to
-                include_all_accessible = True
-            elif ids:
-                qs = qs.filter(id__in=ids)
-            # No project ids === `all projects i am a member of`
-
+        if (
+            project_ids is None
+            and slugs
+            and ALL_ACCESS_PROJECTS_SLUG in slugs
+            or (project_ids is not None or not slugs)
+            and ALL_ACCESS_PROJECT_ID in ids
+        ):
+            # All projects i have access to
+            include_all_accessible = True
+        elif project_ids is None and slugs:
+            qs = qs.filter(slug__in=slugs)
+        elif ids:
+            qs = qs.filter(id__in=ids)
         with sentry_sdk.start_span(op="fetch_organization_projects") as span:
             projects = list(qs)
             span.set_data("Project Count", len(projects))
@@ -467,8 +455,7 @@ class OrganizationEndpoint(Endpoint):
             "organization_id": organization.id,
         }
 
-        environments = self.get_environments(request, organization)
-        if environments:
+        if environments := self.get_environments(request, organization):
             params["environment"] = [env.name for env in environments]
             params["environment_objects"] = environments
 
@@ -538,18 +525,21 @@ class OrganizationReleasesBaseEndpoint(OrganizationEndpoint):
                 return []
             has_valid_api_key = request.auth.has_scope("org:ci")  # type: ignore
 
-        if not (
-            has_valid_api_key or (getattr(request, "user", None) and request.user.is_authenticated)
-        ):
-            return []
-
-        return super().get_projects(
-            request,
-            organization,
-            force_global_perms=has_valid_api_key,
-            include_all_accessible=include_all_accessible,
-            project_ids=project_ids,
-            project_slugs=project_slugs,
+        return (
+            []
+            if not has_valid_api_key
+            and (
+                not getattr(request, "user", None)
+                or not request.user.is_authenticated
+            )
+            else super().get_projects(
+                request,
+                organization,
+                force_global_perms=has_valid_api_key,
+                include_all_accessible=include_all_accessible,
+                project_ids=project_ids,
+                project_slugs=project_slugs,
+            )
         )
 
     def has_release_permission(
@@ -568,22 +558,20 @@ class OrganizationReleasesBaseEndpoint(OrganizationEndpoint):
         ids.
         """
         actor_id = None
-        has_perms = None
         key = None
         if getattr(request, "user", None) and request.user.id:
-            actor_id = "user:%s" % request.user.id
-        if getattr(request, "auth", None) and getattr(request.auth, "id", None):
-            actor_id = "apikey:%s" % request.auth.id  # type: ignore
-        elif getattr(request, "auth", None) and getattr(request.auth, "entity_id", None):
-            actor_id = "apikey:%s" % request.auth.entity_id  # type: ignore
+            actor_id = f"user:{request.user.id}"
+        if getattr(request, "auth", None):
+            if getattr(request.auth, "id", None):
+                actor_id = f"apikey:{request.auth.id}"
+            elif getattr(request.auth, "entity_id", None):
+                actor_id = f"apikey:{request.auth.entity_id}"
+        has_perms = None
         if actor_id is not None:
             requested_project_ids = project_ids
             if requested_project_ids is None:
                 requested_project_ids = self.get_requested_project_ids_unchecked(request)
-            key = "release_perms:1:%s" % hash_values(
-                [actor_id, organization.id, release.id if release is not None else 0]
-                + sorted(requested_project_ids)
-            )
+            key = f"release_perms:1:{hash_values([actor_id, organization.id, release.id if release is not None else 0] + sorted(requested_project_ids))}"
             has_perms = cache.get(key)
         if has_perms is None:
             projects = self.get_projects(request, organization, project_ids=project_ids)

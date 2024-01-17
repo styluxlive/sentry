@@ -103,8 +103,7 @@ class ProjectGroupIndexEndpoint(ProjectEndpoint, EnvironmentMixin):
         if query:
             matching_group = None
             matching_event = None
-            event_id = normalize_event_id(query)
-            if event_id:
+            if event_id := normalize_event_id(query):
                 # check to see if we've got an event ID
                 try:
                     matching_group = Group.objects.from_event_id(project, event_id)
@@ -134,8 +133,7 @@ class ProjectGroupIndexEndpoint(ProjectEndpoint, EnvironmentMixin):
                     request.user,
                     serializer(),
                 )
-                matching_event_id = getattr(matching_event, "event_id", None)
-                if matching_event_id:
+                if matching_event_id := getattr(matching_event, "event_id", None):
                     serialized_groups[0]["matchingEventId"] = getattr(
                         matching_event, "event_id", None
                     )

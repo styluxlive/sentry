@@ -109,7 +109,7 @@ class ProjectArtifactBundleFilesEndpoint(ProjectEndpoint):
             )
 
             def format_date(date: Optional[datetime]) -> Optional[str]:
-                return None if date is None else date.isoformat()[:19] + "Z"
+                return None if date is None else f"{date.isoformat()[:19]}Z"
 
             return serialize(
                 {

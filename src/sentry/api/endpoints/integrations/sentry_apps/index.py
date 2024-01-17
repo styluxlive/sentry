@@ -33,7 +33,20 @@ class SentryAppsEndpoint(SentryAppsBaseEndpoint):
     def get(self, request: Request) -> Response:
         status = request.GET.get("status")
 
-        if status == "published":
+        if (
+            status != "published"
+            and status != "unpublished"
+            and status != "internal"
+            and is_active_superuser(request)
+        ):
+            queryset = SentryApp.objects.all()
+        elif (
+            status != "published"
+            and status != "unpublished"
+            and status != "internal"
+            and not is_active_superuser(request)
+            or status == "published"
+        ):
             queryset = SentryApp.objects.filter(status=SentryAppStatus.PUBLISHED)
 
         elif status == "unpublished":
@@ -47,7 +60,7 @@ class SentryAppsEndpoint(SentryAppsBaseEndpoint):
                         )
                     ]
                 )
-        elif status == "internal":
+        else:
             queryset = SentryApp.objects.filter(status=SentryAppStatus.INTERNAL)
             if not is_active_superuser(request):
                 queryset = queryset.filter(
@@ -58,12 +71,6 @@ class SentryAppsEndpoint(SentryAppsBaseEndpoint):
                         )
                     ]
                 )
-        else:
-            if is_active_superuser(request):
-                queryset = SentryApp.objects.all()
-            else:
-                queryset = SentryApp.objects.filter(status=SentryAppStatus.PUBLISHED)
-
         return self.paginate(
             request=request,
             queryset=queryset,

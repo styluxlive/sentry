@@ -92,11 +92,11 @@ class ProjectPluginDetailsEndpoint(ProjectEndpoint):
         # Currently, only data forwarding plugins need feature check. If there will be plugins with other feature gates,
         # we will need to add the relevant check. However, this is unlikely to happen.
         if any(
-            [
-                fd.featureGate == IntegrationFeatures.DATA_FORWARDING
-                for fd in plugin.feature_descriptions
-            ]
-        ) and not features.has("organizations:data-forwarding", project.organization):
+            fd.featureGate == IntegrationFeatures.DATA_FORWARDING
+            for fd in plugin.feature_descriptions
+        ) and not features.has(
+            "organizations:data-forwarding", project.organization
+        ):
             return Response(
                 {"detail": ERR_FEATURE_REQUIRED % "organizations:data-forwarding"}, status=403
             )

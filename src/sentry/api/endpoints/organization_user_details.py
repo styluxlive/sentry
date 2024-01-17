@@ -25,7 +25,4 @@ class OrganizationUserDetailsEndpoint(OrganizationEndpoint):
         users = user_service.serialize_many(
             filter={"user_ids": [user_id], "organization_id": organization.id}, as_user=request.user
         )
-        if len(users) == 0:
-            return Response(status=404)
-
-        return Response(users[0])
+        return Response(status=404) if len(users) == 0 else Response(users[0])

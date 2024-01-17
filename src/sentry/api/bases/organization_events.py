@@ -74,7 +74,7 @@ class OrganizationEventsEndpointBase(OrganizationEndpoint):
         if not teams:
             teams = Team.objects.get_for_user(organization, request.user)
 
-        return [team for team in teams]
+        return list(teams)
 
     def get_dataset(self, request: Request) -> Any:
         dataset_label = request.GET.get("dataset", "discover")
@@ -156,15 +156,9 @@ class OrganizationEventsEndpointBase(OrganizationEndpoint):
             return params
 
     def get_orderby(self, request: Request) -> Optional[Sequence[str]]:
-        sort: Sequence[str] = request.GET.getlist("sort")
-        if sort:
+        if sort := request.GET.getlist("sort"):
             return sort
-        # Deprecated. `sort` should be used as it is supported by
-        # more endpoints.
-        orderby: Sequence[str] = request.GET.getlist("orderby")
-        if orderby:
-            return orderby
-        return None
+        return orderby if (orderby := request.GET.getlist("orderby")) else None
 
     def quantize_date_params(self, request: Request, params: Dict[str, Any]) -> Dict[str, Any]:
         # We only need to perform this rounding on relative date periods
@@ -201,11 +195,7 @@ class OrganizationEventsV2EndpointBase(OrganizationEventsEndpointBase):
         )
 
         base_url = absolute_uri(urlquote(request.path))
-        if querystring:
-            base_url = f"{base_url}?{querystring}"
-        else:
-            base_url = base_url + "?"
-
+        base_url = f"{base_url}?{querystring}" if querystring else f"{base_url}?"
         return CURSOR_LINK_HEADER.format(
             uri=base_url,
             cursor=str(cursor),
@@ -280,9 +270,7 @@ class OrganizationEventsV2EndpointBase(OrganizationEventsEndpointBase):
             meta["isMetricsData"] = meta.get("isMetricsData", False)
             meta["isMetricsExtractedData"] = meta.get("isMetricsExtractedData", False)
 
-            if not data:
-                return {"data": [], "meta": meta}
-            return {"data": data, "meta": meta}
+            return {"data": [], "meta": meta} if not data else {"data": data, "meta": meta}
 
     def handle_data(
         self,
@@ -312,7 +300,7 @@ class OrganizationEventsV2EndpointBase(OrganizationEventsEndpointBase):
         if "device" in fields and request.GET.get("readable"):
             self.handle_readable_device(results, project_ids, organization)
 
-        if not ("project.id" in first_row or "projectid" in first_row):
+        if "project.id" not in first_row and "projectid" not in first_row:
             return results
 
         for result in results:
@@ -336,8 +324,7 @@ class OrganizationEventsV2EndpointBase(OrganizationEventsEndpointBase):
     ) -> None:
         for result in results:
             if "device" in result:
-                readable_value = get_readable_device_name(result["device"])
-                if readable_value:
+                if readable_value := get_readable_device_name(result["device"]):
                     result["readable"] = readable_value
 
     def get_event_stats_data(
@@ -482,9 +469,7 @@ class OrganizationEventsV2EndpointBase(OrganizationEventsEndpointBase):
                 if top_events > 0 and isinstance(result, SnubaTSResult):
                     serialized_result = {"": serialized_result}
             else:
-                extra_columns = None
-                if comparison_delta:
-                    extra_columns = ["comparisonCount"]
+                extra_columns = ["comparisonCount"] if comparison_delta else None
                 serialized_result = serializer.serialize(
                     result,
                     resolve_axis_column(query_columns[0]),

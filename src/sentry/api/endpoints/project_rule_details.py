@@ -305,8 +305,9 @@ class ProjectRuleDetailsEndpoint(RuleEndpoint):
                 "actions": data["actions"],
                 "frequency": data.get("frequency"),
             }
-            duplicate_rule = find_duplicate_rule(project=project, rule_data=kwargs, rule_id=rule.id)
-            if duplicate_rule:
+            if duplicate_rule := find_duplicate_rule(
+                project=project, rule_data=kwargs, rule_id=rule.id
+            ):
                 return Response(
                     {
                         "name": [
@@ -317,8 +318,7 @@ class ProjectRuleDetailsEndpoint(RuleEndpoint):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            owner = data.get("owner")
-            if owner:
+            if owner := data.get("owner"):
                 try:
                     kwargs["owner"] = owner.resolve_to_actor().id
                 except (User.DoesNotExist, Team.DoesNotExist):

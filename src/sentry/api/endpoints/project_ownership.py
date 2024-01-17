@@ -135,9 +135,7 @@ class ProjectOwnershipRequestSerializer(serializers.Serializer):
                 ownership.codeowners_auto_sync = codeowners_auto_sync
                 changed = True
 
-        changed = self.__modify_auto_assignment(ownership) or changed
-
-        if changed:
+        if changed := self.__modify_auto_assignment(ownership) or changed:
             now = timezone.now()
             if ownership.date_created is None:
                 ownership.date_created = now
@@ -153,15 +151,16 @@ class ProjectOwnershipRequestSerializer(serializers.Serializer):
             return False
 
         new_values = {}
-        if auto_assignment == "Auto Assign to Suspect Commits":
-            new_values["auto_assignment"] = True
-            new_values["suspect_committer_auto_assignment"] = True
         if auto_assignment == "Auto Assign to Issue Owner":
             new_values["auto_assignment"] = True
             new_values["suspect_committer_auto_assignment"] = False
+        elif auto_assignment == "Auto Assign to Suspect Commits":
+            new_values["auto_assignment"] = True
+            new_values["suspect_committer_auto_assignment"] = True
         if auto_assignment == "Turn off Auto-Assignment":
-            autoassignment_types = ProjectOwnership._get_autoassignment_types(ownership)
-            if autoassignment_types:
+            if autoassignment_types := ProjectOwnership._get_autoassignment_types(
+                ownership
+            ):
                 GroupOwner.invalidate_autoassigned_owner_cache(
                     ownership.project_id, autoassignment_types
                 )

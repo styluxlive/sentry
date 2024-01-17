@@ -71,8 +71,8 @@ class SystemOptionsEndpoint(Endpoint):
 
     def __is_secret(self, k: Any) -> bool:
         keywords = ["secret", "private", "token"]
-        return (k.flags & options.FLAG_CREDENTIAL) or any(
-            [keyword in k.name for keyword in keywords]
+        return k.flags & options.FLAG_CREDENTIAL or any(
+            keyword in k.name for keyword in keywords
         )
 
     def has_permission(self, request: Request):
@@ -80,11 +80,7 @@ class SystemOptionsEndpoint(Endpoint):
             return True
         if not request.access.has_permission("options.admin"):
             # We ignore options.admin permission is all keys in the update match the allowlist.
-            if all([k in SYSTEM_OPTIONS_ALLOWLIST for k in request.data.keys()]):
-                return True
-
-            return False
-
+            return all(k in SYSTEM_OPTIONS_ALLOWLIST for k in request.data.keys())
         return True
 
     def put(self, request: Request):
@@ -105,11 +101,11 @@ class SystemOptionsEndpoint(Endpoint):
 
             try:
                 with transaction.atomic(router.db_for_write(options.default_store.model)):
-                    if not (option.flags & options.FLAG_ALLOW_EMPTY) and not v:
-                        options.delete(k)
-                    else:
+                    if option.flags & options.FLAG_ALLOW_EMPTY or v:
                         options.set(k, v, channel=options.UpdateChannel.APPLICATION)
 
+                    else:
+                        options.delete(k)
                     logger.info(
                         "options.update",
                         extra={

@@ -35,8 +35,9 @@ def get_provider_name(provider_type: str, provider_slug: str) -> str | None:
         if plugins.exists(provider_slug):
             return plugins.get(provider_slug).title
     elif provider_type == "sentry_app":
-        sentry_app = app_service.get_sentry_app_by_slug(slug=provider_slug)
-        if sentry_app:
+        if sentry_app := app_service.get_sentry_app_by_slug(
+            slug=provider_slug
+        ):
             return sentry_app.name
     return None
 

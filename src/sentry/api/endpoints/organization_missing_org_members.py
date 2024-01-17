@@ -118,7 +118,7 @@ def _get_missing_organization_members(
     param_dict = {
         "org_id": org_id,
         "date_added": date_added,
-        "provider": "integrations:" + provider,
+        "provider": f"integrations:{provider}",
         "integration_ids": tuple(integration_ids),
     }
 
@@ -142,10 +142,7 @@ def _get_shared_email_domain(organization: Organization) -> str | None:
     owner_email_domains = {_get_email_domain(owner.user_email) for owner in org_owners}
 
     # all owners have the same email domain
-    if len(owner_email_domains) == 1:
-        return owner_email_domains.pop()
-
-    return None
+    return owner_email_domains.pop() if len(owner_email_domains) == 1 else None
 
 
 @region_silo_endpoint

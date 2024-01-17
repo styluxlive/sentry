@@ -213,7 +213,7 @@ class ProjectPerformanceIssueSettingsEndpoint(ProjectEndpoint):
         allowed_settings_options = [*internal_only_settings, *threshold_settings]
 
         body_has_invalid_options = not request.data or any(
-            [option not in allowed_settings_options for option in request.data]
+            option not in allowed_settings_options for option in request.data
         )
         if body_has_invalid_options:
             return Response(
@@ -223,7 +223,9 @@ class ProjectPerformanceIssueSettingsEndpoint(ProjectEndpoint):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        body_has_admin_options = any([option in request.data for option in internal_only_settings])
+        body_has_admin_options = any(
+            option in request.data for option in internal_only_settings
+        )
         if body_has_admin_options and not is_active_superuser(request):
             return Response(
                 {
@@ -254,7 +256,8 @@ class ProjectPerformanceIssueSettingsEndpoint(ProjectEndpoint):
         data = serializer.validated_data
 
         payload_contains_disabled_threshold_setting = any(
-            [option in get_disabled_threshold_options(data, current_settings) for option in data]
+            option in get_disabled_threshold_options(data, current_settings)
+            for option in data
         )
         if payload_contains_disabled_threshold_setting:
             return Response(

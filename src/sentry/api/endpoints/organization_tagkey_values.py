@@ -14,9 +14,10 @@ from sentry.tagstore.base import TAG_KEY_RE
 
 
 def validate_sort_field(field_name: str) -> str:
-    if field_name not in ("-last_seen", "-count"):
+    if field_name in {"-last_seen", "-count"}:
+        return field_name
+    else:
         raise ParseError(detail="Invalid sort parameter. Please use one of: -last_seen or -count")
-    return field_name
 
 
 @region_silo_endpoint

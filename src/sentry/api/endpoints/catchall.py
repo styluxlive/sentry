@@ -15,19 +15,18 @@ class CatchallEndpoint(Endpoint):
         This endpoint handles routes that did not match
         """
         # Let the user know they may have forgotten a trailing slash
-        if not request.path.endswith("/"):
-            help = "Route not found, did you forget a trailing slash?"
-            suggestion = f"try: {request.path}/"
+        if request.path.endswith("/"):
+            return HttpResponse(status=404)
+        help = "Route not found, did you forget a trailing slash?"
+        suggestion = f"try: {request.path}/"
 
-            # Don't break JSON parsers
-            if request.META.get("CONTENT_TYPE", "").startswith("application/json"):
-                return JsonResponse(data={"info": f"{help} {suggestion}"}, status=404)
+        # Don't break JSON parsers
+        if request.META.get("CONTENT_TYPE", "").startswith("application/json"):
+            return JsonResponse(data={"info": f"{help} {suggestion}"}, status=404)
 
-            # Produce error message with a pointer to the trailing slash in plain text
-            arrow_offset = len(suggestion) - 1
-            arrow = f"{' ' * arrow_offset}^"
-            message = f"{help}\n\n{suggestion}\n{arrow}\n"
+        # Produce error message with a pointer to the trailing slash in plain text
+        arrow_offset = len(suggestion) - 1
+        arrow = f"{' ' * arrow_offset}^"
+        message = f"{help}\n\n{suggestion}\n{arrow}\n"
 
-            return HttpResponse(message, status=404, content_type="text/plain")
-
-        return HttpResponse(status=404)
+        return HttpResponse(message, status=404, content_type="text/plain")

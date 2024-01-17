@@ -40,9 +40,7 @@ class TeamSerializer(CamelSnakeModelSerializer):
         return value
 
     def validate_org_role(self, value):
-        if value == "":
-            return None
-        return value
+        return None if value == "" else value
 
 
 @region_silo_endpoint
@@ -154,7 +152,7 @@ class TeamDetailsEndpoint(TeamEndpoint):
         immediate. Teams will have their slug released while waiting for deletion.
         """
         suffix = uuid4().hex
-        new_slug = f"{team.slug}-{suffix}"[0:50]
+        new_slug = f"{team.slug}-{suffix}"[:50]
         try:
             with transaction.atomic(router.db_for_write(Team)):
                 team = Team.objects.get(id=team.id, status=TeamStatus.ACTIVE)

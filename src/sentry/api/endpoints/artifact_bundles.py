@@ -151,16 +151,13 @@ class ArtifactBundlesEndpoint(ProjectEndpoint, ArtifactBundlesMixin):
             # We loop for each group of bundles with the same id, in order to check how many projects are connected to
             # the same bundle.
             for artifact_bundle, project_artifact_bundles in grouped_bundles.items():
-                # Technically for each bundle we will have always different project ids bound to it but to make the
-                # system more robust we compute the set of project ids to work avoid considering duplicates in the
-                # next code.
-                found_project_ids = set()
-                for project_artifact_bundle in project_artifact_bundles:
-                    found_project_ids.add(project_artifact_bundle.project_id)
-
+                found_project_ids = {
+                    project_artifact_bundle.project_id
+                    for project_artifact_bundle in project_artifact_bundles
+                }
                 # In case there are no project ids, which shouldn't happen, there is a db problem, thus we want to track
                 # it.
-                if len(found_project_ids) == 0:
+                if not found_project_ids:
                     with sentry_sdk.push_scope() as scope:
                         scope.set_tag("bundle_id", bundle_id)
                         scope.set_tag("org_id", project.organization.id)
@@ -170,8 +167,8 @@ class ArtifactBundlesEndpoint(ProjectEndpoint, ArtifactBundlesMixin):
 
                     break
 
-                has_one_project_left = len(found_project_ids) == 1
                 if project_id in found_project_ids:
+                    has_one_project_left = len(found_project_ids) == 1
                     # We delete the ProjectArtifactBundle entries that are bound to project requesting the deletion.
                     with atomic_transaction(
                         using=(

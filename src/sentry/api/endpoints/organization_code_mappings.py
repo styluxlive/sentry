@@ -113,12 +113,12 @@ class RepositoryProjectPathConfigSerializer(CamelSnakeModelSerializer):
 
 class OrganizationIntegrationMixin:
     def get_organization_integration(self, organization, integration_id):
-        org_integration = integration_service.get_organization_integration(
+        if org_integration := integration_service.get_organization_integration(
             integration_id=integration_id, organization_id=organization.id
-        )
-        if not org_integration:
+        ):
+            return org_integration
+        else:
             raise Http404
-        return org_integration
 
     def get_project(self, organization, project_id):
         try:

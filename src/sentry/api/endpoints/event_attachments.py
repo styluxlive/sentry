@@ -42,8 +42,7 @@ class EventAttachmentsEndpoint(ProjectEndpoint):
 
         queryset = EventAttachment.objects.filter(project_id=project.id, event_id=event.event_id)
 
-        query = request.GET.get("query")
-        if query:
+        if query := request.GET.get("query"):
             tokens = tokenize_query(query)
             for key, value in tokens.items():
                 if key == "query":
@@ -51,7 +50,7 @@ class EventAttachmentsEndpoint(ProjectEndpoint):
                     queryset = queryset.filter(name__icontains=value)
                 elif key == "is":
                     value = " ".join(value)
-                    if value in ["screenshot"]:
+                    if value in {"screenshot"}:
                         queryset = event_attachment_screenshot_filter(queryset)
                 else:
                     queryset = queryset.none()

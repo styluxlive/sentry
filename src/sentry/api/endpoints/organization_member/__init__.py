@@ -81,10 +81,7 @@ def can_set_team_role(request: Request, team: Team, new_role: TeamRole) -> bool:
         return True
 
     team_role = access.get_team_role(team)
-    if team_role and team_role.can_manage(new_role):
-        return True
-
-    return False
+    return bool(team_role and team_role.can_manage(new_role))
 
 
 def can_admin_team(access: Access, team: Team) -> bool:

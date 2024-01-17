@@ -43,8 +43,7 @@ class OrganizationIssuesCountEndpoint(OrganizationEndpoint):
         with start_span(op="_count"):
             query_kwargs = {"projects": projects}
 
-            query = query.strip()
-            if query:
+            if query := query.strip():
                 search_filters = convert_query_values(
                     parse_search_query(query), projects, request.user, environments
                 )

@@ -148,7 +148,7 @@ def apply_cors_headers(
     basehost = options.get("system.base-hostname")
     if basehost and origin:
         if (
-            origin.endswith(("://" + basehost, "." + basehost))
+            origin.endswith((f"://{basehost}", f".{basehost}"))
             or origin in settings.ALLOWED_CREDENTIAL_ORIGINS
         ):
             response["Access-Control-Allow-Credentials"] = "true"
@@ -190,11 +190,7 @@ class Endpoint(APIView):
         )
         base_url = absolute_uri(urlquote(request.path), url_prefix=url_prefix)
 
-        if querystring:
-            base_url = f"{base_url}?{querystring}"
-        else:
-            base_url = f"{base_url}?"
-
+        base_url = f"{base_url}?{querystring}" if querystring else f"{base_url}?"
         return CURSOR_LINK_HEADER.format(
             uri=base_url,
             cursor=str(cursor),
@@ -320,10 +316,7 @@ class Endpoint(APIView):
         try:
             with sentry_sdk.start_span(op="base.dispatch.request", description=type(self).__name__):
                 if origin:
-                    if request.auth:
-                        allowed_origins = request.auth.get_allowed_origins()
-                    else:
-                        allowed_origins = None
+                    allowed_origins = request.auth.get_allowed_origins() if request.auth else None
                     if not is_valid_origin(origin, allowed=allowed_origins):
                         response = Response(f"Invalid origin: {origin}", status=400)
                         self.response = self.finalize_response(request, response, *args, **kwargs)
@@ -518,8 +511,7 @@ class StatsMixin:
             raise ParseError(detail="Invalid resolution")
 
         try:
-            end_s = request.GET.get("until")
-            if end_s:
+            if end_s := request.GET.get("until"):
                 end = to_datetime(float(end_s))
             else:
                 end = datetime.utcnow().replace(tzinfo=timezone.utc)
@@ -527,8 +519,7 @@ class StatsMixin:
             raise ParseError(detail="until must be a numeric timestamp.")
 
         try:
-            start_s = request.GET.get("since")
-            if start_s:
+            if start_s := request.GET.get("since"):
                 start = to_datetime(float(start_s))
                 assert start <= end
             else:
@@ -603,9 +594,8 @@ class EndpointSiloLimit(SiloLimit):
             )
             if settings.FAIL_ON_UNAVAILABLE_API_CALL:
                 raise self.AvailabilityError(message)
-            else:
-                logger.warning(message)
-                return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+            logger.warning(message)
+            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
         return handle
 

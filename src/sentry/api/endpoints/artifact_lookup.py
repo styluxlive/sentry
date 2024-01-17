@@ -49,12 +49,11 @@ class ProjectArtifactLookupEndpoint(ProjectEndpoint):
             raise Http404
         ty, ty_id, *_rest = split
 
-        rate_limited = ratelimits.backend.is_limited(
+        if rate_limited := ratelimits.backend.is_limited(
             project=project,
             key=f"rl:ArtifactLookupEndpoint:download:{download_id}:{project.id}",
             limit=10,
-        )
-        if rate_limited:
+        ):
             logger.info(
                 "notification.rate_limited",
                 extra={"project_id": project.id, "file_id": download_id},

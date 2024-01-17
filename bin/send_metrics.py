@@ -36,9 +36,11 @@ make_dist_payload = lambda use_case, org_id, rand_str, value_len: {
         "session.status": "healthy",
         f"metric_e2e_{use_case}_dist_k_{rand_str}": f"metric_e2e_{use_case}_dist_v_{rand_str}",
     },
-    "timestamp": int(datetime.datetime.now(tz=datetime.timezone.utc).timestamp()),
+    "timestamp": int(
+        datetime.datetime.now(tz=datetime.timezone.utc).timestamp()
+    ),
     "type": "d",
-    "value": [i for i in range(value_len)],
+    "value": list(range(value_len)),
     "org_id": org_id,
     "retention_days": 90,
     "project_id": 3,
@@ -51,9 +53,11 @@ make_set_payload = lambda use_case, org_id, rand_str, value_len: {
         "session.status": "errored",
         f"metric_e2e_{use_case}_set_k_{rand_str}": f"metric_e2e_{use_case}_set_v_{rand_str}",
     },
-    "timestamp": int(datetime.datetime.now(tz=datetime.timezone.utc).timestamp()),
+    "timestamp": int(
+        datetime.datetime.now(tz=datetime.timezone.utc).timestamp()
+    ),
     "type": "s",
-    "value": [i for i in range(value_len)],
+    "value": list(range(value_len)),
     "org_id": org_id,
     "retention_days": 90,
     "project_id": 3,
@@ -196,7 +200,6 @@ def main(use_cases, rand_str, host, dryrun, start_org_id, end_org_id, num_bad_ms
 
     produce_msgs(messages, is_generic, host, dryrun)
 
-    metrics_per_use_case = 3
     strs_per_use_case = 3
 
     print(
@@ -207,6 +210,7 @@ def main(use_cases, rand_str, host, dryrun, start_org_id, end_org_id, num_bad_ms
     print(make_psql(rand_str, is_generic))
 
     if is_generic:
+        metrics_per_use_case = 3
         print(
             f"Use the following SQL to verify clickhouse, "
             f"there should be {metrics_per_use_case} metrics for each use cases, "
