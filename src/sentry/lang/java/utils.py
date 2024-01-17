@@ -61,13 +61,17 @@ def get_proguard_mapper(uuid: str, project: Project):
             sentry_sdk.capture_exception(exc)
             return
 
-    with sentry_sdk.start_span(op="proguard.open"):
-        mapper = ProguardMapper.open(debug_file_path)
+    mapper = open_proguard_mapper(debug_file_path)
 
     if not mapper.has_line_info:
         return
 
     return mapper
+
+
+def open_proguard_mapper(*args, **kwargs):
+    with sentry_sdk.start_span(op="proguard.open"):
+        return ProguardMapper.open(*args, **kwargs)
 
 
 def _deobfuscate_view_hierarchy(event_data: dict[str, Any], project: Project, view_hierarchy):
