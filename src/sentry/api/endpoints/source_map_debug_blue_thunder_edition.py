@@ -207,7 +207,7 @@ class SourceMapDebugBlueThunderEditionEndpoint(ProjectEndpoint):
             debug_image["debug_id"]
             for debug_image in debug_images
             if debug_image["type"] == "sourcemap"
-        ][0:100]
+        ][:100]
         debug_id_artifact_bundles = DebugIdArtifactBundle.objects.filter(
             artifact_bundle__projectartifactbundle__project_id=project.id,
             debug_id__in=debug_ids,
@@ -215,11 +215,10 @@ class SourceMapDebugBlueThunderEditionEndpoint(ProjectEndpoint):
         debug_ids_with_uploaded_source_file = set()
         debug_ids_with_uploaded_source_map = set()
         for debug_id_artifact_bundle in debug_id_artifact_bundles:
-            if (
-                SourceFileType(debug_id_artifact_bundle.source_file_type) == SourceFileType.SOURCE
-                or SourceFileType(debug_id_artifact_bundle.source_file_type)
-                == SourceFileType.MINIFIED_SOURCE
-            ):
+            if SourceFileType(debug_id_artifact_bundle.source_file_type) in [
+                SourceFileType.SOURCE,
+                SourceFileType.MINIFIED_SOURCE,
+            ]:
                 debug_ids_with_uploaded_source_file.add(str(debug_id_artifact_bundle.debug_id))
             elif (
                 SourceFileType(debug_id_artifact_bundle.source_file_type)
@@ -619,13 +618,11 @@ def get_matching_source_map_location(source_file_path, source_map_reference):
 
 def event_has_debug_ids(event_data):
     debug_images = get_path(event_data, "debug_meta", "images")
-    if debug_images is None:
-        return False
-    else:
+    if debug_images is not None:
         for debug_image in debug_images:
             if debug_image["type"] == "sourcemap":
                 return True
-        return False
+    return False
 
 
 def get_sdk_debug_id_support(event_data):
@@ -639,9 +636,7 @@ def get_sdk_debug_id_support(event_data):
         ]
     except Exception as e:
         sentry_sdk.capture_exception(e)
-        pass
-
-    if official_sdks is None or len(official_sdks) == 0:
+    if official_sdks is None or not official_sdks:
         # Fallback list if release registry is not available
         official_sdks = [
             "sentry.javascript.angular",
@@ -705,8 +700,7 @@ def get_abs_paths_in_event(event_data):
             frames = get_path(exception_value, "raw_stacktrace", "frames")
             if frames is not None:
                 for frame in frames:
-                    abs_path = get_path(frame, "abs_path")
-                    if abs_path:
+                    if abs_path := get_path(frame, "abs_path"):
                         abs_paths.add(abs_path)
     return abs_paths
 

@@ -59,7 +59,8 @@ class NotificationActionsDetailsEndpoint(OrganizationEndpoint):
         if not request.access.has_scope("project:write"):
             # team admins will have project:write scoped to their projects, members will not
             team_admin_has_access = all(
-                [request.access.has_project_scope(project, "project:write") for project in projects]
+                request.access.has_project_scope(project, "project:write")
+                for project in projects
             )
             # all() returns True for empty list, so include a check for it
             if not team_admin_has_access or not projects:

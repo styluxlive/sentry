@@ -104,7 +104,7 @@ class AcceptOrganizationInvite(Endpoint):
         self, request: Request, member_id: int, token: str, organization_slug: Optional[str] = None
     ) -> Response:
         invite_context = get_invite_state(
-            member_id=int(member_id),
+            member_id=member_id,
             organization_slug=organization_slug,
             user_id=request.user.id,
             request=request,
@@ -198,7 +198,7 @@ class AcceptOrganizationInvite(Endpoint):
         self, request: Request, member_id: int, token: str, organization_slug: Optional[str] = None
     ) -> Response:
         invite_context = get_invite_state(
-            member_id=int(member_id),
+            member_id=member_id,
             organization_slug=organization_slug,
             user_id=request.user.id,
             request=request,

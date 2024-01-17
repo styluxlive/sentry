@@ -456,12 +456,7 @@ class OrganizationEventsTrendsEndpointBase(OrganizationEventsV2EndpointBase):
             function, columns, _ = parse_function(trend_function)
         except InvalidSearchQuery as error:
             raise ParseError(detail=error)
-        if len(columns) == 0:
-            # Default to duration
-            column = "transaction.duration"
-        else:
-            column = columns[0]
-
+        column = "transaction.duration" if len(columns) == 0 else columns[0]
         selected_columns = self.get_field_list(organization, request)
         orderby = self.get_orderby(request)
         query = request.GET.get("query")

@@ -22,8 +22,7 @@ class UserOrganizationsEndpoint(RegionSiloUserEndpoint):
     def get(self, request: Request, user: RpcUser) -> Response:
         queryset = Organization.objects.get_for_user_ids({user.id})
 
-        query = request.GET.get("query")
-        if query:
+        if query := request.GET.get("query"):
             queryset = queryset.filter(Q(name__icontains=query) | Q(slug__icontains=query))
 
         return self.paginate(

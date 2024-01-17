@@ -36,7 +36,7 @@ class SlugsUpdateEndpoint(OrganizationEndpoint):
             try:
                 validate_sentry_slug(slug)
             except ValidationError:
-                return Response({"detail": 'Invalid slug "%s".' % slug}, status=400)
+                return Response({"detail": f'Invalid slug "{slug}".'}, status=400)
             slugs[project_id] = slug
 
         if len(slugs) != len(set(slugs.values())):
@@ -69,7 +69,7 @@ class SlugsUpdateEndpoint(OrganizationEndpoint):
                     )
                     if other is not None:
                         if len(slugs) != len(slugs.values()):
-                            return Response({"detail": "Duplicate slug %s." % slug}, status=400)
+                            return Response({"detail": f"Duplicate slug {slug}."}, status=400)
                     project.slug = slug
                     project.update_option("sentry:reviewed-slug", True)
                     project.save()

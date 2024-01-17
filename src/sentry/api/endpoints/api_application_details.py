@@ -92,9 +92,8 @@ class ApiApplicationDetailsEndpoint(Endpoint):
             raise ResourceDoesNotExist
 
         with transaction.atomic(using=router.db_for_write(ApiApplication)):
-            updated = ApiApplication.objects.filter(id=instance.id).update(
+            if updated := ApiApplication.objects.filter(id=instance.id).update(
                 status=ApiApplicationStatus.pending_deletion
-            )
-            if updated:
+            ):
                 ScheduledDeletion.schedule(instance, days=0, actor=request.user)
         return Response(status=204)

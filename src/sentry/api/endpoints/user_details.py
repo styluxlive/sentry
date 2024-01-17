@@ -303,13 +303,11 @@ class UserDetailsEndpoint(UserEndpoint):
                     org_delete_response=org_delete_response,
                 )
 
-        remaining_org_ids = [
+        if remaining_org_ids := [
             o.organization_id
             for o in org_mappings
             if o.organization_id in avail_org_ids.difference(orgs_to_remove)
-        ]
-
-        if remaining_org_ids:
+        ]:
             for member_mapping in OrganizationMemberMapping.objects.filter(
                 organization_id__in=remaining_org_ids, user_id=user.id
             ):

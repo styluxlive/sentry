@@ -20,7 +20,7 @@ class InvalidOrigin(InvalidRequest):
         self.origin = origin
 
     def __str__(self):
-        return "Invalid origin: '%s'" % self.origin
+        return f"Invalid origin: '{self.origin}'"
 
 
 class CacheNotPopulated(Exception):

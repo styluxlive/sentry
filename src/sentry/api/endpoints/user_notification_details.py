@@ -39,12 +39,10 @@ class UserNotificationsSerializer(Serializer):
     def serialize(self, obj, attrs, user, *args, **kwargs):
         raw_data = {option.key: option.value for option in attrs}
 
-        data = {}
-        for key, uo in USER_OPTION_SETTINGS.items():
-            val = raw_data.get(uo["key"], uo["default"])
-            data[key.value] = bool(int(val))  # '1' is true, '0' is false
-
-        return data
+        return {
+            key.value: bool(int(raw_data.get(uo["key"], uo["default"])))
+            for key, uo in USER_OPTION_SETTINGS.items()
+        }
 
 
 # only expose legacy options
@@ -76,7 +74,7 @@ class UserNotificationDetailsEndpoint(UserEndpoint):
                 key = UserOptionsSettingsKey(key)
             except ValueError:
                 return Response(
-                    {"detail": "Unknown key: %s." % key},
+                    {"detail": f"Unknown key: {key}."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 

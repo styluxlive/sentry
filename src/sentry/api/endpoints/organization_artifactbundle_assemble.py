@@ -58,7 +58,7 @@ class OrganizationArtifactBundleAssembleEndpoint(OrganizationReleasesBaseEndpoin
             return Response({"error": "Invalid json body"}, status=400)
 
         projects = set(data.get("projects", []))
-        if len(projects) == 0:
+        if not projects:
             return Response({"error": "You need to specify at least one project"}, status=400)
 
         project_ids = Project.objects.filter(
@@ -76,10 +76,7 @@ class OrganizationArtifactBundleAssembleEndpoint(OrganizationReleasesBaseEndpoin
         # We want to put the missing chunks functionality behind an option in order to cut it off in case of CLI
         # regressions for our users.
         if options.get("sourcemaps.artifact_bundles.assemble_with_missing_chunks") is True:
-            # We check if all requested chunks have been uploaded.
-            missing_chunks = find_missing_chunks(organization.id, chunks)
-            # In case there are some missing chunks, we will tell the client which chunks we require.
-            if missing_chunks:
+            if missing_chunks := find_missing_chunks(organization.id, chunks):
                 return Response(
                     {
                         "state": ChunkFileState.NOT_FOUND,

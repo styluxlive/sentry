@@ -76,26 +76,20 @@ def find_duplicate_rule(project, rule_data=None, rule_id=None, rule=None):
                             keys += 1
                             if existing_rule.environment_id == rule.environment_id:
                                 matches += 1
-                        elif (
-                            existing_rule.environment_id
-                            and not rule.environment_id
-                            or not existing_rule.environment_id
-                            and rule.environment_id
-                        ):
+                        elif existing_rule.environment_id or rule.environment_id:
                             keys += 1
 
-                    else:
-                        if existing_rule.environment_id and rule_data.get(matcher):
-                            keys += 1
-                            if existing_rule.environment_id == rule_data.get(matcher):
-                                matches += 1
-                        elif (
-                            existing_rule.environment_id
-                            and not rule_data.get(matcher)
-                            or not existing_rule.environment_id
-                            and rule_data.get(matcher)
-                        ):
-                            keys += 1
+                    elif existing_rule.environment_id and rule_data.get(matcher):
+                        keys += 1
+                        if existing_rule.environment_id == rule_data.get(matcher):
+                            matches += 1
+                    elif (
+                        existing_rule.environment_id
+                        and not rule_data.get(matcher)
+                        or not existing_rule.environment_id
+                        and rule_data.get(matcher)
+                    ):
+                        keys += 1
                 elif not existing_rule.data.get(matcher) and not rule_data.get(matcher):
                     # neither rule has the matcher
                     continue
@@ -568,12 +562,9 @@ class ProjectRulesEndpoint(ProjectEndpoint):
         if "filters" in data:
             conditions.extend(data["filters"])
 
-        new_rule_is_slow = False
-        for condition in conditions:
-            if is_condition_slow(condition):
-                new_rule_is_slow = True
-                break
-
+        new_rule_is_slow = any(
+            is_condition_slow(condition) for condition in conditions
+        )
         rules = Rule.objects.filter(project=project, status=ObjectStatus.ACTIVE)
         slow_rules = 0
         for rule in rules:
@@ -631,8 +622,7 @@ class ProjectRulesEndpoint(ProjectEndpoint):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        owner = data.get("owner")
-        if owner:
+        if owner := data.get("owner"):
             try:
                 kwargs["owner"] = owner.resolve_to_actor().id
             except (User.DoesNotExist, Team.DoesNotExist):

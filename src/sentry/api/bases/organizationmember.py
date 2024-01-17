@@ -19,14 +19,10 @@ class MemberIdField(serializers.IntegerField):
     """
 
     def to_internal_value(self, data):
-        if data == "me":
-            return data
-        return super().to_internal_value(data)
+        return data if data == "me" else super().to_internal_value(data)
 
     def run_validation(self, data):
-        if data == "me":
-            return data
-        return super().run_validation(data)
+        return data if data == "me" else super().run_validation(data)
 
 
 class MemberSerializer(serializers.Serializer):
@@ -74,5 +70,4 @@ class OrganizationMemberEndpoint(OrganizationEndpoint):
         if invite_status:
             kwargs.update(invite_status=invite_status.value)
 
-        om = OrganizationMember.objects.filter(*args, **kwargs).get()
-        return om
+        return OrganizationMember.objects.filter(*args, **kwargs).get()

@@ -34,8 +34,7 @@ class OrganizationCodeOwnersAssociationsEndpoint(OrganizationEndpoint):
             status=ObjectStatus.ACTIVE,
         )
         project_code_owners = ProjectCodeOwners.objects.filter(project__in=projects)
-        provider = request.GET.get("provider")
-        if provider:
+        if provider := request.GET.get("provider"):
             org_integrations = integration_service.get_organization_integrations(
                 providers=[provider],
                 organization_ids=[pco.project.organization_id for pco in project_code_owners],

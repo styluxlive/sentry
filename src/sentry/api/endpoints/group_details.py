@@ -198,8 +198,9 @@ class GroupDetailsEndpoint(GroupEndpoint, EnvironmentMixin):
                 data.update({"owners": owners})
 
             if "forecast" in expand:
-                fetched_forecast = EscalatingGroupForecast.fetch(group.project_id, group.id)
-                if fetched_forecast:
+                if fetched_forecast := EscalatingGroupForecast.fetch(
+                    group.project_id, group.id
+                ):
                     fetched_forecast = fetched_forecast.to_dict()
                     data.update(
                         {

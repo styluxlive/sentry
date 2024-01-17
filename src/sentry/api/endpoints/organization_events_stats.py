@@ -215,13 +215,13 @@ class OrganizationEventsStatsEndpoint(OrganizationEventsV2EndpointBase):
         force_metrics_layer = request.GET.get("forceMetricsLayer") == "true"
 
         def get_event_stats(
-            query_columns: Sequence[str],
-            query: str,
-            params: Dict[str, str],
-            rollup: int,
-            zerofill_results: bool,
-            comparison_delta: Optional[datetime],
-        ) -> SnubaTSResult:
+                query_columns: Sequence[str],
+                query: str,
+                params: Dict[str, str],
+                rollup: int,
+                zerofill_results: bool,
+                comparison_delta: Optional[datetime],
+            ) -> SnubaTSResult:
             if top_events > 0:
                 return dataset.top_events_timeseries(
                     timeseries_columns=query_columns,
@@ -233,7 +233,7 @@ class OrganizationEventsStatsEndpoint(OrganizationEventsV2EndpointBase):
                     rollup=rollup,
                     limit=top_events,
                     organization=organization,
-                    referrer=referrer + ".find-topn",
+                    referrer=f"{referrer}.find-topn",
                     allow_empty=False,
                     zerofill_results=zerofill_results,
                     on_demand_metrics_enabled=use_on_demand_metrics,

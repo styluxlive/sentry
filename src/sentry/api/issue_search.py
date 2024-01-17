@@ -126,9 +126,7 @@ def convert_release_value(
     for version in value:
         releases.update(parse_release(version, projects, environments))
     results = list(releases)
-    if len(results) == 1:
-        return results[0]
-    return results
+    return results[0] if len(results) == 1 else results
 
 
 def convert_first_release_value(
@@ -184,10 +182,10 @@ def convert_category_value(
     """Convert a value like 'error' or 'performance' to the GroupType value for issue lookup"""
     results: List[int] = []
     for category in value:
-        group_category = getattr(GroupCategory, category.upper(), None)
-        if not group_category:
+        if group_category := getattr(GroupCategory, category.upper(), None):
+            results.extend(get_group_types_by_category(group_category.value))
+        else:
             raise InvalidSearchQuery(f"Invalid category value of '{category}'")
-        results.extend(get_group_types_by_category(group_category.value))
     return results
 
 
@@ -200,10 +198,10 @@ def convert_type_value(
     """Convert a value like 'error' or 'performance_n_plus_one_db_queries' to the GroupType value for issue lookup"""
     results = []
     for type in value:
-        group_type = get_group_type_by_slug(type)
-        if not group_type:
+        if group_type := get_group_type_by_slug(type):
+            results.append(group_type.type_id)
+        else:
             raise InvalidSearchQuery(f"Invalid type value of '{type}'")
-        results.append(group_type.type_id)
     return results
 
 
@@ -216,10 +214,10 @@ def convert_device_class_value(
     """Convert high, medium, and low to the underlying device class values"""
     results = set()
     for device_class in value:
-        device_class_values = DEVICE_CLASS.get(device_class)
-        if not device_class_values:
+        if device_class_values := DEVICE_CLASS.get(device_class):
+            results.update(device_class_values)
+        else:
             raise InvalidSearchQuery(f"Invalid type value of '{type}'")
-        results.update(device_class_values)
     return list(results)
 
 

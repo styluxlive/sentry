@@ -44,10 +44,9 @@ class UserAvatarEndpoint(AvatarMixin[UserAvatar], UserEndpoint):
         if user_avatar.get_avatar_type_display() == "upload":
             url_base = options.get("system.url-prefix")
             avatar_url = f"{url_base}/avatar/{user_avatar.ident}/"
-        serialized_user = user_service.update_user(
+        if serialized_user := user_service.update_user(
             user_id=request.user.id,
             attrs=dict(avatar_url=avatar_url, avatar_type=user_avatar.avatar_type),
-        )
-        if serialized_user:
+        ):
             return Response(serialized_user)
         return Response(status=status.HTTP_404_NOT_FOUND)

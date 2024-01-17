@@ -210,9 +210,8 @@ class SentryAppPermission(SentryPermission):
             if request.user.id is not None
             else ()
         )
-        # if app is unpublished, user must be in the Org who owns the app.
-        if not sentry_app.is_published:
-            if not any(sentry_app.owner_id == org.id for org in organizations):
+        if all(sentry_app.owner_id != org.id for org in organizations):
+            if not sentry_app.is_published:
                 raise Http404
 
         # TODO(meredith): make a better way to allow for public
@@ -285,7 +284,7 @@ class SentryAppInstallationsPermission(SentryPermission):
             if request.user.id is not None
             else ()
         )
-        if not any(organization.id == org.id for org in organizations):
+        if all(organization.id != org.id for org in organizations):
             raise Http404
 
         return ensure_scoped_permission(request, self.scope_map.get(request.method))

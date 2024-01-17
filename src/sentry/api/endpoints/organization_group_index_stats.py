@@ -84,18 +84,17 @@ class OrganizationGroupIndexStatsEndpoint(OrganizationEndpoint):
                 detail="You should include `groups` with your request. (i.e. groups=1,2,3)"
             )
 
-        else:
-            groups = list(
-                Group.objects.filter(id__in=group_ids, project_id__in=project_ids).select_related(
-                    "project"
-                )
+        groups = list(
+            Group.objects.filter(id__in=group_ids, project_id__in=project_ids).select_related(
+                "project"
             )
-            if not groups:
-                raise ParseError(detail="No matching groups found")
-            elif len(groups) > 100:
-                raise ParseError(detail="Too many groups requested.")
-            elif not all(request.access.has_project_access(g.project) for g in groups):
-                raise PermissionDenied
+        )
+        if not groups:
+            raise ParseError(detail="No matching groups found")
+        elif len(groups) > 100:
+            raise ParseError(detail="Too many groups requested.")
+        elif not all(request.access.has_project_access(g.project) for g in groups):
+            raise PermissionDenied
 
         if stats_period not in (None, "", "24h", "14d", "auto"):
             raise ParseError(detail=ERR_INVALID_STATS_PERIOD)
@@ -128,5 +127,4 @@ class OrganizationGroupIndexStatsEndpoint(OrganizationEndpoint):
             request=request,
         )
 
-        response = Response(context)
-        return response
+        return Response(context)

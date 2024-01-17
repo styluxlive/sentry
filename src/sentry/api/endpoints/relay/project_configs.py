@@ -140,12 +140,11 @@ class RelayProjectConfigsEndpoint(Endpoint):
         proj_configs = {}
         pending = []
         for key in public_keys:
-            computed = self._get_cached_or_schedule(key)
-            if not computed:
-                pending.append(key)
-            else:
+            if computed := self._get_cached_or_schedule(key):
                 proj_configs[key] = computed
 
+            else:
+                pending.append(key)
         # Originally, these metrics were emitted for the latest endpoint version
         # at the time, v3. Since there's no effective way to know where these
         # metrics are used, changing the name can result in empty data. As a
@@ -161,8 +160,7 @@ class RelayProjectConfigsEndpoint(Endpoint):
 
         Debouncing of the project happens after the task has been scheduled.
         """
-        cached_config = projectconfig_cache.backend.get(public_key)
-        if cached_config:
+        if cached_config := projectconfig_cache.backend.get(public_key):
             return cached_config
 
         schedule_build_project_config(public_key=public_key)
@@ -262,10 +260,9 @@ class RelayProjectConfigsEndpoint(Endpoint):
                 projects = {}
 
         with start_span(op="relay_fetch_orgs"):
-            # Preload all organizations and their options to prevent repeated
-            # database access when computing the project configuration.
-            org_ids: Set[int] = {project.organization_id for project in projects.values()}
-            if org_ids:
+            if org_ids := {
+                project.organization_id for project in projects.values()
+            }:
                 with metrics.timer("relay_project_configs.fetching_orgs.duration"):
                     orgs_seq = Organization.objects.get_many_from_cache(org_ids)
                     orgs = {o.id: o for o in orgs_seq if request.relay.has_org_access(o)}
@@ -273,7 +270,7 @@ class RelayProjectConfigsEndpoint(Endpoint):
                 orgs = {}
 
             with metrics.timer("relay_project_configs.fetching_org_options.duration"):
-                for org_id in orgs.keys():
+                for org_id in orgs:
                     OrganizationOption.objects.get_all_values(org_id)
 
         with start_span(op="relay_fetch_keys"):

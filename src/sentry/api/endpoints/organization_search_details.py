@@ -88,7 +88,7 @@ class OrganizationSearchDetailsEndpoint(OrganizationEndpoint):
             .exists()
         ):
             return Response(
-                {"detail": "Query {} already exists".format(result["query"])}, status=400
+                {"detail": f'Query {result["query"]} already exists'}, status=400
             )
 
         search.update(**result)

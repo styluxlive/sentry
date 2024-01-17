@@ -39,11 +39,7 @@ class GroupTagsEndpoint(GroupEndpoint):
         if limit is not None:
             value_limit = int(limit)
         else:
-            if keys:
-                value_limit = 9
-            else:
-                value_limit = 10
-
+            value_limit = 9 if keys else 10
         environment_ids = [e.id for e in get_environments(request, group.project.organization)]
 
         tag_keys = tagstore.backend.get_group_tag_keys_and_top_values(
@@ -56,8 +52,7 @@ class GroupTagsEndpoint(GroupEndpoint):
 
         data = serialize(tag_keys, request.user)
 
-        show_readable_tag_values = request.GET.get("readable")
-        if show_readable_tag_values:
+        if show_readable_tag_values := request.GET.get("readable"):
             add_readable_tag_values(data)
 
         map_device_class(data)
@@ -70,8 +65,9 @@ def add_readable_tag_values(data: Any) -> None:
     for device_tag in data:
         if device_tag["key"] == "device":
             for top_device in device_tag["topValues"]:
-                readable_value = get_readable_device_name(top_device["value"])
-                if readable_value:
+                if readable_value := get_readable_device_name(
+                    top_device["value"]
+                ):
                     top_device["readable"] = readable_value
             break
 

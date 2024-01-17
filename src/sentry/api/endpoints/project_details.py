@@ -67,8 +67,7 @@ def clean_newline_inputs(value, case_insensitive=True):
     for v in value.split("\n"):
         if case_insensitive:
             v = v.lower()
-        v = v.strip()
-        if v:
+        if v := v.strip():
             result.append(v)
     return result
 
@@ -238,12 +237,12 @@ class ProjectAdminSerializer(ProjectMemberSerializer):
         return data
 
     def validate_allowedDomains(self, value):
-        value = list(filter(bool, value))
-        if len(value) == 0:
+        if value := list(filter(bool, value)):
+            return value
+        else:
             raise serializers.ValidationError(
                 "Empty value will block all requests, use * to accept from all domains"
             )
-        return value
 
     def validate_slug(self, slug: str) -> str:
         if slug in RESERVED_PROJECT_SLUGS:
@@ -256,7 +255,7 @@ class ProjectAdminSerializer(ProjectMemberSerializer):
         )
         if other is not None:
             raise serializers.ValidationError(
-                "Another project (%s) is already using that slug" % other.name
+                f"Another project ({other.name}) is already using that slug"
             )
         return slug
 
@@ -272,12 +271,12 @@ class ProjectAdminSerializer(ProjectMemberSerializer):
 
         organization = self.context["project"].organization
         request = self.context["request"]
-        has_sources = features.has("organizations:symbol-sources", organization, actor=request.user)
-
-        if not has_sources:
+        if has_sources := features.has(
+            "organizations:symbol-sources", organization, actor=request.user
+        ):
+            return value
+        else:
             raise serializers.ValidationError("Organization is not allowed to set symbol sources")
-
-        return value
 
     def validate_symbolSources(self, sources_json):
         if not sources_json:
@@ -362,9 +361,7 @@ class ProjectAdminSerializer(ProjectMemberSerializer):
             )
 
         max_expiry_date = now + (91 * 24 * 3600)
-        if value > max_expiry_date:
-            value = max_expiry_date
-
+        value = min(value, max_expiry_date)
         return value
 
     def validate_fingerprintingRules(self, value):
@@ -416,28 +413,22 @@ class ProjectAdminSerializer(ProjectMemberSerializer):
     def validate_recapServerUrl(self, value):
         from sentry import features
 
-        # Adding recapServerUrl is only allowed if recap server polling is enabled for given organization.
-        has_recap_server_enabled = features.has(
+        if has_recap_server_enabled := features.has(
             "organizations:recap-server", self.context["project"].organization
-        )
-
-        if not has_recap_server_enabled:
+        ):
+            return value
+        else:
             raise serializers.ValidationError("Project is not allowed to set recap server url")
-
-        return value
 
     def validate_recapServerToken(self, value):
         from sentry import features
 
-        # Adding recapServerUrl is only allowed if recap server polling is enabled for given organization.
-        has_recap_server_enabled = features.has(
+        if has_recap_server_enabled := features.has(
             "organizations:recap-server", self.context["project"].organization
-        )
-
-        if not has_recap_server_enabled:
+        ):
+            return value
+        else:
             raise serializers.ValidationError("Project is not allowed to set recap server token")
-
-        return value
 
 
 class RelaxedProjectPermission(ProjectPermission):
@@ -463,8 +454,7 @@ class ProjectDetailsEndpoint(ProjectEndpoint):
     def _get_unresolved_count(self, project):
         queryset = Group.objects.filter(status=GroupStatus.UNRESOLVED, project=project)
 
-        resolve_age = project.get_option("sentry:resolve_age", None)
-        if resolve_age:
+        if resolve_age := project.get_option("sentry:resolve_age", None):
             queryset = queryset.filter(
                 last_seen__gte=timezone.now() - timedelta(hours=int(resolve_age))
             )
@@ -901,10 +891,9 @@ class ProjectDetailsEndpoint(ProjectEndpoint):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        updated = Project.objects.filter(id=project.id, status=ObjectStatus.ACTIVE).update(
-            status=ObjectStatus.PENDING_DELETION
-        )
-        if updated:
+        if updated := Project.objects.filter(
+            id=project.id, status=ObjectStatus.ACTIVE
+        ).update(status=ObjectStatus.PENDING_DELETION):
             scheduled = RegionScheduledDeletion.schedule(project, days=0, actor=request.user)
 
             common_audit_data = {

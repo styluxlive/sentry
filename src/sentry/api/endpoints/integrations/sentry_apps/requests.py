@@ -26,9 +26,7 @@ def filter_by_date(request: Mapping[str, Any], start: float, end: float) -> bool
 
 
 def filter_by_organization(request: Mapping[str, Any], organization: Organization) -> bool:
-    if not organization:
-        return True
-    return request["organization_id"] == organization.id
+    return request["organization_id"] == organization.id if organization else True
 
 
 @dataclass
@@ -92,9 +90,10 @@ class SentryAppRequestsEndpoint(RegionSentryAppBaseEndpoint):
             except Organization.DoesNotExist:
                 return Response({"detail": "Invalid organization."}, status=400)
 
-        filtered_requests = []
-        for i, req in enumerate(buffer.get_requests(**kwargs)):
-            if filter_by_date(req, start, end) and filter_by_organization(req, organization):
-                filtered_requests.append(BufferedRequest(id=i, data=req))
-
+        filtered_requests = [
+            BufferedRequest(id=i, data=req)
+            for i, req in enumerate(buffer.get_requests(**kwargs))
+            if filter_by_date(req, start, end)
+            and filter_by_organization(req, organization)
+        ]
         return Response(serialize(filtered_requests, request.user, RequestSerializer(sentry_app)))

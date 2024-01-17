@@ -104,12 +104,12 @@ class RegionOrganizationIntegrationBaseEndpoint(RegionIntegrationEndpoint):
         :param integration_id:
         :return:
         """
-        org_integration = integration_service.get_organization_integration(
+        if org_integration := integration_service.get_organization_integration(
             integration_id=integration_id, organization_id=organization_id
-        )
-        if not org_integration:
+        ):
+            return org_integration
+        else:
             raise Http404
-        return org_integration
 
     @staticmethod
     def get_integration(organization_id: int, integration_id: int) -> RpcIntegration:

@@ -142,12 +142,8 @@ class GroupEventsEndpoint(GroupEndpoint, EnvironmentMixin):
     def _get_search_query(
         self, request: Request, group: Group, environments: Sequence[Environment]
     ) -> Optional[str]:
-        raw_query = request.GET.get("query")
-
-        if raw_query:
+        if raw_query := request.GET.get("query"):
             query_kwargs = parse_query([group.project], raw_query, request.user, environments)
-            query = query_kwargs.pop("query", None)
+            return query_kwargs.pop("query", None)
         else:
-            query = None
-
-        return query
+            return None

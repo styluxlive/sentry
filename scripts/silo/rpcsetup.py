@@ -87,10 +87,10 @@ def main(api_token: str, region_count: int, control_port: int) -> None:
     ]
     region_config = json.dumps([r.get_env_repr() for r in regions])
 
-    common_env_vars = {}
-    common_env_vars["SENTRY_REGION_CONFIG"] = region_config
-    common_env_vars["SENTRY_DEV_HYBRID_CLOUD_RPC_SENDER"] = json.dumps(sender_credentials)
-
+    common_env_vars = {
+        "SENTRY_REGION_CONFIG": region_config,
+        "SENTRY_DEV_HYBRID_CLOUD_RPC_SENDER": json.dumps(sender_credentials),
+    }
     control_env_vars = common_env_vars.copy()
     control_env_vars["SENTRY_SILO_MODE"] = "CONTROL"
     control_env_vars["SENTRY_DEVSERVER_BIND"] = f"localhost:{control_port}"

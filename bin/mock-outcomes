@@ -24,7 +24,8 @@ def store_outcomes(outcome, num_times=1):
         outcomes.append(outcome_copy)
 
     req = requests.post(
-        settings.SENTRY_SNUBA + "/tests/entities/outcomes/insert", data=json.dumps(outcomes)
+        f"{settings.SENTRY_SNUBA}/tests/entities/outcomes/insert",
+        data=json.dumps(outcomes),
     )
     req.raise_for_status()
 
@@ -61,7 +62,12 @@ def generate_outcomes():
 
 
 def drop_outcomes():
-    assert requests.post(settings.SENTRY_SNUBA + "/tests/entities/outcomes/drop").status_code == 200
+    assert (
+        requests.post(
+            f"{settings.SENTRY_SNUBA}/tests/entities/outcomes/drop"
+        ).status_code
+        == 200
+    )
 
 
 if __name__ == "__main__":

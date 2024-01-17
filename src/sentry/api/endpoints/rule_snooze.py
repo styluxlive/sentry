@@ -27,7 +27,7 @@ class RuleSnoozeValidator(CamelSnakeSerializer):
 @register(RuleSnooze)
 class RuleSnoozeSerializer(Serializer):
     def serialize(self, obj, attrs, user, **kwargs):
-        result = {
+        return {
             "ownerId": obj.owner_id,
             "userId": obj.user_id or "everyone",
             "until": obj.until or "forever",
@@ -35,7 +35,6 @@ class RuleSnoozeSerializer(Serializer):
             "ruleId": obj.rule_id,
             "alertRuleId": obj.alert_rule_id,
         }
-        return result
 
 
 def can_edit_alert_rule(rule, organization, user_id, user):
@@ -48,9 +47,7 @@ def can_edit_alert_rule(rule, organization, user_id, user):
         pass
     # if the goal is to mute the rule just for the user, ensure they belong to the organization
     if user_id:
-        if organization not in Organization.objects.get_for_user(user):
-            return False
-        return True
+        return organization in Organization.objects.get_for_user(user)
     # if the rule is owned by a team, allow edit (same permission as delete)
     # if the rule is unassigned, anyone can edit it
     return True

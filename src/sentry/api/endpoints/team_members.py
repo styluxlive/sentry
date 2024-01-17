@@ -30,12 +30,14 @@ class DetailedOrganizationMemberTeamSerializer(Serializer):
         )
         org_member_dict = {om["id"]: om for om in org_member_set}
 
-        attrs = {}
-        for org_member_team in item_list:
-            attrs[org_member_team] = {
-                "org_member": org_member_dict[f"{org_member_team.organizationmember_id}"]
+        return {
+            org_member_team: {
+                "org_member": org_member_dict[
+                    f"{org_member_team.organizationmember_id}"
+                ]
             }
-        return attrs
+            for org_member_team in item_list
+        }
 
     def serialize(self, obj, attrs, user):
         org_member = attrs["org_member"]

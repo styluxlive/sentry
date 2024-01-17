@@ -232,10 +232,7 @@ class ReleaseThresholdStatusIndexEndpoint(OrganizationReleasesBaseEndpoint, Envi
 
                     latest_deploy: Deploy | None = None
                     if threshold.environment:
-                        # NOTE: if a threshold has no environment set, we monitor from start of the release creation
-                        # If a deploy does not exist for the thresholds environment, we monitor from start of release creation
-                        # ReleaseProjectEnvironment model
-                        rpe_entry: ReleaseProjectEnvironment | None = next(
+                        if rpe_entry := next(
                             (
                                 rpe
                                 for rpe in release.releaseprojectenvironment_set.all()
@@ -243,8 +240,7 @@ class ReleaseThresholdStatusIndexEndpoint(OrganizationReleasesBaseEndpoint, Envi
                                 and rpe.project == project
                             ),
                             None,
-                        )
-                        if rpe_entry:
+                        ):
                             last_deploy_id = rpe_entry.last_deploy_id
                             latest_deploy = next(
                                 (
@@ -295,8 +291,8 @@ class ReleaseThresholdStatusIndexEndpoint(OrganizationReleasesBaseEndpoint, Envi
         # ========================================================================
         release_threshold_health = defaultdict(list)
         for threshold_type, filter_list in thresholds_by_type.items():
-            project_id_list = [proj_id for proj_id in filter_list["project_ids"]]
-            release_value_list = [release_version for release_version in filter_list["releases"]]
+            project_id_list = list(filter_list["project_ids"])
+            release_value_list = list(filter_list["releases"])
             category_thresholds: List[EnrichedThreshold] = filter_list["thresholds"]
             if threshold_type == ReleaseThresholdType.TOTAL_ERROR_COUNT:
                 metrics.incr("release.threshold_health_status.check.error_count")

@@ -67,18 +67,15 @@ class CustomRulesInputSerializer(serializers.Serializer):
         if data.get("projects") is None:
             data["projects"] = []
 
-        # check that the project exists
-        invalid_projects = []
-
         data["projects"] = _clean_project_list(data["projects"])
         requested_projects = data["projects"]
 
         available_projects = {p.id for p in Project.objects.get_many_from_cache(data["projects"])}
-        for project_id in requested_projects:
-            if project_id not in available_projects:
-                invalid_projects.append(f"invalid project id: {project_id}")
-
-        if invalid_projects:
+        if invalid_projects := [
+            f"invalid project id: {project_id}"
+            for project_id in requested_projects
+            if project_id not in available_projects
+        ]:
             raise serializers.ValidationError({"projects": invalid_projects})
 
         period = data.get("period")
@@ -198,15 +195,14 @@ class CustomRulesEndpoint(OrganizationEndpoint):
 
         if requested_projects_ids:
             org_rule = False
-            invalid_projects = []
             available_projects = {
                 p.id for p in Project.objects.get_many_from_cache(requested_projects_ids)
             }
-            for project_id in requested_projects_ids:
-                if project_id not in available_projects:
-                    invalid_projects.append(f"invalid project id: {project_id}")
-
-            if invalid_projects:
+            if invalid_projects := [
+                f"invalid project id: {project_id}"
+                for project_id in requested_projects_ids
+                if project_id not in available_projects
+            ]:
                 raise serializers.ValidationError({"projects": invalid_projects})
         else:
             # no project specified (it is an org rule)
@@ -234,7 +230,7 @@ class CustomRulesEndpoint(OrganizationEndpoint):
             # a rule org covers all projects
             return _rule_to_response(rule)
 
-        if not rule.is_org_level and org_rule:
+        if org_rule:
             # we need an org rule, and we have a simple rule return not found
             return Response(status=204)
 
@@ -288,9 +284,7 @@ def get_rule_condition(query: Optional[str]) -> RuleCondition:
 
         # Second we convert it to the Relay's internal rules format.
         converter = SearchQueryConverter(tokens)
-        condition = converter.convert()
-
-        return condition
+        return converter.convert()
     except UnsupportedSearchQuery as unsupported_ex:
         # log unsupported queries with a different message so that
         # we can differentiate them from other errors
@@ -310,11 +304,7 @@ def get_rule_condition(query: Optional[str]) -> RuleCondition:
 
 
 def _clean_project_list(project_ids: List[int]) -> List[int]:
-    if len(project_ids) == 1 and project_ids[0] == -1:
-        # special case for all projects convention ( sends a project id of -1)
-        return []
-
-    return project_ids
+    return [] if len(project_ids) == 1 and project_ids[0] == -1 else project_ids
 
 
 def _schedule_invalidate_project_configs(organization: Organization, project_ids: List[int]):

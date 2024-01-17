@@ -86,17 +86,16 @@ class BasePaginator:
                     new_order_by = list(queryset.query.order_by)
                     new_order_by[index] = f"-{queryset.query.order_by[index]}"
                     queryset.query.order_by = tuple(new_order_by)
-            elif ("-%s" % self.key) in queryset.query.order_by:
+            elif f"-{self.key}" in queryset.query.order_by:
                 if asc:
                     index = queryset.query.order_by.index(f"-{self.key}")
                     new_order_by = list(queryset.query.order_by)
                     new_order_by[index] = queryset.query.order_by[index][1:]
                     queryset.query.order_b = tuple(new_order_by)
+            elif asc:
+                queryset = queryset.order_by(self.key)
             else:
-                if asc:
-                    queryset = queryset.order_by(self.key)
-                else:
-                    queryset = queryset.order_by("-%s" % self.key)
+                queryset = queryset.order_by(f"-{self.key}")
 
         if value:
             assert self.key
@@ -130,11 +129,7 @@ class BasePaginator:
 
         limit = min(limit, self.max_limit)
 
-        if cursor.value:
-            cursor_value = self.value_from_cursor(cursor)
-        else:
-            cursor_value = 0
-
+        cursor_value = self.value_from_cursor(cursor) if cursor.value else 0
         queryset = self.build_queryset(cursor_value, cursor.is_prev)
 
         # TODO(dcramer): this does not yet work correctly for ``is_prev`` when
@@ -282,11 +277,7 @@ class OffsetPaginator(PaginatorLike):
         if self.on_results:
             results = self.on_results(results)
 
-        if count_hits:
-            hits = self.count_hits(max_hits=MAX_HITS_LIMIT)
-        else:
-            hits = None
-
+        hits = self.count_hits(max_hits=MAX_HITS_LIMIT) if count_hits else None
         return CursorResult(results=results, next=next_cursor, prev=prev_cursor, hits=hits)
 
     def count_hits(self, max_hits):
@@ -626,7 +617,7 @@ class CombinedQuerysetPaginator:
 
     def _build_combined_querysets(self, is_prev):
         asc = self._is_asc(is_prev)
-        combined_querysets = list()
+        combined_querysets = []
         for intermediary in self.intermediaries:
             key = intermediary.order_by[0]
             annotate = {}
@@ -638,10 +629,7 @@ class CombinedQuerysetPaginator:
             for key in intermediary.order_by:
                 if self.case_insensitive:
                     key = f"{key}_lower"
-                if asc:
-                    queryset = queryset.order_by(key)
-                else:
-                    queryset = queryset.order_by(f"-{key}")
+                queryset = queryset.order_by(key) if asc else queryset.order_by(f"-{key}")
             combined_querysets += list(queryset)
 
         def _sort_combined_querysets(item):
@@ -672,7 +660,7 @@ class CombinedQuerysetPaginator:
         page = int(cursor.offset)
         cursor_value = int(cursor.value)
         offset = page * cursor_value
-        stop = offset + (int(cursor_value) or limit) + 1
+        stop = offset + (cursor_value or limit) + 1
 
         if offset < 0:
             raise BadPaginationError("Pagination offset cannot be negative")

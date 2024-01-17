@@ -142,9 +142,8 @@ def get_date_range_from_params(
     elif timeframe_start or timeframe_end:
         if not all([timeframe_start, timeframe_end]):
             raise InvalidParams("timeframeStart and timeframeEnd are both required")
-        else:
-            mutable_params["statsPeriodStart"] = timeframe_start
-            mutable_params["statsPeriodEnd"] = timeframe_end
+        mutable_params["statsPeriodStart"] = timeframe_start
+        mutable_params["statsPeriodEnd"] = timeframe_end
 
     return get_date_range_from_stats_period(
         mutable_params, optional=optional, default_stats_period=default_stats_period
@@ -254,10 +253,7 @@ def is_member_disabled_from_limit(
         member = organization_service.check_membership_by_id(
             organization_id=extract_id_from(organization), user_id=user.id
         )
-    if member is None:
-        return False
-    else:
-        return member.flags.member_limit__restricted
+    return False if member is None else member.flags.member_limit__restricted
 
 
 def generate_organization_hostname(org_slug: str) -> str:
@@ -268,15 +264,14 @@ def generate_organization_hostname(org_slug: str) -> str:
     has_org_slug_placeholder = "{slug}" in org_base_hostname_template
     if not has_org_slug_placeholder:
         return url_prefix_hostname
-    org_hostname = org_base_hostname_template.replace("{slug}", org_slug)
-    return org_hostname
+    return org_base_hostname_template.replace("{slug}", org_slug)
 
 
 def generate_organization_url(org_slug: str) -> str:
-    org_url_template: str = options.get("system.organization-url-template")
-    if not org_url_template:
+    if org_url_template := options.get("system.organization-url-template"):
+        return org_url_template.replace("{hostname}", generate_organization_hostname(org_slug))
+    else:
         return options.get("system.url-prefix")
-    return org_url_template.replace("{hostname}", generate_organization_hostname(org_slug))
 
 
 def generate_region_url(region_name: str | None = None) -> str:
@@ -374,9 +369,7 @@ def get_auth_api_token_type(auth: object) -> str | None:
         return "api_token"
     if is_org_auth_token_auth(auth):
         return "org_auth_token"
-    if is_api_key_auth(auth):
-        return "api_key"
-    return None
+    return "api_key" if is_api_key_auth(auth) else None
 
 
 @contextmanager
@@ -455,7 +448,4 @@ class Timer:
     @property
     def duration(self):
         # If _duration is set, return it; otherwise, calculate ongoing duration
-        if self._duration is not None:
-            return self._duration
-        else:
-            return time.time() - self._start
+        return time.time() - self._start if self._duration is None else self._duration

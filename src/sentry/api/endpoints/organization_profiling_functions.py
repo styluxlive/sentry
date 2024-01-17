@@ -308,7 +308,4 @@ def get_interval_from_range(date_range: timedelta) -> str:
     if date_range > timedelta(days=14):
         return "4h"
 
-    if date_range > timedelta(days=7):
-        return "2h"
-
-    return "1h"
+    return "2h" if date_range > timedelta(days=7) else "1h"

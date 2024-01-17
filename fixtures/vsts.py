@@ -54,8 +54,7 @@ class VstsIntegrationTestCase(IntegrationTestCase):
 
         responses.add(
             responses.GET,
-            "https://app.vssps.visualstudio.com/_apis/accounts?memberId=%s&api-version=4.1"
-            % self.vsts_user_id,
+            f"https://app.vssps.visualstudio.com/_apis/accounts?memberId={self.vsts_user_id}&api-version=4.1",
             json={
                 "count": 1,
                 "value": [
@@ -71,8 +70,7 @@ class VstsIntegrationTestCase(IntegrationTestCase):
 
         responses.add(
             responses.GET,
-            "https://app.vssps.visualstudio.com/_apis/resourceareas/79134C72-4A58-4B42-976C-04E7115F32BF?hostId=%s&api-preview=5.0-preview.1"
-            % self.vsts_account_id,
+            f"https://app.vssps.visualstudio.com/_apis/resourceareas/79134C72-4A58-4B42-976C-04E7115F32BF?hostId={self.vsts_account_id}&api-preview=5.0-preview.1",
             json={"locationUrl": self.vsts_base_url},
         )
         responses.add(
@@ -132,9 +130,7 @@ class VstsIntegrationTestCase(IntegrationTestCase):
         for project in [self.project_a, self.project_b]:
             responses.add(
                 responses.GET,
-                "https://{}.visualstudio.com/{}/_apis/wit/workitemtypes/{}/states".format(
-                    self.vsts_account_name.lower(), project["id"], "Bug"
-                ),
+                f'https://{self.vsts_account_name.lower()}.visualstudio.com/{project["id"]}/_apis/wit/workitemtypes/Bug/states',
                 json={
                     "count": 6,
                     "value": [
@@ -149,9 +145,7 @@ class VstsIntegrationTestCase(IntegrationTestCase):
             )
             responses.add(
                 responses.GET,
-                "https://{}.visualstudio.com/{}/_apis/wit/workitemtypes/{}/states".format(
-                    self.vsts_account_name.lower(), project["id"], "Issue"
-                ),
+                f'https://{self.vsts_account_name.lower()}.visualstudio.com/{project["id"]}/_apis/wit/workitemtypes/Issue/states',
                 json={
                     "count": 0,
                     "value": [],
@@ -159,9 +153,7 @@ class VstsIntegrationTestCase(IntegrationTestCase):
             )
             responses.add(
                 responses.GET,
-                "https://{}.visualstudio.com/{}/_apis/wit/workitemtypes/{}/states".format(
-                    self.vsts_account_name.lower(), project["id"], "Task"
-                ),
+                f'https://{self.vsts_account_name.lower()}.visualstudio.com/{project["id"]}/_apis/wit/workitemtypes/Task/states',
                 json={
                     "count": 0,
                     "value": [],

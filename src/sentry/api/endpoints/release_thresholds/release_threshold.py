@@ -72,8 +72,6 @@ class ReleaseThresholdEndpoint(ProjectEndpoint):
 
     def get(self, request: Request, project: Project) -> HttpResponse:
         release_thresholds = ReleaseThreshold.objects.filter(project=project)
-        environment_name: Union[str, None] = request.GET.get("environment")
-
-        if environment_name:
+        if environment_name := request.GET.get("environment"):
             release_thresholds = release_thresholds.filter(environment__name=environment_name)
         return Response(serialize(list(release_thresholds), request.user), status=200)

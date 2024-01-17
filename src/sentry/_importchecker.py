@@ -101,7 +101,7 @@ def track_import(from_name, to_name, fromlist):
         observations.add((from_name, to_name))
 
         for name in fromlist or ():
-            potential_module_name = to_name + "." + name
+            potential_module_name = f"{to_name}.{name}"
             if sys.modules.get(potential_module_name) is not None:
                 observations.add((from_name, potential_module_name))
 

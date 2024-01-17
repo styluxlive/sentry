@@ -38,8 +38,7 @@ class UserOrganizationIntegrationsEndpoint(UserEndpoint):
             status=ObjectStatus.ACTIVE,
             integration__status=ObjectStatus.ACTIVE,
         )
-        provider = request.GET.get("provider")
-        if provider:
+        if provider := request.GET.get("provider"):
             queryset = queryset.filter(integration__provider=provider.lower())
 
         return self.paginate(

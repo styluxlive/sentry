@@ -185,13 +185,12 @@ class OrganizationStatsSummaryEndpoint(OrganizationEndpoint):
     def _get_projects_for_orgstats_query(self, request: Request, organization):
         req_proj_ids = self.get_requested_project_ids_unchecked(request)
 
-        # the projects table always filters by project
-        # the projects in the table should be those the user has access to
-
-        projects = self.get_projects(request, organization, project_ids=req_proj_ids)
-        if not projects:
+        if projects := self.get_projects(
+            request, organization, project_ids=req_proj_ids
+        ):
+            return [p.id for p in projects]
+        else:
             raise NoProjects("No projects available")
-        return [p.id for p in projects]
 
     def _is_org_total_query(self, project_ids):
         return all([not project_ids or project_ids == ALL_ACCESS_PROJECTS])
@@ -214,11 +213,8 @@ class OrganizationStatsSummaryEndpoint(OrganizationEndpoint):
         longest_key_project = projects[longest_key]
         for category_stats in longest_key_project.values():
             for category, stats in category_stats.items():
-                for outcome in stats["outcomes"]:
-                    headers.append(outcome + "_" + category + "s")
-                for total in stats["totals"]:
-                    headers.append(total + "_" + category + "s")
-
+                headers.extend(f"{outcome}_{category}s" for outcome in stats["outcomes"])
+                headers.extend(f"{total}_{category}s" for total in stats["totals"])
         csv_writer.writerow(headers)
 
         ids = projects.keys()
@@ -230,17 +226,11 @@ class OrganizationStatsSummaryEndpoint(OrganizationEndpoint):
             for category_stats in project_stats.values():
                 for category, stats in category_stats.items():
                     for outcome, val in stats["outcomes"].items():
-                        header_name = outcome + "_" + category + "s"
-                        if header_name in headers:
-                            row[header_name] = val
-                        else:
-                            row[header_name] = 0
+                        header_name = f"{outcome}_{category}s"
+                        row[header_name] = val if header_name in headers else 0
                     for total, val in stats["totals"].items():
-                        header_name = total + "_" + category + "s"
-                        if header_name in headers:
-                            row[header_name] = val
-                        else:
-                            row[header_name] = 0
+                        header_name = f"{total}_{category}s"
+                        row[header_name] = val if header_name in headers else 0
             formatted_row = []
             for header in headers:
                 if header in row:

@@ -193,7 +193,7 @@ class OrganizationEventsFacetsPerformanceHistogramEndpoint(
                     return {"tags": [], "histogram": {"data": []}}
 
                 # Only pass exactly the number of tags so histogram fetches correct number of rows
-                histogram_top_tags = top_tags[0:raw_limit]
+                histogram_top_tags = top_tags[:raw_limit]
 
                 histogram = query_facet_performance_key_histogram(
                     top_tags=histogram_top_tags,
@@ -242,13 +242,12 @@ class HistogramPaginator(GenericOffsetPaginator):
         # Use raw_limit for the histogram itself so bucket calculations are correct
         data = self.data_fn(offset=offset, limit=limit + 1, raw_limit=limit)
 
-        if isinstance(data["tags"], list):
-            has_more = len(data["tags"]) == limit + 1
-            if has_more:
-                data["tags"].pop()
-        else:
+        if not isinstance(data["tags"], list):
             raise NotImplementedError
 
+        has_more = len(data["tags"]) == limit + 1
+        if has_more:
+            data["tags"].pop()
         return CursorResult(
             data,
             prev=Cursor(0, max(0, offset - limit), True, offset > 0),
@@ -299,9 +298,7 @@ def query_tag_data(
         # Return early to avoid doing more queries with 0 count transactions or aggregates for columns that don't exist
         if counts[0] == 0 or aggregates[0] is None:
             return None
-    if not tag_data["data"][0]:
-        return None
-    return tag_data["data"][0]
+    return None if not tag_data["data"][0] else tag_data["data"][0]
 
 
 def query_top_tags(
@@ -361,9 +358,7 @@ def query_top_tags(
         # Return early to avoid doing more queries with 0 count transactions or aggregates for columns that don't exist
         if counts[0] == 0:
             return None
-    if not tag_data["data"]:
-        return None
-    return tag_data["data"]
+    return None if not tag_data["data"] else tag_data["data"]
 
 
 def query_facet_performance(
@@ -497,9 +492,7 @@ def query_facet_performance(
             ([] if orderby is None else orderby) + ["tags_key", "tags_value"]
         )
 
-        results = tag_query.process_results(tag_query.run_query(f"{referrer}.tag_values"))
-
-        return results
+        return tag_query.process_results(tag_query.run_query(f"{referrer}.tag_values"))
 
 
 def query_facet_performance_key_histogram(
@@ -516,7 +509,7 @@ def query_facet_performance_key_histogram(
 
     tag_values = [x["tags_value"] for x in top_tags]
 
-    results = discover.histogram_query(
+    return discover.histogram_query(
         fields=[
             aggregate_column,
         ],
@@ -533,4 +526,3 @@ def query_facet_performance_key_histogram(
         referrer="api.organization-events-facets-performance-histogram",
         normalize_results=False,
     )
-    return results

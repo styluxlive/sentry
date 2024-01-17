@@ -202,54 +202,44 @@ class TraceEvent:
             suspect_spans: List[str] = []
             start: Optional[float] = None
             end: Optional[float] = None
-            if light:
-                # This value doesn't matter for the light view
-                span = [self.event["trace.span"]]
-            else:
-                if self.nodestore_event is not None:
-                    occurrence_query = QueryBuilder(
-                        Dataset.IssuePlatform,
-                        snuba_params,
-                        query=f"event_id:{self.nodestore_event.event_id}",
-                        selected_columns=["occurrence_id"],
-                    )
-                    occurrence_ids = occurrence_query.process_results(
-                        occurrence_query.run_query("api.trace-view.get-occurrence-ids")
-                    )["data"]
+            if not light and self.nodestore_event is not None:
+                occurrence_query = QueryBuilder(
+                    Dataset.IssuePlatform,
+                    snuba_params,
+                    query=f"event_id:{self.nodestore_event.event_id}",
+                    selected_columns=["occurrence_id"],
+                )
+                occurrence_ids = occurrence_query.process_results(
+                    occurrence_query.run_query("api.trace-view.get-occurrence-ids")
+                )["data"]
 
-                    problems = IssueOccurrence.fetch_multi(
-                        [occurrence.get("occurrence_id") for occurrence in occurrence_ids],
-                        self.nodestore_event.project_id,
-                    )
-                    unique_spans: Set[str] = set()
+                problems = IssueOccurrence.fetch_multi(
+                    [occurrence.get("occurrence_id") for occurrence in occurrence_ids],
+                    self.nodestore_event.project_id,
+                )
+                unique_spans: Set[str] = set()
+                for problem in problems:
+                    parent_span_ids = problem.evidence_data.get("parent_span_ids")
+                    if parent_span_ids is not None:
+                        unique_spans = unique_spans.union(parent_span_ids)
+                span = list(unique_spans)
+                for event_span in self.nodestore_event.data.get("spans", []):
                     for problem in problems:
-                        parent_span_ids = problem.evidence_data.get("parent_span_ids")
-                        if parent_span_ids is not None:
-                            unique_spans = unique_spans.union(parent_span_ids)
-                    span = list(unique_spans)
-                    for event_span in self.nodestore_event.data.get("spans", []):
-                        for problem in problems:
-                            offender_span_ids = problem.evidence_data.get("offender_span_ids", [])
-                            if event_span.get("span_id") in offender_span_ids:
-                                try:
-                                    start_timestamp = float(event_span.get("start_timestamp"))
-                                    if start is None:
-                                        start = start_timestamp
-                                    else:
-                                        start = min(start, start_timestamp)
-                                except ValueError:
-                                    pass
-                                try:
-                                    end_timestamp = float(event_span.get("timestamp"))
-                                    if end is None:
-                                        end = end_timestamp
-                                    else:
-                                        end = max(end, end_timestamp)
-                                except ValueError:
-                                    pass
-                                suspect_spans.append(event_span.get("span_id"))
-                else:
-                    span = [self.event["trace.span"]]
+                        offender_span_ids = problem.evidence_data.get("offender_span_ids", [])
+                        if event_span.get("span_id") in offender_span_ids:
+                            try:
+                                start_timestamp = float(event_span.get("start_timestamp"))
+                                start = start_timestamp if start is None else min(start, start_timestamp)
+                            except ValueError:
+                                pass
+                            try:
+                                end_timestamp = float(event_span.get("timestamp"))
+                                end = end_timestamp if end is None else max(end, end_timestamp)
+                            except ValueError:
+                                pass
+                            suspect_spans.append(event_span.get("span_id"))
+            else:
+                span = [self.event["trace.span"]]
 
             # Logic for qualified_short_id is copied from property on the Group model
             # to prevent an N+1 query from accessing project.slug everytime
@@ -510,10 +500,9 @@ class OrganizationEventsTraceEndpointBase(OrganizationEventsV2EndpointBase):
                 "trace_view.transactions.grouped", format_grouped_length(len_transactions)
             )
             set_measurement("trace_view.transactions", len_transactions)
-            projects: Set[int] = set()
-            for transaction in transactions:
-                projects.add(transaction["project.id"])
-
+            projects: Set[int] = {
+                transaction["project.id"] for transaction in transactions
+            }
             len_projects = len(projects)
             sentry_sdk.set_tag("trace_view.projects", len_projects)
             sentry_sdk.set_tag("trace_view.projects.grouped", format_grouped_length(len_projects))
@@ -677,10 +666,10 @@ class OrganizationEventsTraceLightEndpoint(OrganizationEventsTraceEndpointBase):
         with sentry_sdk.start_span(op="building.trace", description="light trace"):
             # Check if the event is an orphan_error
             if not snuba_event and not nodestore_event and allow_orphan_errors:
-                orphan_error = find_event(
-                    errors, lambda item: item is not None and item["id"] == event_id
-                )
-                if orphan_error:
+                if orphan_error := find_event(
+                    errors,
+                    lambda item: item is not None and item["id"] == event_id,
+                ):
                     return {
                         "transactions": [],
                         "orphan_errors": [self.serialize_error(orphan_error)],
@@ -899,9 +888,8 @@ class OrganizationEventsTraceEndpoint(OrganizationEventsTraceEndpointBase):
                         nodestore_event = event_id_to_nodestore_event[previous_event_id]
                         previous_event._nodestore_event = nodestore_event
                         spans = nodestore_event.data.get("spans", [])
-                else:
-                    if previous_event.nodestore_event:
-                        spans = previous_event.nodestore_event.data.get("spans", [])
+                elif previous_event.nodestore_event:
+                    spans = previous_event.nodestore_event.data.get("spans", [])
 
                 # Need to include the transaction as a span as well
                 #
@@ -990,21 +978,23 @@ class OrganizationEventsTraceEndpoint(OrganizationEventsTraceEndpointBase):
         orphans.sort(key=child_sort_key)
         orphan_errors = sorted(orphan_errors, key=lambda k: k["timestamp"])
 
-        if len(orphans) > 0:
+        if orphans:
             sentry_sdk.set_tag("discover.trace-view.contains-orphans", "yes")
             logger.warning("discover.trace-view.contains-orphans", extra=warning_extra)
 
         if allow_orphan_errors:
             return {
-                "transactions": [trace.full_dict(detailed) for trace in root_traces]
+                "transactions": [
+                    trace.full_dict(detailed) for trace in root_traces
+                ]
                 + [orphan.full_dict(detailed) for orphan in orphans],
-                "orphan_errors": [orphan for orphan in orphan_errors],
+                "orphan_errors": list(orphan_errors),
             }
 
         return (
             [trace.full_dict(detailed) for trace in root_traces]
             + [orphan.full_dict(detailed) for orphan in orphans]
-            + [orphan for orphan in orphan_errors]
+            + list(orphan_errors)
         )
 
 

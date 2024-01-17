@@ -51,7 +51,7 @@ def find_migration(migrations_path: str, migration: str) -> MigrationMeta:
         click.echo("Try again with a more specific pattern")
         raise click.Abort()
 
-    if len(matches) == 0:
+    if not matches:
         click.echo(f"Could not find migration matching {migration}")
         raise click.Abort()
 

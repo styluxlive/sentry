@@ -177,7 +177,7 @@ class OrganizationSpansSamplesEndpoint(OrganizationEventsEndpointBase):
             if top:
                 span_ids.append(top)
 
-        if len(span_ids) > 0:
+        if span_ids:
             query = f"span_id:[{','.join(span_ids)}] {request.query_params.get('query')}"
         else:
             query = request.query_params.get("query")

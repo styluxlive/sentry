@@ -201,7 +201,7 @@ def translate_wildcard(pat: str) -> str:
     res = ""
     while i < n:
         c = pat[i]
-        i = i + 1
+        i += 1
         # fnmatch.translate has no way to handle escaping metacharacters.
         # Applied this basic patch to handle it:
         # https://bugs.python.org/file27570/issue8402.1.patch
@@ -214,7 +214,7 @@ def translate_wildcard(pat: str) -> str:
             res += re.escape(c)
         else:
             res += c
-    return "^" + res + "$"
+    return f"^{res}$"
 
 
 def translate_escape_sequences(string: str) -> str:
@@ -227,7 +227,7 @@ def translate_escape_sequences(string: str) -> str:
     res = ""
     while i < n:
         c = string[i]
-        i = i + 1
+        i += 1
         if c == "\\" and i < n:
             d = string[i]
             if d == "*":
@@ -323,12 +323,12 @@ class SearchBoolean(namedtuple("SearchBoolean", "left_term operator right_term")
 
 class ParenExpression(namedtuple("ParenExpression", "children")):
     def to_query_string(self):
-        children = ""
-        for child in self.children:
-            if isinstance(child, str):
-                children += f" {child}"
-            else:
-                children += f" {child.to_query_string()}"
+        children = "".join(
+            f" {child}"
+            if isinstance(child, str)
+            else f" {child.to_query_string()}"
+            for child in self.children
+        )
         return f"({children})"
 
 
@@ -370,7 +370,7 @@ class SearchValue(NamedTuple):
         # str(["a","b"]) == "['a', 'b']" but we would like "[a,b]"
         if type(self.raw_value) in [list, tuple]:
             ret_val = reduce(lambda acc, elm: f"{acc}, {elm}", self.raw_value)
-            ret_val = "[" + ret_val + "]"
+            ret_val = f"[{ret_val}]"
             return ret_val
         if isinstance(self.raw_value, datetime):
             return self.raw_value.isoformat()
@@ -595,10 +595,7 @@ class SearchVisitor(NodeVisitor):
 
         children = remove_space(remove_optional_nodes(flatten(children)))
         children = flatten(children[1])
-        if len(children) == 0:
-            return node.text
-
-        return ParenExpression(children)
+        return node.text if len(children) == 0 else ParenExpression(children)
 
     # --- Start of filter visitors
 
@@ -1048,9 +1045,7 @@ class SearchVisitor(NodeVisitor):
 
     def visit_quoted_value(self, node, children):
         value = "".join(node.text for node in flatten(children[1]))
-        value = value.replace('\\"', '"')
-
-        return value
+        return value.replace('\\"', '"')
 
     def visit_in_value(self, node, children):
         return node.text.replace('\\"', '"')
@@ -1185,10 +1180,7 @@ def parse_search_query(
         prefix = query[max(0, idx - 5) : idx]
         suffix = query[idx : (idx + 5)]
         raise InvalidSearchQuery(
-            "{} {}".format(
-                f"Parse error at '{prefix}{suffix}' (column {e.column():d}).",
-                "This is commonly caused by unmatched parentheses. Enclose any text in double quotes.",
-            )
+            f"Parse error at '{prefix}{suffix}' (column {e.column():d}). This is commonly caused by unmatched parentheses. Enclose any text in double quotes."
         )
 
     if config_overrides:

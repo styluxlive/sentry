@@ -52,24 +52,23 @@ class PromptsActivityEndpoint(Endpoint):
         conditions: Q | None = None
         for feature in features:
             if not prompt_config.has(feature):
-                return Response({"detail": "Invalid feature name " + feature}, status=400)
+                return Response({"detail": f"Invalid feature name {feature}"}, status=400)
 
             required_fields = prompt_config.required_fields(feature)
             for field in required_fields:
                 if field not in request.GET:
-                    return Response({"detail": 'Missing required field "%s"' % field}, status=400)
+                    return Response({"detail": f'Missing required field "{field}"'}, status=400)
             filters = {k: request.GET.get(k) for k in required_fields}
             condition = Q(feature=feature, **filters)
             conditions = condition if conditions is None else (conditions | condition)
 
         result = PromptsActivity.objects.filter(conditions, user_id=request.user.id)
         featuredata = {k.feature: k.data for k in result}
-        if len(features) == 1:
-            result = result.first()
-            data = None if result is None else result.data
-            return Response({"data": data, "features": featuredata})
-        else:
+        if len(features) != 1:
             return Response({"features": featuredata})
+        result = result.first()
+        data = None if result is None else result.data
+        return Response({"data": data, "features": featuredata})
 
     def put(self, request: Request, **kwargs):
         serializer = PromptsActivitySerializer(data=request.data)

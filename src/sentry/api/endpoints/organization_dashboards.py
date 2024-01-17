@@ -173,11 +173,9 @@ class OrganizationDashboardsEndpoint(OrganizationEndpoint):
             return Response("Dashboard title already taken", status=409)
 
         title = request.data["title"]
-        match = re.match(DUPLICATE_TITLE_PATTERN, title)
-        if match:
+        if match := re.match(DUPLICATE_TITLE_PATTERN, title):
             partial_title = match.group(1)
-            copy_counter = match.group(2)
-            if copy_counter:
+            if copy_counter := match.group(2):
                 request.data["title"] = f"{partial_title} copy {int(copy_counter) + 1}"
             else:
                 request.data["title"] = f"{partial_title} copy 1"

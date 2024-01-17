@@ -49,7 +49,7 @@ class EventAppleCrashReportEndpoint(ProjectEndpoint):
         )
 
         if request.GET.get("download") is not None:
-            filename = "{}{}.crash".format(event.event_id, symbolicated and "-symbolicated" or "")
+            filename = f'{event.event_id}{symbolicated and "-symbolicated" or ""}.crash'
             return StreamingHttpResponse(
                 apple_crash_report_string,
                 content_type="text/plain",

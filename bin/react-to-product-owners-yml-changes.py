@@ -18,11 +18,9 @@ def main():
     product_owners = yaml.safe_load(open(sys.argv[1]))
     labels = open(LABELS_YAML)
     areas = [
-        # For `sentry` repo we don't want SDK or Docs areas, that stuff should
-        # be transferred to other repos.
         x
         for x in product_owners["by_area"]
-        if not x.startswith("SDK") and not x == "Docs"
+        if not x.startswith("SDK") and x != "Docs"
     ]
 
     fastforward = False
@@ -52,7 +50,7 @@ def main():
     for area in areas:
         # These are specifically placed at the front and end of the list of product areas.
         # They will always exist, so ignore what is coming in from security-as-code as a workaround.
-        if area != "Other" and area != "Unknown":
+        if area not in ["Other", "Unknown"]:
             if "'" in area:
                 area_lines.append(f'- name: "Product Area: {area}"\n')
             else:
@@ -87,7 +85,7 @@ def main():
                 current.append(line)
 
         for area in areas:
-            if area != "Other" and area != "Unknown":
+            if area not in ["Other", "Unknown"]:
                 if "'" in area:
                     area_lines.append(f'        - "{area}"\n')
                 else:
